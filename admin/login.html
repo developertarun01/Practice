@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servon Admin - Login</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box .logo {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #2563eb;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1f2937;
+        }
+
+        .login-box .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+        }
+
+        .login-message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .login-message.error {
+            color: #ef4444;
+        }
+
+        .login-message.success {
+            color: #10b981;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">Servon</div>
+            <h2>Admin Panel</h2>
+            <form id="loginForm" method="POST">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                <div class="login-message" id="loginMessage"></div>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: #6b7280;">
+                Demo: admin@servon.com / admin123
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageElement = document.getElementById('loginMessage');
+
+            try {
+                const response = await fetch('../api/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageElement.textContent = 'Login successful. Redirecting...';
+                    messageElement.className = 'login-message success';
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.php';
+                    }, 1000);
+                } else {
+                    messageElement.textContent = data.message || 'Login failed. Please try again.';
+                    messageElement.className = 'login-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                messageElement.textContent = 'Network error. Please try again.';
+                messageElement.className = 'login-message error';
+            }
+        });
+    </script>
+</body>
+
+</html>

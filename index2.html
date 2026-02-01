@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servon - Domestic Support Solution in Delhi</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Servon</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Professional Domestic Support Solutions</h1>
+                <p>Find trusted, verified household help in Delhi. Reliable service for your home and family.</p>
+                <a href="#contact" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">👨‍💼</div>
+                    <h3>All Rounder</h3>
+                    <p>Comprehensive home support covering multiple household tasks</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👶</div>
+                    <h3>Baby Caretaker</h3>
+                    <p>Professional baby care and childcare services for your little ones</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👨‍🍳</div>
+                    <h3>Cooking Maid</h3>
+                    <p>Expert meal preparation and kitchen management services</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏠</div>
+                    <h3>House Maid</h3>
+                    <p>Professional cleaning and household maintenance services</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">👴</div>
+                    <h3>Elderly Care</h3>
+                    <p>Compassionate care and support for senior family members</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🛡️</div>
+                    <h3>Security Guard</h3>
+                    <p>Professional security services for residential and office premises</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h2>Get Your Domestic Support Today</h2>
+                    <p>Fill out the form below with your requirements and our team will connect with you shortly.</p>
+                    <div class="info-item">
+                        <span class="label">📍 Service Area:</span>
+                        <span class="value">Delhi and NCR</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">⏱️ Response Time:</span>
+                        <span class="value">Within 2 hours</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">✓ Verification:</span>
+                        <span class="value">All staff fully verified</span>
+                    </div>
+                </div>
+
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <label for="service">Select Service *</label>
+                        <select id="service" name="service" required>
+                            <option value="">Choose a service...</option>
+                            <option value="All Rounder">All Rounder</option>
+                            <option value="Baby Caretaker">Baby Caretaker</option>
+                            <option value="Cooking Maid">Cooking Maid</option>
+                            <option value="House Maid">House Maid</option>
+                            <option value="Elderly Care">Elderly Care</option>
+                            <option value="Security Guard">Security Guard</option>
+                        </select>
+                        <span class="error-message" id="serviceError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        <span class="error-message" id="nameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter 10-digit phone number"
+                            pattern="[0-9]{10}" required>
+                        <span class="error-message" id="phoneError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-submit">Submit Request</button>
+                    <span class="form-message" id="formMessage"></span>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us">
+        <div class="container">
+            <h2>Why Choose Servon?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h4>Verified Professionals</h4>
+                    <p>All staff undergo thorough background and document verification</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Safe & Secure</h4>
+                    <p>Your privacy and safety is our top priority</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⭐</div>
+                    <h4>Quality Assured</h4>
+                    <p>Experienced and rated professionals for your peace of mind</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🤝</div>
+                    <h4>Dedicated Support</h4>
+                    <p>24/7 customer support for any assistance you need</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Servon - Domestic Support Solution. All rights reserved.</p>
+            <p>Email: <a href="mailto:support@servon.com">support@servon.com</a></p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servon - Home</title>
+    <link rel="stylesheet" href="assets/css/style2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link rel="shortcut icon" href="./assets/images/logo.png" type="image/pngs">
+
+    <!-- Google Font (For Font Family) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome (For Icons)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Section 1 */
+        .sec1 {
+            background: radial-gradient(circle at 27% 75%,
+                    rgba(177, 255, 153, 0.3) 200px 200px,
+                    transparent 400px);
+        }
+
+        .sec1-inner {
+            height: 100vh;
+            padding-bottom: 0 !important;
+            gap: 100px;
+        }
+
+        .sec1-left {
+            height: 100%;
+        }
+
+        .sec1-card {
+            border: 2px solid var(--button);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .sec1-card:hover {
+            box-shadow: 0px 0px 10px var(--button-light);
+        }
+
+        .sec1-form {
+            display: none;
+        }
+
+        /* Section 2 */
+        .sec2-cards {
+            gap: 0;
+        }
+
+        .sec2-card {
+            padding: 30px;
+        }
+
+        .card-line {
+            border-right: 2px solid var(--button);
+        }
+
+        /* Section 4 */
+        .sec3-card {
+            border: 2px solid var(--button);
+            border-radius: 10px;
+        }
+
+        .sec3-card-top img {
+            border-radius: 10px 10px 0px 0px;
+            height: 200px;
+        }
+
+        .sec3-card-bottom {
+            padding: 15px;
+        }
+
+        /* Section 4  */
+        .sec4 {
+            background: radial-gradient(circle at 50% 50%,
+                    rgba(177, 255, 153, 0.3) 200px 200px,
+                    transparent 400px);
+        }
+
+        /* Section 5 */
+        .sec5-cards {
+            gap: 0px;
+        }
+
+        .sec5-card {
+            padding: 40px 20px 20px 20px;
+        }
+
+        .card-bottom-line {
+            border-bottom: 2px solid var(--button);
+        }
+
+        /* section 6  */
+        .swiper {
+            padding: 30px 60px;
+            position: relative;
+        }
+
+        .card-wrapper {
+            max-width: 1400px;
+            margin: 0 15px 0px;
+            padding: 20px 10px;
+            overflow: hidden;
+        }
+
+        .sec6-card {
+            border: 2px solid var(--button);
+            padding: 20px;
+            border-radius: 20px;
+            user-select: none;
+            height: auto;
+        }
+
+        .swiper-button-prev,
+        .swiper-button-next {
+            color: var(--button) !important;
+
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--button-dark) !important;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--button) !important;
+        }
+
+        /* Section 7 */
+        .sec7-cards {
+            padding-top: 40px;
+        }
+
+        body {
+            background: radial-gradient(circle at 90% 90%,
+                    rgba(177, 255, 153, 0.3) 200px 200px,
+                    transparent 400px);
+        }
+
+
+
+        /* Mobile and Tablets (1023px) */
+        @media (max-width: 900px) {
+
+            /* Section 1  */
+
+            .sec1-inner {
+                position: relative;
+                padding-top: 0;
+            }
+
+            .sec1-inner h1 {
+                font-size: 30px;
+            }
+
+            .sec1-left {
+                position: absolute;
+                z-index: -1;
+                opacity: 0.1;
+            }
+
+            .sec1-right {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sec1-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-top: 40px;
+            }
+
+            .sec1-card {
+                flex-direction: row;
+            }
+
+            .swiper {
+                padding: 0 0 30px 0;
+            }
+
+            .mt-40 {
+                margin-top: 30px;
+            }
+
+            .card-line,
+            .card-bottom-line {
+                border: none;
+            }
+
+            .swiper-button-prev,
+            .swiper-button-next {
+                display: none;
+            }
+
+            /* Section 7  */
+            .sec7-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav flex-center">
+        <div class="flex nav-inner container">
+            <div class="nav-left flex-center">
+                <a href="/">
+                    <img class="logo-desktop" src="./assets/images/logo-name.png" alt="Servon Logo">
+                    <img class="logo-mobile" src="./assets/images/logo.png" alt="Servon Logo">
+                </a>
+            </div>
+            <div class="nav-center ">
+                <ul class="flex-center">
+                    <li><a href="#">Blogs</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Policy</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <a href="#"><button class="btn">Help Desk</button></a>
+                </ul>
+            </div>
+            <div class="hamburger-open">
+                <i class="fa-solid fa-bars fa-sm"></i>
+            </div>
+            <div class="hamburger-close">
+                <i class="fa-solid fa-xmark fa-sm"></i>
+            </div>
+        </div>
+    </nav>
+
+    <section class="sec1">
+        <div class="sec1-inner flex-center-center container reveal">
+            <div class="sec1-left flex-1 center">
+                <img src="./assets/images/all-rounder.png" alt="All Rounder">
+
+            </div>
+            <div class="sec1-right flex-1 center">
+                <h1>We don't give Service <br>We offer <span>Experience</span></h1>
+                <p class="mt-10">Welcome to <span><b>Servon</b></span>, Choose one from Below!</p>
+                <div class="sec1-cards grid-2 mt-20">
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-person-booth"></i></span>
+                            <p><b>All Rounder</b></p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-baby"></i></span>
+                            <p><b>Baby Caretaker</b></p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-utensils"></i></span>
+                            <p><b>Cooking Maid</b></p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-broom "></i></span>
+                            <p><b>House Maid</b></p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-hand-holding-hand "></i></span>
+                            <p><b>Elderly Care</b></p>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="sec1-card flex-center-center">
+                            <span><i class="fa-solid mr-10 fa-user-shield "></i></span>
+                            <p><b>Security Guard</b></p>
+                        </div>
+                    </a>
+                </div>
+                <form id="contactForm" class="contact-form flex-col reveal-anti mt-20 sec1-form">
+                    <select name="service" id="service" required>
+                        <option value="All Rounder">All Rounder</option>
+                        <option value="Baby Caretaker">Baby Caretaker</option>
+                        <option value="Cooking Maid">Cooking Maid</option>
+                        <option value="House Maid">House Maid</option>
+                        <option value="Elderly Care">Elderly Care</option>
+                        <option value="Security Guard">Security Guard</option>
+                    </select>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Mobile Number" required>
+                    <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                    <span class="form-message" id="formMessage"></span>
+                    <span class="error-message" id="phoneError"></span>
+                    <span class="error-message" id="nameError"></span>
+                </form>
+            </div>
+        </div>
+
+    </section>
+    <hr>
+
+    <section class="sec2">
+        <div class="sec2-inner container center">
+            <h1>How does it <span>work?</span></h1>
+            <p class="mt-10">We follow Simple & Transparent process for Staff Selection</p>
+            <div class="sec2-cards grid-3 mt-40 reveal-anti">
+                <div class="sec2-card card-line">
+                    <span><i class="fa-solid mr-10 fa-magnifying-glass fa-2xl"></i></span>
+                    <h2 class="mt-20">Search</h2>
+                    <p class="mt-10">Use our simple search and tell us what you require. See list of all the available
+                        maids in your
+                        area</p>
+                </div>
+                <div class="sec2-card card-line">
+                    <span><i class="fa-solid mr-10 fa-clipboard-list fa-2xl"></i></span>
+                    <h2 class="mt-20">Shortlist</h2>
+                    <p class="mt-10">View the complete profile of the hundreds of available maids and shortlist as per
+                        your preference</p>
+                </div>
+                <div class="sec2-card">
+                    <span><i class="fa-solid mr-10 fa-handshake fa-2xl"></i></span>
+                    <h2 class="mt-20">Meet, Select & Relax</h2>
+                    <p class="mt-10">Talk to the maid on the phone or meet her personally. Select the maid and pay only
+                        after the maid joins</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec3">
+        <div class="sec3-inner container center">
+            <h1>What we <span>offer?</span></h1>
+            <p class="mt-10">We offer a wide range of services as per your requirements</p>
+            <div class="sec3-cards mt-40 grid-4 reveal-anti">
+                <div class="sec3-card ">
+                    <div class="sec3-card-top">
+                        <img src="./assets/images/maid.jpg" alt="">
+                    </div>
+                    <div class="sec3-card-bottom">
+                        <h2>Housemaid</h2>
+                        <p class="mt-10">Reliable housemaids help with cleaning, laundry, dishwashing, and daily
+                            household chores,
+                            ensuring a neat, organized, and comfortable living environment.</p>
+
+                    </div>
+                </div>
+                <div class="sec3-card ">
+                    <div class="sec3-card-top">
+                        <img src="./assets/images/cook.jpg" alt="">
+                    </div>
+                    <div class="sec3-card-bottom">
+                        <h2>Cook</h2>
+                        <p class="mt-10">Experienced cooks prepare healthy, tasty meals, manage kitchen hygiene, follow
+                            dietary
+                            preferences, and save your time every day.</p>
+                    </div>
+                </div>
+                <div class="sec3-card ">
+                    <div class="sec3-card-top">
+                        <img src="./assets/images/child.jpg" alt="">
+                    </div>
+                    <div class="sec3-card-bottom">
+                        <h2>Baby Sitter</h2>
+                        <p class="mt-10">Caring babysitters ensure your child’s safety, engage them in fun activities,
+                            support
+                            learning, provide loving attention, and ensure their nutritious growth.</p>
+                    </div>
+                </div>
+                <div class="sec3-card ">
+                    <div class="sec3-card-top">
+                        <img src="./assets/images/elderly.jpg" alt="">
+                    </div>
+                    <div class="sec3-card-bottom">
+                        <h2>Elderly Care</h2>
+                        <p class="mt-10">Professional elderly caregivers offer companionship, medication support,
+                            mobility assistance,
+                            and daily care for a safe, comfortable life.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec4">
+        <div class="sec4-inner container">
+            <h1 class="center">Difference between other agencies and <span>Servon</span></h1>
+            <table class="mt-40 reveal-anti">
+                <tr>
+                    <th>
+                        <h2>Other maid agencies</h2>
+                    </th>
+                    <th>
+                        <h2>Servon</h2>
+                    </th>
+                </tr>
+                <tr>
+                    <td>Most of them are not registered companies with no way to track them</td>
+                    <td>A professional corporate company with reliability</td>
+                </tr>
+                <tr>
+                    <td>Will charge an advance payment - Will not answer phone calls</td>
+                    <td>No advance payment. Pay only after you've finalized the maid.</td>
+                </tr>
+                <tr>
+                    <td>Have a small database of 20-30 maids.</td>
+                    <td>Have a database of over 5 Lakh maids and growing</td>
+                </tr>
+                <tr>
+                    <td>Charge renewal fees after 1 year</td>
+                    <td>No renewal fees</td>
+                </tr>
+                <tr>
+                    <td>Place the same maid somewhere else after you pay them</td>
+                    <td>We are ethical. Client satisfaction is most important</td>
+                </tr>
+                <tr>
+                    <td>Will not answer phone calls when you ask for replacement</td>
+                    <td>Immediate replacement</td>
+                </tr>
+                <tr>
+                    <td>Will only claim to do a background check. Will never do it</td>
+                    <td>We do document verification of the maid</td>
+                </tr>
+                <tr>
+                    <td>Run by a single man</td>
+                    <td>Over 200 employees working for your satisfaction</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section class="sec5">
+        <div class="sec5-inner container center">
+            <h1>Why Use <span>Servon</span>?</h1>
+            <div class="sec5-cards grid-3 mt-40 reveal-anti">
+                <div class="sec5-card card-line card-bottom-line">
+                    <span><i class="fa-regular fa-clock fa-2xl"></i></span>
+                    <h3 class="mt-20">Quick & Easy</h3>
+                    <p class="mt-20">No need to wait for maid to come for interview. Search - View profile - Select</p>
+                </div>
+                <div class="sec5-card card-line card-bottom-line">
+                    <span><i class="fa-solid fa-shield-halved fa-2xl"></i></span>
+                    <h3 class="mt-20">Safe & Reliable</h3>
+                    <p class="mt-20">Your safety is our first priority. We do a thorough background check of every maid
+                    </p>
+                </div>
+                <div class="sec5-card card-bottom-line">
+                    <span><i class="fa-regular fa-window-restore fa-2xl"></i></span>
+                    <h3 class="mt-20">Multiple Options</h3>
+                    <p class="mt-20">Watch as many profiles as you want. Select only the one you find best</p>
+                </div>
+                <div class="sec5-card card-line">
+                    <span><i class="fa-regular fa-id-badge fa-2xl"></i></span>
+                    <h3 class="mt-20">High Quality</h3>
+                    <p class="mt-20">Only skilled maids are registered with us.</p>
+                </div>
+                <div class="sec5-card card-line">
+                    <span><i class="fa-solid fa-person-walking-arrow-loop-left fa-2xl"></i></span>
+                    <h3 class="mt-20">Free Replacement</h3>
+                    <p class="mt-20">If the maid leaves for any reason within 6 months of joining, we will replace the
+                        maid. No questions asked</p>
+                </div>
+                <div class="sec5-card">
+                    <span><i class="fa-solid fa-screwdriver-wrench fa-2xl"></i></span>
+                    <h3 class="mt-20">Service</h3>
+                    <p class="mt-20">We are not just another maid agency. We have strong ethics and customers comes
+                        first!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec6">
+        <div class="sec6-inner container center">
+            <h1>Why our <span>clients</span> love us?</h1>
+            <div class="swiper reveal-anti">
+                <div class="card-wrapper">
+                    <div class="sec6-cards mt-40 swiper-wrapper">
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <h3 class="mt-20">Ankit Malhotra</h3>
+                            <p class="mt-20">
+                                Servon is one of the most reliable domestic help agencies in Delhi NCR.
+                                After facing repeated issues with local maid services, Servon provided us
+                                with a trained and verified maid. The service quality and support are excellent.
+                            </p>
+                        </div>
+
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-regular fa-star"></i></span>
+                            <h3 class="mt-20">Ritika Chauhan</h3>
+                            <p class="mt-20">
+                                Finding a trustworthy maid service in Delhi NCR was difficult until we chose Servon.
+                                The maid is punctual, professional, and well-verified.
+                                I highly recommend Servon for anyone looking for domestic support services.
+                            </p>
+                        </div>
+
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star-half-stroke"></i></span>
+                            <h3 class="mt-20">Vikas Sharma</h3>
+                            <p class="mt-20">
+                                Servon offers one of the best home maid services in Delhi NCR.
+                                Unlike other agencies, they ensure continuity and proper replacement support.
+                                We have been using their domestic help services for several months now.
+                            </p>
+                        </div>
+
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-regular fa-star"></i></span>
+                            <h3 class="mt-20">Neetu Aggarwal</h3>
+                            <p class="mt-20">
+                                We were searching for a professional domestic help agency in Delhi NCR
+                                and Servon exceeded our expectations.
+                                The maid is well-trained, polite, and consistent in her work.
+                            </p>
+                        </div>
+
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <h3 class="mt-20">Manish Gupta</h3>
+                            <p class="mt-20">
+                                Servon is a trusted name for domestic help services across Delhi NCR.
+                                Their maid verification process and customer support make them stand out.
+                                A dependable solution for busy families.
+                            </p>
+                        </div>
+
+                        <div class="sec6-card swiper-slide">
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-solid fa-star"></i></span>
+                            <span><i class="fa-regular fa-star"></i></span>
+                            <h3 class="mt-20">Shalini Bansal</h3>
+                            <p class="mt-20">
+                                If you are looking for a reliable maid service in Delhi NCR,
+                                Servon is the right choice.
+                                Transparent pricing, verified staff, and excellent service quality.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec7">
+        <div class="sec7-inner container center">
+            <h1>We're big on <span>trust & safety</span>.</h1>
+            <p>Maids go through an extensive vetting process before they are listed on servon.in</p>
+            <div class="sec7-cards grid-4 mt-40 reveal-anti">
+                <div class="sec7-card">
+                    <span><i class="fa-regular fa-address-card fa-2xl"></i></span>
+                    <h3 class="mt-20">Identity check</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-regular fa-circle-check fa-2xl"></i></span>
+                    <h3 class="mt-20">Document verification</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-brands fa-rocketchat fa-2xl"></i></span>
+                    <h3 class="mt-20">In-person interview</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-solid fa-laptop fa-2xl"></i></span>
+                    <h3 class="mt-20">Training session</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec8">
+        <div class="sec8-inner container ">
+            <form action="#" class="grid-4 reveal-anti">
+                <select name="service" id="service">
+                    <option value="All Rounder">All Rounder</option>
+                    <option value="Baby Caretaker">Baby Caretaker</option>
+                    <option value="Cooking Maid">Cooking Maid</option>
+                    <option value="House Maid">House Maid</option>
+                    <option value="Elderly Care">Elderly Care</option>
+                    <option value="Security Guard">Security Guard</option>
+                </select>
+                <input type="text" placeholder="Your Name" required>
+                <input type="tel" placeholder="Mobile Number" required>
+                <button class="btn">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner container flex">
+            <div class="footer-left flex-2">
+                <h1>Servon.in</h1>
+                <p class="small footer-content mt-10">We are India's largest company of domestic helpers with over 5
+                    lakh maids and
+                    over 2
+                    lakh satisfied customers. Whether you are looking for a full time, part time, 24 hours, live-out,
+                    live-in maid, cleaner, babysitter, cook, nanny, governess, senior citizen caretaker, patient
+                    caretaker in Delhi NCR you will find the best quality and experienced staff here for your home and
+                    family</p>
+
+            </div>
+            <div class="footer-right flex flex-3">
+                <div class="footer-r-l flex-1">
+                    <h2>Connect with us</h2>
+                    <div class="footer-left-icons mt-20">
+                        <a href="#"><span><i class="fa-brands fa-facebook fa-xl"></i></span></a>
+                        <a href="#"><span><i class="fa-brands fa-x-twitter fa-xl"></i></span></a>
+                        <a href="#"><span><i class="fa-brands fa-instagram fa-xl"></i></span></a>
+                        <a href="#"><span><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+                    </div>
+                </div>
+                <div class="footer-r-r flex-1">
+                    <h2>Quick Links</h2>
+                    <a href="#">
+                        <p class="mt-20">Home</p>
+                    </a>
+                    <a href="#">
+                        <p class="mt-10">About Us</p>
+                    </a>
+                    <a href="#">
+                        <p class="mt-10">Contact Us</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p class="center small">Servon.in © 2026 | All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script>
+        // Form Select 
+        const sec1Cards = document.querySelector('.sec1-cards');
+        const sec1Form = document.querySelector('.sec1-form');
+        document.querySelectorAll('.sec1-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                sec1Cards.style.display = "none";
+                sec1Form.style.display = "flex";
+
+                const selectedService = this.querySelector('p').innerText.trim();
+                const serviceSelect = document.getElementById('service');
+
+                serviceSelect.value = selectedService;
+            });
+        });
+
+        // Card Slider
+        new Swiper('.card-wrapper', {
+            loop: true,
+            spaceBetween: 20,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            breakpoints: {
+                0: {
+                    slidesPerView: 1
+                },
+                768: {
+                    slidesPerView: 2
+                },
+                1024: {
+                    slidesPerView: 3
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>
