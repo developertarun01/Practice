@@ -610,8 +610,8 @@
 
     <section class="sec8">
         <div class="sec8-inner container ">
-            <form action="#" class="grid-4 reveal-anti">
-                <select name="service" id="service">
+            <form id="contactForm" class="contact-form grid-4 reveal-anti">
+                <select name="service" id="service" required>
                     <option value="All Rounder">All Rounder</option>
                     <option value="Baby Caretaker">Baby Caretaker</option>
                     <option value="Cooking Maid">Cooking Maid</option>
@@ -619,9 +619,12 @@
                     <option value="Elderly Care">Elderly Care</option>
                     <option value="Security Guard">Security Guard</option>
                 </select>
-                <input type="text" placeholder="Your Name" required>
-                <input type="tel" placeholder="Mobile Number" required>
-                <button class="btn">Submit</button>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                <input type="tel" id="phone" name="phone" placeholder="Mobile Number" required>
+                <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                <span class="form-message" id="formMessage"></span>
+                <span class="error-message" id="phoneError"></span>
+                <span class="error-message" id="nameError"></span>
             </form>
         </div>
     </section>

@@ -108,32 +108,33 @@ async function handleFormSubmit(e) {
         });
 
         const data = await response.json();
-        // messageElement.style.display = "block";
 
         if (data.success) {
 
+            messageElement.style.display = "block";
             messageElement.textContent = '✓ Thank you! Our team will contact you within 2 hours.';
-            messageElement.className = 'form-message success';
+            messageElement.className = 'success';
             e.target.reset();
 
             // Clear error messages
             document.getElementById('nameError').textContent = '';
             document.getElementById('phoneError').textContent = '';
-            document.getElementById('serviceError').textContent = '';
+            // document.getElementById('serviceError').textContent = '';
 
             // Hide message after 5 seconds
             setTimeout(() => {
-                messageElement.textContent = '';
-                messageElement.className = 'form-message';
+                messageElement.style.display = "none";
+                // messageElement.className = 'form-message';
             }, 5000);
         } else {
             messageElement.textContent = '✗ ' + (data.message || 'Error submitting form. Please try again.');
-            messageElement.className = 'form-message error';
+            messageElement.className = 'error';
         }
     } catch (error) {
         console.error('Error:', error);
+        console.log(error)
         messageElement.textContent = '✗ Network error. Please try again.';
-        messageElement.className = 'form-message error';
+        messageElement.className = 'error';
     }
 }
 
