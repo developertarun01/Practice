@@ -638,6 +638,7 @@ async function viewBooking(bookingId) {
                         <p><strong>Starts At:</strong> ${booking.starts_at ? new Date(booking.starts_at).toLocaleString() : '-'}</p>
                         <p><strong>Job Hours:</strong> ${booking.job_hours || '-'}</p>
                         <p><strong>Salary Bracket:</strong> ${booking.salary_bracket || '-'}</p>
+                        ${booking.updated_by_name ? `<p><strong>Last Edited By:</strong> ${booking.updated_by_name}</p>` : ''}
                     </div>
                     <button class="btn btn-secondary" onclick="editBooking(${bookingId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewBookingModal')">Close</button>
@@ -821,6 +822,7 @@ async function viewPayment(paymentId) {
                         <p><strong>Status:</strong> <span class="badge">${payment.status}</span></p>
                         <p><strong>Payment Method:</strong> ${payment.payment_method || '-'}</p>
                         <p><strong>Created At:</strong> ${new Date(payment.created_at).toLocaleString()}</p>
+                        ${payment.updated_by_name ? `<p><strong>Last Edited By:</strong> ${payment.updated_by_name}</p>` : ''}
                     </div>
                     <button class="btn btn-secondary" onclick="editPayment(${paymentId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewPaymentModal')">Close</button>
@@ -931,6 +933,7 @@ async function viewProfessional(professionalId) {
                         <p><strong>Status:</strong> <span class="badge">${prof.status}</span></p>
                         <p><strong>Verification:</strong> <span class="badge">${prof.verify_status}</span></p>
                         <p><strong>Location:</strong> ${prof.location || '-'}</p>
+                        ${prof.updated_by_name ? `<p><strong>Last Edited By:</strong> ${prof.updated_by_name}</p>` : ''}
                     </div>
                     <button class="btn btn-secondary" onclick="editProfessional(${professionalId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewProfessionalModal')">Close</button>
@@ -1072,6 +1075,7 @@ async function viewUser(userId) {
                         <p><strong>Role:</strong> ${user.role || 'N/A'}</p>
                         <p><strong>Status:</strong> <span class="badge">${user.enabled ? 'Enabled' : 'Disabled'}</span></p>
                         <p><strong>Created At:</strong> ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}</p>
+                        ${user.updated_by_name ? `<p><strong>Last Edited By:</strong> ${user.updated_by_name}</p>` : ''}
                     </div>
                     <button class="btn btn-secondary" onclick="editUser(${userId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewUserModal')">Close</button>

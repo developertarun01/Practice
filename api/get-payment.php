@@ -14,8 +14,14 @@ if (!$payment_id) {
     die(json_encode(['success' => false, 'message' => 'Payment ID is required']));
 }
 
-// Get payment details
-$payment_result = $conn->query("SELECT * FROM payments WHERE id = $payment_id");
+// Get payment details with editor info
+$payment_result = $conn->query("
+    SELECT p.*, 
+           u.name as updated_by_name
+    FROM payments p
+    LEFT JOIN users u ON p.updated_by = u.id
+    WHERE p.id = $payment_id
+");
 
 if ($payment_result->num_rows == 0) {
     die(json_encode(['success' => false, 'message' => 'Payment not found']));

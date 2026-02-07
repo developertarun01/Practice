@@ -25,7 +25,7 @@ if ($check->num_rows == 0) {
 
 // Update payment status
 $received_at = $status == 'Completed' ? 'NOW()' : 'NULL';
-$sql = "UPDATE payments SET status = '$status', received_at = $received_at, updated_at = NOW() WHERE id = $payment_id";
+$sql = "UPDATE payments SET status = '$status', received_at = $received_at, updated_at = NOW(), updated_by = " . intval($_SESSION['user_id']) . " WHERE id = $payment_id";
 
 if ($conn->query($sql) === TRUE) {
     echo json_encode(['success' => true, 'message' => 'Payment status updated']);

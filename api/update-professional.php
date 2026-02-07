@@ -43,6 +43,7 @@ if (empty($updates)) {
 }
 
 $updates[] = "updated_at = NOW()";
+$updates[] = "updated_by = " . intval($_SESSION['user_id']);
 $sql = "UPDATE professionals SET " . implode(', ', $updates) . " WHERE id = $professional_id";
 
 if ($conn->query($sql) === TRUE) {

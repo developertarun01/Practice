@@ -14,8 +14,14 @@ if (!$professional_id) {
     die(json_encode(['success' => false, 'message' => 'Professional ID is required']));
 }
 
-// Get professional details
-$prof_result = $conn->query("SELECT * FROM professionals WHERE id = $professional_id");
+// Get professional details with editor info
+$prof_result = $conn->query("
+    SELECT p.*, 
+           u.name as updated_by_name
+    FROM professionals p
+    LEFT JOIN users u ON p.updated_by = u.id
+    WHERE p.id = $professional_id
+");
 
 if ($prof_result->num_rows == 0) {
     die(json_encode(['success' => false, 'message' => 'Professional not found']));
