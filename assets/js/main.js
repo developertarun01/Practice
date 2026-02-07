@@ -1025,16 +1025,32 @@ async function handleEditProfessional(e, professionalId) {
 
 // User view/edit functions
 async function viewUser(userId) {
+    console.log('Attempting to view user with ID:', userId);
+
     try {
-        const response = await fetch(`api/get-user.php?id=${userId}`);
-        const data = await response.json();
+        const response = await fetch(`../api/get-user.php?id=${userId}`);
+        console.log('Response status:', response.status);
+
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            alert('Invalid response from server');
+            return;
+        }
 
         if (!data.success) {
+            console.error('API error:', data.message);
             alert('Error: ' + data.message);
             return;
         }
 
         const user = data.data;
+        console.log('User data:', user);
 
         const html = `
             <div id="viewUserModal" class="modal active">
@@ -1042,29 +1058,52 @@ async function viewUser(userId) {
                     <span class="close" onclick="closeModal('viewUserModal')">&times;</span>
                     <h2>User Details</h2>
                     <div class="user-details">
-                        <p><strong>Name:</strong> ${user.name}</p>
-                        <p><strong>Email:</strong> ${user.email}</p>
-                        <p><strong>Phone:</strong> ${user.phone}</p>
-                        <p><strong>Role:</strong> ${user.role}</p>
+                        <p><strong>Name:</strong> ${user.name || 'N/A'}</p>
+                        <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                        <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+                        <p><strong>Role:</strong> ${user.role || 'N/A'}</p>
                         <p><strong>Status:</strong> <span class="badge">${user.enabled ? 'Enabled' : 'Disabled'}</span></p>
-                        <p><strong>Created At:</strong> ${new Date(user.created_at).toLocaleString()}</p>
+                        <p><strong>Created At:</strong> ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}</p>
                     </div>
                     <button class="btn btn-secondary" onclick="editUser(${userId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewUserModal')">Close</button>
                 </div>
             </div>
         `;
+
+        // Close any existing modal first
+        const existingModal = document.getElementById('viewUserModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
         document.body.insertAdjacentHTML('beforeend', html);
+
     } catch (error) {
-        console.error(error);
-        alert('Error loading user details');
+        console.error('View user error:', error);
+        alert('Error loading user details: ' + error.message);
     }
 }
 
 async function editUser(userId) {
+    console.log('Attempting to edit user with ID:', userId);
+
     try {
-        const response = await fetch(`api/get-user.php?id=${userId}`);
-        const data = await response.json();
+        // FIX: Add ../ to go up one level from admin to api folder
+        const response = await fetch(`../api/get-user.php?id=${userId}`);
+        console.log('Response status:', response.status);
+
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            alert('Invalid response from server - expected JSON but got HTML');
+            return;
+        }
 
         if (!data.success) {
             alert('Error: ' + data.message);
@@ -1072,7 +1111,18 @@ async function editUser(userId) {
         }
 
         const user = data.data;
-        closeModal('viewUserModal');
+
+        // Close any existing view modal first
+        const existingViewModal = document.getElementById('viewUserModal');
+        if (existingViewModal) {
+            existingViewModal.remove();
+        }
+
+        // Close any existing edit modal first
+        const existingEditModal = document.getElementById('editUserModal');
+        if (existingEditModal) {
+            existingEditModal.remove();
+        }
 
         const html = `
             <div id="editUserModal" class="modal active">
@@ -1082,19 +1132,19 @@ async function editUser(userId) {
                     <form id="editUserForm" onsubmit="handleEditUser(event, ${userId})">
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" name="name" value="${user.name}">
+                            <input type="text" name="name" value="${user.name || ''}" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" name="email" value="${user.email}">
+                            <input type="email" name="email" value="${user.email || ''}" required>
                         </div>
                         <div class="form-group">
                             <label>Phone</label>
-                            <input type="tel" name="phone" pattern="[0-9]{10}" value="${user.phone}">
+                            <input type="tel" name="phone" pattern="[0-9]{10}" value="${user.phone || ''}" required>
                         </div>
                         <div class="form-group">
                             <label>Role</label>
-                            <select name="role">
+                            <select name="role" required>
                                 <option value="Admin" ${user.role === 'Admin' ? 'selected' : ''}>Admin</option>
                                 <option value="Sales" ${user.role === 'Sales' ? 'selected' : ''}>Sales</option>
                                 <option value="Allocation" ${user.role === 'Allocation' ? 'selected' : ''}>Allocation</option>
@@ -1103,14 +1153,14 @@ async function editUser(userId) {
                         </div>
                         <div class="form-group">
                             <label>Status</label>
-                            <select name="enabled">
+                            <select name="enabled" required>
                                 <option value="1" ${user.enabled ? 'selected' : ''}>Enabled</option>
                                 <option value="0" ${!user.enabled ? 'selected' : ''}>Disabled</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>New Password (leave blank to keep current)</label>
-                            <input type="password" name="password" minlength="6">
+                            <input type="password" name="password" minlength="6" placeholder="Leave blank to keep current password">
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editUserModal')">Cancel</button>
@@ -1119,9 +1169,10 @@ async function editUser(userId) {
             </div>
         `;
         document.body.insertAdjacentHTML('beforeend', html);
+
     } catch (error) {
-        console.error(error);
-        alert('Error loading user for editing');
+        console.error('Edit user error:', error);
+        alert('Error loading user for editing: ' + error.message);
     }
 }
 
@@ -1132,7 +1183,8 @@ async function handleEditUser(e, userId) {
     formData.append('user_id', userId);
 
     try {
-        const response = await fetch('api/update-user.php', {
+        // FIX: Add ../ here too
+        const response = await fetch('../api/update-user.php', {
             method: 'POST',
             body: formData
         });
