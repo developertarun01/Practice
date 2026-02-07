@@ -504,6 +504,10 @@ form {
   text-align: end;
 }
 
+.call-button {
+  display: none;
+}
+
 /* Mobile and Tablets (1023px) */
 @media (max-width: 900px) {
   i {
@@ -632,8 +636,33 @@ form {
   }
 
   /* Footer  */
+  .footer {
+    padding-bottom: 55px;
+  }
+
   .footer-right {
     text-align: start;
     flex-direction: row;
+  }
+
+  .call-button {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    background-color: var(--button);
+    color: white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    border-radius: 40px 40px 0px 0;
+  }
+
+  .call-button i {
+    color: white;
+  }
+
+  .call-button p {
+    font-size: 18px;
   }
 }

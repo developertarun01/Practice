@@ -1,105 +1,113 @@
-// Form validation and submission
+// ============================
+// CONTACT FORM HANDLING
+// ============================
 document.addEventListener('DOMContentLoaded', function () {
-    const contactForm = document.getElementById('contactForm');
 
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleFormSubmit);
+    const forms = document.querySelectorAll('.contact-form');
+
+    forms.forEach(form => {
+
+        // Submit
+        form.addEventListener('submit', handleFormSubmit);
 
         // Real-time validation
-        document.getElementById('name').addEventListener('blur', validateName);
-        document.getElementById('phone').addEventListener('blur', validatePhone);
-        document.getElementById('service').addEventListener('change', validateService);
-    }
+        form.querySelector('[name="name"]')
+            ?.addEventListener('blur', () => validateName(form));
 
-    // Smooth scrolling for navigation links
+        form.querySelector('[name="phone"]')
+            ?.addEventListener('blur', () => validatePhone(form));
+
+        form.querySelector('[name="service"]')
+            ?.addEventListener('change', () => validateService(form));
+    });
+
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href !== '#') {
-                e.preventDefault();
-                const target = document.querySelector(href);
+            const targetId = this.getAttribute('href');
+            if (targetId !== '#') {
+                const target = document.querySelector(targetId);
                 if (target) {
+                    e.preventDefault();
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             }
         });
     });
+
+    // Admin init
+    initDateRangeFilters();
+    setActiveMenu();
+    autoHideMessages();
 });
 
-// Form validation functions
-function validateName() {
-    const nameInput = document.getElementById('name');
-    const nameError = document.getElementById('nameError');
-    const value = nameInput.value.trim();
+// ============================
+// VALIDATION FUNCTIONS
+// ============================
+function validateName(form) {
+    const input = form.querySelector('[name="name"]');
+    const error = form.querySelector('#nameError');
+    const value = input.value.trim();
 
     if (!value) {
-        nameError.textContent = 'Name is required';
-        nameError.classList.add('error');
+        error.textContent = 'Name is required';
+        error.classList.add('error');
         return false;
-    } else if (value.length < 3) {
-        nameError.textContent = 'Name must be at least 3 characters';
-        nameError.classList.add('error');
-        return false;
-    } else {
-        nameError.textContent = '';
-        nameError.classList.remove('error');
-        return true;
     }
-}
 
-function validatePhone() {
-    const phoneInput = document.getElementById('phone');
-    const phoneError = document.getElementById('phoneError');
-    const value = phoneInput.value.trim();
-
-    if (!value) {
-        phoneError.textContent = 'Phone number is required';
-        phoneError.classList.add('error');
+    if (value.length < 3) {
+        error.textContent = 'Name must be at least 3 characters';
+        error.classList.add('error');
         return false;
-    } else if (!/^\d{10}$/.test(value)) {
-        phoneError.textContent = 'Phone number must be 10 digits';
-        phoneError.classList.add('error');
-        return false;
-    } else {
-        phoneError.textContent = '';
-        phoneError.classList.remove('error');
-        return true;
     }
-}
 
-function validateService() {
-    const serviceSelect = document.getElementById('service');
-    const serviceError = document.getElementById('serviceError');
-    const value = serviceSelect.value;
-
+    error.textContent = '';
+    error.classList.remove('error');
     return true;
-
-    // if (!value) {
-    //     serviceError.textContent = 'Please select a service';
-    //     serviceError.classList.add('error');
-    //     return false;
-    // } else {
-    //     serviceError.textContent = '';
-    //     serviceError.classList.remove('error');
-    //     return true;
-    // }
 }
 
-// Form submission handler
+function validatePhone(form) {
+    const input = form.querySelector('[name="phone"]');
+    const error = form.querySelector('#phoneError');
+    const value = input.value.trim();
+
+    if (!value) {
+        error.textContent = 'Phone number is required';
+        error.classList.add('error');
+        return false;
+    }
+
+    if (!/^\d{10}$/.test(value)) {
+        error.textContent = 'Phone number must be 10 digits';
+        error.classList.add('error');
+        return false;
+    }
+
+    error.textContent = '';
+    error.classList.remove('error');
+    return true;
+}
+
+function validateService(form) {
+    // Validation intentionally disabled
+    return true;
+}
+
+// ============================
+// FORM SUBMIT HANDLER
+// ============================
 async function handleFormSubmit(e) {
     e.preventDefault();
+    const form = e.target;
 
-    // Validate all fields
-    const isNameValid = validateName();
-    const isPhoneValid = validatePhone();
-    const isServiceValid = validateService();
+    if (
+        !validateName(form) ||
+        !validatePhone(form) ||
+        !validateService(form)
+    ) return;
 
-    if (!isNameValid || !isPhoneValid || !isServiceValid) {
-        return;
-    }
-
-    const formData = new FormData(e.target);
-    const messageElement = document.getElementById('formMessage');
+    const formData = new FormData(form);
+    const message = form.querySelector('#formMessage');
 
     try {
         const response = await fetch('api/submit-lead.php', {
@@ -110,122 +118,103 @@ async function handleFormSubmit(e) {
         const data = await response.json();
 
         if (data.success) {
+            message.style.display = 'block';
+            message.textContent = '✓ Thank you! Our team will contact you within 2 hours.';
+            message.classList.add('success');
 
-            messageElement.style.display = "block";
-            messageElement.textContent = '✓ Thank you! Our team will contact you within 2 hours.';
-            messageElement.className = 'success';
-            e.target.reset();
+            form.reset();
 
-            // Clear error messages
-            document.getElementById('nameError').textContent = '';
-            document.getElementById('phoneError').textContent = '';
-            // document.getElementById('serviceError').textContent = '';
-
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageElement.style.display = "none";
-                // messageElement.className = 'form-message';
-            }, 5000);
+            // setTimeout(() => {
+            //     message.style.display = 'none';
+            // }, 5000);
         } else {
-            messageElement.textContent = '✗ ' + (data.message || 'Error submitting form. Please try again.');
-            messageElement.className = 'error';
+            message.textContent = data.message || 'Error submitting form';
+            message.classList.add('error');
         }
+
     } catch (error) {
-        console.error('Error:', error);
-        console.log(error)
-        messageElement.textContent = '✗ Network error. Please try again.';
-        messageElement.className = 'error';
+        console.error(error);
+        message.textContent = 'Network error. Please try again.';
+        message.classList.add('error');
     }
 }
 
-// Admin panel functions
+// ============================
+// ADMIN MODAL FUNCTIONS
+// ============================
 function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('active');
-    }
+    document.getElementById(modalId)?.classList.add('active');
 }
 
 function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('active');
-    }
+    document.getElementById(modalId)?.classList.remove('active');
 }
 
-// Close modal when clicking outside
-window.addEventListener('click', function (event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.classList.remove('active');
+window.addEventListener('click', function (e) {
+    if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('active');
     }
 });
 
-// Admin filter functionality
+// ============================
+// ADMIN FILTERS
+// ============================
 function applyFilters(formId, tableId) {
     const form = document.getElementById(formId);
     if (!form) return;
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        const filters = new FormData(form);
-        const params = new URLSearchParams(filters);
+        const params = new URLSearchParams(new FormData(form));
 
-        // Update table with filtered data
         fetch('?' + params.toString())
-            .then(response => response.text())
+            .then(res => res.text())
             .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+                const doc = new DOMParser().parseFromString(html, 'text/html');
                 const newTable = doc.getElementById(tableId);
                 if (newTable) {
                     document.getElementById(tableId).innerHTML = newTable.innerHTML;
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(console.error);
     });
 }
 
-// Date range filter
+// ============================
+// DATE RANGE FILTER
+// ============================
 function initDateRangeFilters() {
-    const fromDates = document.querySelectorAll('[data-date-from]');
-    const toDates = document.querySelectorAll('[data-date-to]');
-
-    fromDates.forEach(fromDate => {
-        fromDate.addEventListener('change', function () {
-            const toDate = document.querySelector(this.dataset.dateFrom);
-            if (toDate && this.value > toDate.value) {
-                toDate.value = this.value;
-            }
+    document.querySelectorAll('[data-date-from]').forEach(from => {
+        from.addEventListener('change', function () {
+            const to = document.querySelector(this.dataset.dateFrom);
+            if (to && this.value > to.value) to.value = this.value;
         });
     });
 
-    toDates.forEach(toDate => {
-        toDate.addEventListener('change', function () {
-            const fromDate = document.querySelector(this.dataset.dateTo);
-            if (fromDate && this.value < fromDate.value) {
-                fromDate.value = this.value;
-            }
+    document.querySelectorAll('[data-date-to]').forEach(to => {
+        to.addEventListener('change', function () {
+            const from = document.querySelector(this.dataset.dateTo);
+            if (from && this.value < from.value) from.value = this.value;
         });
     });
 }
 
-// Initialize admin panel
-document.addEventListener('DOMContentLoaded', function () {
-    initDateRangeFilters();
-
-    // Set active menu item
-    const currentUrl = window.location.pathname;
+// ============================
+// ADMIN UI HELPERS
+// ============================
+function setActiveMenu() {
+    const path = window.location.pathname;
     document.querySelectorAll('.sidebar-menu a').forEach(link => {
-        if (currentUrl.includes(link.getAttribute('href'))) {
+        if (path.includes(link.getAttribute('href'))) {
             link.classList.add('active');
         }
     });
+}
 
-    // Auto-hide messages after 3 seconds
-    const messages = document.querySelectorAll('[data-auto-hide]');
-    messages.forEach(msg => {
+function autoHideMessages() {
+    document.querySelectorAll('[data-auto-hide]').forEach(msg => {
         setTimeout(() => {
             msg.style.display = 'none';
         }, 3000);
     });
-});
+}
