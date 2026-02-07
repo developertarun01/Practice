@@ -11,7 +11,7 @@ $from_date = isset($_GET['from_date']) ? esc($_GET['from_date']) : '';
 $to_date = isset($_GET['to_date']) ? esc($_GET['to_date']) : '';
 
 $where = "1=1";
-if ($search) $where .= " AND (name LIKE '%$search%' OR phone LIKE '%$search%')";
+if ($search) $where .= " AND (name LIKE '%$search%' OR phone LIKE '%$search%' OR location LIKE '%$search%')";
 if ($service) $where .= " AND service = '$service'";
 if ($status) $where .= " AND status = '$status'";
 if ($gender) $where .= " AND gender = '$gender'";
@@ -54,7 +54,7 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                         <form method="GET" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; width: 100%;">
                             <div class="filter-group">
                                 <label>Search</label>
-                                <input type="text" name="search" placeholder="Name or Phone" value="<?php echo htmlspecialchars($search); ?>">
+                                <input type="text" name="search" placeholder="Name or Location" value="<?php echo htmlspecialchars($search); ?>">
                             </div>
                             <div class="filter-group">
                                 <label>Service</label>
@@ -111,8 +111,9 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Service</th>
+                                <th>Location</th>
                                 <th>Experience</th>
-                                <th>Rating</th>
+                                <!-- <th>Rating</th> -->
                                 <th>Status</th>
                                 <th>Verification</th>
                                 <th>Created At</th>
@@ -129,8 +130,9 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                                     echo "<td>" . htmlspecialchars($prof['name']) . "</td>";
                                     echo "<td>" . htmlspecialchars($prof['phone']) . "</td>";
                                     echo "<td>" . htmlspecialchars($prof['service']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($prof['location']) . "</td>";
                                     echo "<td>" . ($prof['experience'] ? $prof['experience'] . " yrs" : "-") . "</td>";
-                                    echo "<td>⭐ " . $prof['rating'] . "</td>";
+                                    // echo "<td>⭐ " . $prof['rating'] . "</td>";
                                     echo "<td>" . $prof['status'] . "</td>";
                                     echo "<td>";
                                     $v_color = match ($prof['verify_status']) {

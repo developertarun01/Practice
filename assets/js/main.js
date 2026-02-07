@@ -110,7 +110,7 @@ async function handleFormSubmit(e) {
     const message = form.querySelector('#formMessage');
 
     try {
-        const response = await fetch('api/submit-lead.php', {
+        const response = await fetch('../api/submit-lead.php', {
             method: 'POST',
             body: formData
         });
@@ -434,7 +434,7 @@ async function handleCreateBooking(e) {
     const formData = new FormData(form);
 
     try {
-        const response = await fetch('api/create-booking.php', {
+        const response = await fetch('../api/create-booking.php', {
             method: 'POST',
             body: formData
         });
@@ -460,7 +460,7 @@ async function handleCreatePayment(e) {
     const formData = new FormData(form);
 
     try {
-        const response = await fetch('api/create-payment.php', {
+        const response = await fetch('../api/create-payment.php', {
             method: 'POST',
             body: formData
         });
@@ -486,7 +486,7 @@ async function handleCreateProfessional(e) {
     const formData = new FormData(form);
 
     try {
-        const response = await fetch('api/create-professional.php', {
+        const response = await fetch('../api/create-professional.php', {
             method: 'POST',
             body: formData
         });
@@ -548,7 +548,7 @@ async function handleCreateUser(e) {
 // ============================
 async function viewLead(leadId) {
     try {
-        const response = await fetch(`api/get-lead.php?id=${leadId}`);
+        const response = await fetch(`../api/get-lead.php?id=${leadId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -605,7 +605,7 @@ async function viewLead(leadId) {
 
 async function viewBooking(bookingId) {
     try {
-        const response = await fetch(`api/get-booking.php?id=${bookingId}`);
+        const response = await fetch(`../api/get-booking.php?id=${bookingId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -645,7 +645,7 @@ async function viewBooking(bookingId) {
 
 async function editBooking(bookingId) {
     try {
-        const response = await fetch(`api/get-booking.php?id=${bookingId}`);
+        const response = await fetch(`../api/get-booking.php?id=${bookingId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -708,7 +708,7 @@ async function handleEditBooking(e, bookingId) {
     formData.append('booking_id', bookingId);
 
     try {
-        const response = await fetch('api/update-booking.php', {
+        const response = await fetch('../api/update-booking.php', {
             method: 'POST',
             body: formData
         });
@@ -735,7 +735,7 @@ async function handleAddComment(e, leadId) {
     formData.append('lead_id', leadId);
 
     try {
-        const response = await fetch('api/add-comment.php', {
+        const response = await fetch('../api/add-comment.php', {
             method: 'POST',
             body: formData
         });
@@ -788,7 +788,7 @@ function setupViewButtons() {
 // Payment view/edit functions
 async function viewPayment(paymentId) {
     try {
-        const response = await fetch(`api/get-payment.php?id=${paymentId}`);
+        const response = await fetch(`../api/get-payment.php?id=${paymentId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -828,7 +828,7 @@ async function viewPayment(paymentId) {
 
 async function editPayment(paymentId) {
     try {
-        const response = await fetch(`api/get-payment.php?id=${paymentId}`);
+        const response = await fetch(`../api/get-payment.php?id=${paymentId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -874,7 +874,7 @@ async function handleEditPayment(e, paymentId) {
     formData.append('payment_id', paymentId);
 
     try {
-        const response = await fetch('api/update-payment-status.php', {
+        const response = await fetch('../api/update-payment-status.php', {
             method: 'POST',
             body: formData
         });
@@ -897,7 +897,7 @@ async function handleEditPayment(e, paymentId) {
 // Professional view/edit functions
 async function viewProfessional(professionalId) {
     try {
-        const response = await fetch(`api/get-professional.php?id=${professionalId}`);
+        const response = await fetch(`../api/get-professional.php?id=${professionalId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -938,7 +938,7 @@ async function viewProfessional(professionalId) {
 
 async function editProfessional(professionalId) {
     try {
-        const response = await fetch(`api/get-professional.php?id=${professionalId}`);
+        const response = await fetch(`../api/get-professional.php?id=${professionalId}`);
         const data = await response.json();
 
         if (!data.success) {
@@ -1003,7 +1003,7 @@ async function handleEditProfessional(e, professionalId) {
     formData.append('professional_id', professionalId);
 
     try {
-        const response = await fetch('api/update-professional.php', {
+        const response = await fetch('../api/update-professional.php', {
             method: 'POST',
             body: formData
         });
