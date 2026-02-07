@@ -10,7 +10,7 @@ $pending_payments = $conn->query("SELECT COUNT(*) as count FROM payments WHERE s
 $missed_calls = $conn->query("SELECT COUNT(*) as count FROM missed_calls WHERE missed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)")->fetch_assoc()['count'];
 
 // Get recent leads
-$recent_leads = $conn->query("SELECT id, name, phone, service, created_at FROM leads ORDER BY created_at DESC LIMIT 5");
+$recent_leads = $conn->query("SELECT l.id, l.name, l.phone, l.service, l.status, l.created_at, u.name as updated_by_name FROM leads l LEFT JOIN users u ON l.updated_by = u.id ORDER BY l.created_at DESC LIMIT 5");
 
 // Get pending payments
 $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phone, total_amount, created_at FROM payments WHERE status = 'Pending' ORDER BY created_at DESC LIMIT 5");
@@ -86,6 +86,7 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                                 <th>Service</th>
                                 <th>Status</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -94,19 +95,36 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                             $counter = 1;
                             if ($recent_leads->num_rows > 0) {
                                 while ($lead = $recent_leads->fetch_assoc()) {
+                                    $status_color = match ($lead['status']) {
+                                        'Fresh' => '#fef3c7',
+                                        'In progress' => '#dbeafe',
+                                        'Converted' => '#d1fae5',
+                                        'Dropped' => '#fee2e2',
+                                        default => '#f3f4f6'
+                                    };
+
+                                    $status_text_color = match ($lead['status']) {
+                                        'Fresh' => '#92400e',
+                                        'In progress' => '#0c4a6e',
+                                        'Converted' => '#065f46',
+                                        'Dropped' => '#7f1d1d',
+                                        default => '#374151'
+                                    };
+
                                     echo "<tr>";
                                     echo "<td>" . $counter . "</td>";
                                     echo "<td>" . htmlspecialchars($lead['name']) . "</td>";
                                     echo "<td>" . htmlspecialchars($lead['phone']) . "</td>";
                                     echo "<td>" . htmlspecialchars($lead['service']) . "</td>";
-                                    echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: #fef3c7; color: #92400e;'>" . $lead['status'] . "</span></td>";
+                                    echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color; color: $status_text_color;'>" . $lead['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($lead['created_at'])) . "</td>";
-                                    echo "<td><a href='leads.php?action=view&id=" . $lead['id'] . "' class='action-btn view-btn'>View</a></td>";
+                                    echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
+                                    echo "<td><a href='leads.php?action=view&id=" . $lead['id'] . "' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a></td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='7' style='text-align: center;'>No open leads</td></tr>";
+                                echo "<tr><td colspan='8' style='text-align: center;'>No open leads</td></tr>";
                             }
                             ?>
                         </tbody>
