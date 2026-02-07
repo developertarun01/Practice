@@ -147,12 +147,32 @@ function openModal(modalId) {
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId)?.classList.remove('active');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+        // Remove the modal from DOM after closing animation
+        setTimeout(() => {
+            if (modal && modal.parentNode) {
+                modal.remove();
+            }
+        }, 300);
+    }
+}
+
+function removeAllModals() {
+    document.querySelectorAll('.modal.active').forEach(modal => {
+        modal.remove();
+    });
 }
 
 window.addEventListener('click', function (e) {
     if (e.target.classList.contains('modal')) {
         e.target.classList.remove('active');
+        setTimeout(() => {
+            if (e.target && e.target.parentNode) {
+                e.target.remove();
+            }
+        }, 300);
     }
 });
 
@@ -612,6 +632,7 @@ async function viewLead(leadId) {
 }
 
 async function viewBooking(bookingId) {
+    removeAllModals();
     try {
         const response = await fetch(`../api/get-booking.php?id=${bookingId}`);
         const data = await response.json();
@@ -796,6 +817,7 @@ function setupViewButtons() {
 
 // Payment view/edit functions
 async function viewPayment(paymentId) {
+    removeAllModals();
     try {
         const response = await fetch(`../api/get-payment.php?id=${paymentId}`);
         const data = await response.json();
@@ -906,6 +928,7 @@ async function handleEditPayment(e, paymentId) {
 
 // Professional view/edit functions
 async function viewProfessional(professionalId) {
+    removeAllModals();
     try {
         const response = await fetch(`../api/get-professional.php?id=${professionalId}`);
         const data = await response.json();
@@ -1036,6 +1059,7 @@ async function handleEditProfessional(e, professionalId) {
 
 // User view/edit functions
 async function viewUser(userId) {
+    removeAllModals();
     console.log('Attempting to view user with ID:', userId);
 
     try {

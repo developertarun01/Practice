@@ -31,7 +31,14 @@ if ($to_date) {
     $where .= " AND DATE(created_at) <= '$to_date'";
 }
 
-$payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_at DESC");
+$payments = $conn->query("
+    SELECT p.*, 
+           u.name as updated_by_name
+    FROM payments p
+    LEFT JOIN users u ON p.updated_by = u.id
+    WHERE $where 
+    ORDER BY p.created_at DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,6 +125,7 @@ $payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_a
                                 <th>Amount (Rs)</th>
                                 <th>Status</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -142,6 +150,7 @@ $payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_a
                                     echo "<td>₹" . number_format($payment['total_amount'], 2) . "</td>";
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color;'>" . $payment['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($payment['created_at'])) . "</td>";
+                                    echo "<td>" . ($payment['updated_by_name'] ? htmlspecialchars($payment['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $payment['id'] . "' data-type='payment' onclick='viewPayment(" . $payment['id'] . "); return false;'>View</a>";
                                     echo "</td>";
@@ -149,7 +158,7 @@ $payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_a
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='8' style='text-align: center;'>No payments found</td></tr>";
+                                echo "<tr><td colspan='9' style='text-align: center;'>No payments found</td></tr>";
                             }
                             ?>
                         </tbody>

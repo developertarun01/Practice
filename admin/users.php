@@ -15,7 +15,14 @@ if ($enabled !== '') $where .= " AND enabled = " . ($enabled == '1' ? '1' : '0')
 if ($from_date) $where .= " AND DATE(created_at) >= '$from_date'";
 if ($to_date) $where .= " AND DATE(created_at) <= '$to_date'";
 
-$users = $conn->query("SELECT * FROM users WHERE $where ORDER BY created_at DESC");
+$users = $conn->query("
+    SELECT u.*, 
+           editor.name as updated_by_name
+    FROM users u
+    LEFT JOIN users editor ON u.updated_by = editor.id
+    WHERE $where 
+    ORDER BY u.created_at DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,6 +105,7 @@ $users = $conn->query("SELECT * FROM users WHERE $where ORDER BY created_at DESC
                                 <th>Role</th>
                                 <th>Status</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -116,12 +124,13 @@ $users = $conn->query("SELECT * FROM users WHERE $where ORDER BY created_at DESC
                                     $status_badge = $user['enabled'] ? '<span style="background-color: #d1fae5; padding: 4px 8px; border-radius: 4px;">Enabled</span>' : '<span style="background-color: #fee2e2; padding: 4px 8px; border-radius: 4px;">Disabled</span>';
                                     echo $status_badge . "</td>";
                                     echo "<td>" . date('M d, Y', strtotime($user['created_at'])) . "</td>";
+                                    echo "<td>" . ($user['updated_by_name'] ? htmlspecialchars($user['updated_by_name']) : '-') . "</td>";
                                     echo "<td><a href='#' class='action-btn view-btn' data-id='" . $user['id'] . "' data-type='user' onclick='viewUser(" . $user['id'] . "); return false;'>View</a></td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='8' style='text-align: center;'>No users found</td></tr>";
+                                echo "<tr><td colspan='9' style='text-align: center;'>No users found</td></tr>";
                             }
                             ?>
                         </tbody>

@@ -19,7 +19,14 @@ if ($verify_status) $where .= " AND verify_status = '$verify_status'";
 if ($from_date) $where .= " AND DATE(created_at) >= '$from_date'";
 if ($to_date) $where .= " AND DATE(created_at) <= '$to_date'";
 
-$professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY created_at DESC");
+$professionals = $conn->query("
+    SELECT p.*, 
+           u.name as updated_by_name
+    FROM professionals p
+    LEFT JOIN users u ON p.updated_by = u.id
+    WHERE $where 
+    ORDER BY p.created_at DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -117,6 +124,7 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                                 <th>Status</th>
                                 <th>Verification</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -143,12 +151,13 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                                     };
                                     echo "<span style='padding: 4px 8px; border-radius: 4px; background-color: $v_color;'>" . $prof['verify_status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
+                                    echo "<td>" . ($prof['updated_by_name'] ? htmlspecialchars($prof['updated_by_name']) : '-') . "</td>";
                                     echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a></td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='10' style='text-align: center;'>No professionals found</td></tr>";
+                                echo "<tr><td colspan='11' style='text-align: center;'>No professionals found</td></tr>";
                             }
                             ?>
                         </tbody>

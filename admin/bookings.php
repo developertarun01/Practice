@@ -31,7 +31,14 @@ if ($to_date) {
     $where .= " AND DATE(created_at) <= '$to_date'";
 }
 
-$bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_at DESC");
+$bookings = $conn->query("
+    SELECT b.*, 
+           u.name as updated_by_name
+    FROM bookings b
+    LEFT JOIN users u ON b.updated_by = u.id
+    WHERE $where 
+    ORDER BY b.created_at DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -128,6 +135,7 @@ $bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_a
                                 <th>Status</th>
                                 <th>Starts At</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -154,6 +162,7 @@ $bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_a
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color;'>" . $booking['status'] . "</span></td>";
                                     echo "<td>" . ($booking['starts_at'] ? date('M d, Y', strtotime($booking['starts_at'])) : '-') . "</td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($booking['created_at'])) . "</td>";
+                                    echo "<td>" . ($booking['updated_by_name'] ? htmlspecialchars($booking['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $booking['id'] . "' data-type='booking' onclick='viewBooking(" . $booking['id'] . "); return false;'>View</a>";
                                     echo "</td>";
@@ -161,7 +170,7 @@ $bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_a
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='8' style='text-align: center;'>No bookings found</td></tr>";
+                                echo "<tr><td colspan='9' style='text-align: center;'>No bookings found</td></tr>";
                             }
                             ?>
                         </tbody>
