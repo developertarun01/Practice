@@ -160,8 +160,14 @@ function closeModal(modalId) {
 }
 
 function removeAllModals() {
-    document.querySelectorAll('.modal.active').forEach(modal => {
-        modal.remove();
+    // Remove all modal elements from DOM
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            if (modal && modal.parentNode) {
+                modal.remove();
+            }
+        }, 100);
     });
 }
 
