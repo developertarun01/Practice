@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initDateRangeFilters();
     setActiveMenu();
     autoHideMessages();
+    setupViewButtons();
 });
 
 // ============================
@@ -581,6 +582,7 @@ async function handleCreateUser(e) {
 // VIEW/EDIT MODAL HANDLERS
 // ============================
 async function viewLead(leadId) {
+    removeAllModals();
     try {
         const response = await fetch(`../api/get-lead.php?id=${leadId}`);
         const data = await response.json();
@@ -793,31 +795,38 @@ async function handleAddComment(e, leadId) {
 }
 
 // Update action buttons in pages to use view functions
+// Using event delegation to avoid duplicate listeners
 function setupViewButtons() {
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.getAttribute('data-id');
-            const type = this.getAttribute('data-type');
+    // Only attach once at document level - event delegation
+    if (window.viewButtonsSetup) return;
+    window.viewButtonsSetup = true;
 
-            if (type === 'lead') viewLead(id);
-            else if (type === 'booking') viewBooking(id);
-            else if (type === 'payment') viewPayment(id);
-            else if (type === 'professional') viewProfessional(id);
-            else if (type === 'user') viewUser(id);
-        });
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.view-btn');
+        if (!btn) return;
+
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        const type = btn.getAttribute('data-type');
+
+        if (type === 'lead') viewLead(id);
+        else if (type === 'booking') viewBooking(id);
+        else if (type === 'payment') viewPayment(id);
+        else if (type === 'professional') viewProfessional(id);
+        else if (type === 'user') viewUser(id);
     });
 
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            const id = this.getAttribute('data-id');
-            const type = this.getAttribute('data-type');
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.edit-btn');
+        if (!btn) return;
 
-            if (type === 'booking') editBooking(id);
-            else if (type === 'professional') editProfessional(id);
-            else if (type === 'user') editUser(id);
-        });
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        const type = btn.getAttribute('data-type');
+
+        if (type === 'booking') editBooking(id);
+        else if (type === 'professional') editProfessional(id);
+        else if (type === 'user') editUser(id);
     });
 }
 
