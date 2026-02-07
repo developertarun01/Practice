@@ -116,7 +116,7 @@ $users = $conn->query("SELECT * FROM users WHERE $where ORDER BY created_at DESC
                                     $status_badge = $user['enabled'] ? '<span style="background-color: #d1fae5; padding: 4px 8px; border-radius: 4px;">Enabled</span>' : '<span style="background-color: #fee2e2; padding: 4px 8px; border-radius: 4px;">Disabled</span>';
                                     echo $status_badge . "</td>";
                                     echo "<td>" . date('M d, Y', strtotime($user['created_at'])) . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn'>View</a> <a href='#' class='action-btn edit-btn'>Edit</a></td>";
+                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $user['id'] . "' data-type='user' onclick='viewUser(" . $user['id'] . "); return false;'>View</a></td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
@@ -132,11 +132,6 @@ $users = $conn->query("SELECT * FROM users WHERE $where ORDER BY created_at DESC
     </div>
 
     <script src="../assets/js/main.js"></script>
-    <script>
-        function openNewUserModal() {
-            alert('New User modal will open here');
-        }
-    </script>
 </body>
 
 </html>

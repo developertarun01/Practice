@@ -101,7 +101,7 @@ $calls = $conn->query("SELECT c.*, u.name as agent_name FROM phone_calls c LEFT 
                                     echo "<td>" . $call['duration'] . "</td>";
                                     echo "<td>" . ($call['tag'] ? htmlspecialchars($call['tag']) : "-") . "</td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($call['created_at'])) . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn'>View</a> <a href='#' class='action-btn edit-btn'>Edit</a></td>";
+                                    echo "<td>-</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }

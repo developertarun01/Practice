@@ -155,8 +155,7 @@ $bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_a
                                     echo "<td>" . ($booking['starts_at'] ? date('M d, Y', strtotime($booking['starts_at'])) : '-') . "</td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($booking['created_at'])) . "</td>";
                                     echo "<td>";
-                                    echo "<a href='#' class='action-btn view-btn'>View</a>";
-                                    echo "<a href='#' class='action-btn edit-btn'>Edit</a>";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $booking['id'] . "' data-type='booking' onclick='viewBooking(" . $booking['id'] . "); return false;'>View</a>";
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;

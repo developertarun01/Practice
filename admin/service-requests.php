@@ -102,7 +102,7 @@ $service_requests = $conn->query("SELECT s.*, p.name as prof_name, p.phone as pr
                                     echo "<td>" . (isset($sr['created_by_name']) ? htmlspecialchars($sr['created_by_name']) : "-") . "</td>";
                                     echo "<td>" . ($sr['deployed_at'] ? date('M d, Y H:i', strtotime($sr['deployed_at'])) : "-") . "</td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($sr['created_at'])) . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn'>View</a> <a href='#' class='action-btn edit-btn'>Edit</a></td>";
+                                    echo "<td>-</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }

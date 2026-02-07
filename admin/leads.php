@@ -176,8 +176,7 @@ $leads = $conn->query("SELECT * FROM leads WHERE $where ORDER BY created_at DESC
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color; color: $status_text_color;'>" . $lead['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($lead['created_at'])) . "</td>";
                                     echo "<td>";
-                                    echo "<a href='?action=view&id=" . $lead['id'] . "' class='action-btn view-btn'>View</a>";
-                                    echo "<a href='?action=edit&id=" . $lead['id'] . "' class='action-btn edit-btn'>Edit</a>";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead' onclick='viewLead(" . $lead['id'] . "); return false;'>View</a>";
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;

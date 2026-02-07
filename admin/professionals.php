@@ -141,7 +141,7 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
                                     };
                                     echo "<span style='padding: 4px 8px; border-radius: 4px; background-color: $v_color;'>" . $prof['verify_status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn'>View</a> <a href='#' class='action-btn edit-btn'>Edit</a></td>";
+                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a></td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
@@ -157,11 +157,6 @@ $professionals = $conn->query("SELECT * FROM professionals WHERE $where ORDER BY
     </div>
 
     <script src="../assets/js/main.js"></script>
-    <script>
-        function openNewProfessionalModal() {
-            alert('New Professional modal will open here');
-        }
-    </script>
 </body>
 
 </html>

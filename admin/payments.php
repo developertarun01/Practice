@@ -143,8 +143,7 @@ $payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_a
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color;'>" . $payment['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($payment['created_at'])) . "</td>";
                                     echo "<td>";
-                                    echo "<a href='#' class='action-btn view-btn'>View</a>";
-                                    echo "<a href='#' class='action-btn edit-btn'>Edit</a>";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $payment['id'] . "' data-type='payment' onclick='viewPayment(" . $payment['id'] . "); return false;'>View</a>";
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;
@@ -161,11 +160,6 @@ $payments = $conn->query("SELECT * FROM payments WHERE $where ORDER BY created_a
     </div>
 
     <script src="../assets/js/main.js"></script>
-    <script>
-        function openNewPaymentModal() {
-            alert('New Payment modal will open here');
-        }
-    </script>
 </body>
 
 </html>
