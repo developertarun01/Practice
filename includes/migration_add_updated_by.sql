@@ -11,3 +11,6 @@ ALTER TABLE professionals ADD FOREIGN KEY (updated_by) REFERENCES users(id);
 
 ALTER TABLE users ADD COLUMN updated_by INT DEFAULT NULL;
 ALTER TABLE users ADD FOREIGN KEY (updated_by) REFERENCES users(id);
+
+ALTER TABLE leads ADD COLUMN updated_by INT DEFAULT NULL;
+ALTER TABLE leads ADD FOREIGN KEY (updated_by) REFERENCES users(id);

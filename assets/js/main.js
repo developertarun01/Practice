@@ -621,6 +621,7 @@ async function viewLead(leadId) {
                         <p><strong>Service:</strong> ${lead.service}</p>
                         <p><strong>Status:</strong> <span class="badge">${lead.status}</span></p>
                         <p><strong>Created At:</strong> ${new Date(lead.created_at).toLocaleString()}</p>
+                        ${lead.updated_by_name ? `<p><strong>Last Edited By:</strong> ${lead.updated_by_name}</p>` : ''}
                     </div>
                     <h3>Comments</h3>
                     ${commentsHtml}
@@ -628,6 +629,7 @@ async function viewLead(leadId) {
                         <textarea name="comment" placeholder="Add a comment..." required></textarea>
                         <button type="submit" class="btn btn-primary">Add Comment</button>
                     </form>
+                    <button class="btn btn-secondary" onclick="editLead(${leadId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewLeadModal')">Close</button>
                 </div>
             </div>
@@ -636,6 +638,95 @@ async function viewLead(leadId) {
     } catch (error) {
         console.error(error);
         alert('Error loading lead details');
+    }
+}
+
+async function editLead(leadId) {
+    try {
+        const response = await fetch(`../api/get-lead.php?id=${leadId}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            alert('Error: ' + data.message);
+            return;
+        }
+
+        const lead = data.data.lead;
+        closeModal('viewLeadModal');
+
+        const html = `
+            <div id="editLeadModal" class="modal active">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('editLeadModal')">&times;</span>
+                    <h2>Edit Lead</h2>
+                    <form id="editLeadForm" onsubmit="handleEditLead(event, ${leadId})">
+                        <div class="form-group">
+                            <label>Name *</label>
+                            <input type="text" name="name" value="${lead.name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" name="phone" pattern="[0-9]{10}" value="${lead.phone}" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Service *</label>
+                            <select name="service" required>
+                                <option value="">Select Service</option>
+                                <option value="All Rounder" ${lead.service === 'All Rounder' ? 'selected' : ''}>All Rounder</option>
+                                <option value="Baby Caretaker" ${lead.service === 'Baby Caretaker' ? 'selected' : ''}>Baby Caretaker</option>
+                                <option value="Cooking Maid" ${lead.service === 'Cooking Maid' ? 'selected' : ''}>Cooking Maid</option>
+                                <option value="House Maid" ${lead.service === 'House Maid' ? 'selected' : ''}>House Maid</option>
+                                <option value="Elderly Care" ${lead.service === 'Elderly Care' ? 'selected' : ''}>Elderly Care</option>
+                                <option value="Security Guard" ${lead.service === 'Security Guard' ? 'selected' : ''}>Security Guard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status *</label>
+                            <select name="status" required>
+                                <option value="">Select Status</option>
+                                <option value="Fresh" ${lead.status === 'Fresh' ? 'selected' : ''}>Fresh</option>
+                                <option value="In progress" ${lead.status === 'In progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="Converted" ${lead.status === 'Converted' ? 'selected' : ''}>Converted</option>
+                                <option value="Dropped" ${lead.status === 'Dropped' ? 'selected' : ''}>Dropped</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Lead</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editLeadModal')">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', html);
+    } catch (error) {
+        console.error(error);
+        alert('Error loading lead for editing');
+    }
+}
+
+async function handleEditLead(e, leadId) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append('lead_id', leadId);
+
+    try {
+        const response = await fetch('../api/update-lead.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Lead updated successfully!');
+            closeModal('editLeadModal');
+            setTimeout(() => location.reload(), 500);
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error');
     }
 }
 

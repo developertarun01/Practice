@@ -41,7 +41,7 @@ if ($_SESSION['user_role'] != 'Admin') {
     $where .= " AND responder_id = " . $_SESSION['user_id'];
 }
 
-$leads = $conn->query("SELECT * FROM leads WHERE $where ORDER BY created_at DESC");
+$leads = $conn->query("SELECT l.*, u.name as updated_by_name FROM leads l LEFT JOIN users u ON l.updated_by = u.id WHERE $where ORDER BY l.created_at DESC");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -144,6 +144,7 @@ $leads = $conn->query("SELECT * FROM leads WHERE $where ORDER BY created_at DESC
                                 <th>Service</th>
                                 <th>Status</th>
                                 <th>Created At</th>
+                                <th>Last Edited By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -175,6 +176,7 @@ $leads = $conn->query("SELECT * FROM leads WHERE $where ORDER BY created_at DESC
                                     echo "<td>" . htmlspecialchars($lead['service']) . "</td>";
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color; color: $status_text_color;'>" . $lead['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($lead['created_at'])) . "</td>";
+                                    echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a>";
                                     echo "</td>";
@@ -182,7 +184,7 @@ $leads = $conn->query("SELECT * FROM leads WHERE $where ORDER BY created_at DESC
                                     $counter++;
                                 }
                             } else {
-                                echo "<tr><td colspan='7' style='text-align: center;'>No leads found</td></tr>";
+                                echo "<tr><td colspan='8' style='text-align: center;'>No leads found</td></tr>";
                             }
                             ?>
                         </tbody>
