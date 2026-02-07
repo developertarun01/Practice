@@ -172,11 +172,6 @@ $bookings = $conn->query("SELECT * FROM bookings WHERE $where ORDER BY created_a
     </div>
 
     <script src="../assets/js/main.js"></script>
-    <script>
-        function openNewBookingModal() {
-            alert('New Booking modal will open here');
-        }
-    </script>
 </body>
 
 </html>

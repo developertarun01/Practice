@@ -439,6 +439,14 @@ async function handleCreateBooking(e) {
             body: formData
         });
 
+        // Check if response is ok
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server error:', response.status, text);
+            alert('Server error (500). Check console for details.');
+            return;
+        }
+
         const data = await response.json();
 
         if (data.success) {
@@ -449,8 +457,8 @@ async function handleCreateBooking(e) {
             alert('Error: ' + (data.message || 'Unknown error'));
         }
     } catch (error) {
-        console.error(error);
-        alert('Network error');
+        console.error('Fetch error:', error);
+        alert('Error: ' + error.message);
     }
 }
 
