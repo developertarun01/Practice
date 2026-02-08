@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servon - All Rounder</title>
+    <link rel="stylesheet" href="assets/css/style2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+    <link rel="shortcut icon" href="./assets/images/logo.png" type="image/pngs">
+
+    <!-- Google Font (For Font Family) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome (For Icons)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Section 2 */
+        .sec2-inner {
+            padding-top: 120px;
+        }
+
+        .sec2-inner li {
+            list-style: circle;
+            margin-left: 20px;
+        }
+
+        .sec2-cards {
+            gap: 0;
+        }
+
+        .sec2-card {
+            padding: 30px;
+        }
+
+        .card-line {
+            border-right: 2px solid var(--button);
+        }
+
+        .sec2-right {
+            padding: 20px;
+        }
+
+        .sec2-right img {
+            box-shadow: 20px 20px 0 var(--button);
+            border-radius: 20px;
+            height: auto;
+        }
+
+        /* Section 7 */
+        .sec7-cards {
+            padding-top: 40px;
+        }
+
+        /* Section 71  */
+
+        .sec71-inner {
+            padding: 20px 100px;
+        }
+
+        .sec71-right {
+            border-radius: 30px;
+            border: 3px solid var(--button-dark);
+        }
+
+        .sec71-right iframe {
+            border-radius: 30px;
+            width: 100%;
+        }
+
+
+        /* Mobile and Tablets (1023px) */
+        @media (max-width: 900px) {
+
+            /* Section 1  */
+
+            .sec1-inner {
+                position: relative;
+                padding-top: 0;
+            }
+
+            .sec1-inner h1 {
+                font-size: 30px;
+            }
+
+            .sec1-left {
+                position: absolute;
+                z-index: -1;
+                opacity: 0.1;
+            }
+
+            .sec1-right {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sec1-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-top: 40px;
+            }
+
+            .sec1-card {
+                flex-direction: row;
+            }
+
+            .swiper {
+                padding: 0 0 30px 0;
+            }
+
+            .mt-40 {
+                margin-top: 30px;
+            }
+
+            .card-line,
+            .card-bottom-line {
+                border: none;
+            }
+
+            .swiper-button-prev,
+            .swiper-button-next {
+                display: none;
+            }
+
+            /* Section 2 */
+            .sec2-inner {
+                padding-top: 80px;
+                text-align: center;
+            }
+
+            .sec2-right {
+                padding: 0;
+            }
+
+            .sec2-right img {
+                box-shadow: 0px 10px 0 var(--button);
+            }
+
+            /* Section 7  */
+            .sec7-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sec71-inner {
+                padding: 20px 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav flex-center">
+        <div class="flex nav-inner container">
+            <div class="nav-left flex-center">
+                <a href="/">
+                    <img class="logo-desktop" src="./assets/images/logo-name.png" alt="Servon Logo">
+                    <img class="logo-mobile" src="./assets/images/logo.png" alt="Servon Logo">
+                </a>
+            </div>
+            <div class="nav-center ">
+                <ul class="flex-center">
+                    <li id="services"><a href="#">Services ⮟</a></li>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="contact-us.html">Contact Us</a></li>
+                    <a href="tel:8130079566"><button class="btn">Help Desk</button></a>
+                </ul>
+            </div>
+            <div class="hamburger-open">
+                <i class="fa-solid fa-bars fa-sm"></i>
+            </div>
+            <div class="hamburger-close">
+                <i class="fa-solid fa-xmark fa-sm"></i>
+            </div>
+        </div>
+        <div class="sec-services-cards">
+            <a href="all-rounder.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-person-booth"></i></span>
+                    <p><b>All Rounder</b></p>
+                </div>
+            </a>
+            <a href="baby-caretaker.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-baby"></i></span>
+                    <p><b>Baby Caretaker</b></p>
+                </div>
+            </a>
+            <a href="cooking-maid.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-utensils"></i></span>
+                    <p><b>Cooking Maid</b></p>
+                </div>
+            </a>
+            <a href="house-maid.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-broom "></i></span>
+                    <p><b>House Maid</b></p>
+                </div>
+            </a>
+            <a href="elderly-care.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-hand-holding-hand "></i></span>
+                    <p><b>Elderly Care</b></p>
+                </div>
+            </a>
+            <a href="security-guard.html">
+                <div class="sec-services-card flex">
+                    <span><i class="fa-solid mr-10 fa-user-shield "></i></span>
+                    <p><b>Security Guard</b></p>
+                </div>
+            </a>
+
+        </div>
+    </nav>
+
+    <section class="sec2">
+        <div class="sec2-inner container flex-center ">
+            <div class="sec2-left flex-1 reveal">
+                <h1>All <span>Rounder</span></h1>
+
+                <p class="mt-10">
+                    Servon specializes in providing <strong>professional all-rounder domestic helpers in Delhi
+                        NCR</strong> who
+                    can efficiently manage multiple household responsibilities. Our <strong>verified and trained
+                        all-rounder
+                        staff</strong> are ideal for families looking for a single, dependable helper to handle daily
+                    home needs with
+                    care, discipline, and trust.
+                </p>
+
+                <h3 class="mt-20">All-Rounder Domestic Services We Offer</h3>
+
+                <p class="mt-10">
+                    Our all-rounder helpers are skilled to perform a wide range of household tasks, including:
+                </p>
+
+                <ul>
+                    <li><strong>House Cleaning & Daily Chores</strong> (sweeping, mopping, dusting)</li>
+                    <li><strong>Cooking Assistance</strong> (basic to regular home meals)</li>
+                    <li><strong>Utensil Cleaning & Kitchen Management</strong></li>
+                    <li><strong>Laundry & Clothes Care</strong></li>
+                    <li><strong>Child Supervision & Basic Baby Care</strong></li>
+                    <li><strong>Elderly Support & Routine Assistance</strong></li>
+                </ul>
+
+            </div>
+
+            <div class="sec2-right flex-1 reveal">
+                <img src="./assets/images/rounder.png" alt="All Rounder">
+            </div>
+
+        </div>
+    </section>
+
+    <section class="sec7">
+        <div class="sec7-inner container center">
+            <h1>We're big on <span>trust & safety</span>.</h1>
+            <p>Maids go through an extensive vetting process before they are listed on servon.in</p>
+            <div class="sec7-cards grid-4 mt-40 reveal-anti">
+                <div class="sec7-card">
+                    <span><i class="fa-regular fa-address-card fa-2xl"></i></span>
+                    <h3 class="mt-20">Identity check</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-regular fa-circle-check fa-2xl"></i></span>
+                    <h3 class="mt-20">Document verification</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-brands fa-rocketchat fa-2xl"></i></span>
+                    <h3 class="mt-20">In-person interview</h3>
+                </div>
+                <div class="sec7-card">
+                    <span><i class="fa-solid fa-laptop fa-2xl"></i></span>
+                    <h3 class="mt-20">Training session</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec71">
+        <div class="sec71-inner container flex-center">
+            <div class="sec71-left flex-1">
+                <h1><span>Contact</span></h1>
+                <a href="tel:8130079566">
+                    <h3 class="mt-20">Tel: 81300 79566</h3>
+                </a>
+                <a href="mailto:contact@servon.in">
+                    <h4>Email: contact@servon.in</h4>
+                </a>
+                <div class="mt-40">
+                    <i class="fa-brands fa-facebook fa-2xl"></i>
+                    <i class="fa-brands fa-square-instagram fa-2xl"></i>
+                    <i class="fa-brands fa-x-twitter fa-2xl"></i>
+                </div>
+                <a href="tel:8130079566"><button class="btn mt-40">Talk to Us</button></a>
+            </div>
+            <div class="sec71-right flex-2">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d56037.58757635826!2d76.96122882167968!3d28.619293799999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d05478638149f%3A0x3478a5062c930123!2sDwarka%20Mor!5e0!3m2!1sen!2sin!4v1770558757503!5m2!1sen!2sin"
+                    width="600" height="350" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec8">
+        <div class="sec8-inner container ">
+            <form id="contactFormFooter" class="contact-form  reveal-anti">
+                <div class="grid-4">
+                    <select name="service" id="service" required>
+                        <option value="All Rounder">All Rounder</option>
+                        <option value="Baby Caretaker">Baby Caretaker</option>
+                        <option value="Cooking Maid">Cooking Maid</option>
+                        <option value="House Maid">House Maid</option>
+                        <option value="Elderly Care">Elderly Care</option>
+                        <option value="Security Guard">Security Guard</option>
+                    </select>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Mobile Number" required>
+                    <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                </div>
+                <span class="form-message center mt-20" id="formMessage"></span>
+                <span class="error-message center mt-20" id="phoneError"></span>
+                <span class="error-message center mt-20" id="nameError"></span>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-inner container flex">
+            <div class="footer-left flex-2">
+                <h1>Servon.in</h1>
+                <p class="small footer-content mt-10">We are India's largest company of domestic helpers with over 5
+                    lakh maids and
+                    over 2
+                    lakh satisfied customers. Whether you are looking for a full time, part time, 24 hours, live-out,
+                    live-in maid, cleaner, babysitter, cook, nanny, governess, senior citizen caretaker, patient
+                    caretaker in Delhi NCR you will find the best quality and experienced staff here for your home and
+                    family</p>
+                <p class="mt-20 small"><b>Address</b> – 1st floor, Plot no. 76, Gate no. 2 , Dwarka Mor Metro Station,
+                    New
+                    Delhi –
+                    110059</p>
+
+            </div>
+            <div class="footer-right flex flex-3">
+                <div class="footer-r-r flex-1">
+                    <h2>Quick Links</h2>
+                    <a href="/">
+                        <p class="mt-10">Home</p>
+                    </a>
+                    <a href="about-us .html">
+                        <p class="mt-10">About Us</p>
+                    </a>
+                    <a href="contact-us .html">
+                        <p class="mt-10">Contact Us</p>
+                    </a>
+                    <h2 class="mt-20">Connect with us</h2>
+                    <div class="footer-left-icons mt-20">
+                        <a href="tel:8130079566"><span><i class="fa-brands fa-facebook fa-xl"></i></span></a>
+                        <a href="tel:8130079566"><span><i class="fa-brands fa-x-twitter fa-xl"></i></span></a>
+                        <a href="tel:8130079566"><span><i class="fa-brands fa-instagram fa-xl"></i></span></a>
+                        <a href="tel:8130079566"><span><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="center small">Servon.in © 2026 | All rights reserved.</p>
+    </footer>
+
+    <a href="tel:8130079566">
+        <div class="call-button flex-center-center">
+            <span><i class="fa-solid fa-phone-volume fa-xl fa-shake"></i></span>
+            <p>Speak to an Expert</p>
+        </div>
+    </a>
+
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script>
+        // Form Select 
+        const sec1Cards = document.querySelector('.sec1-cards');
+        const sec1Form = document.querySelector('.sec1-form');
+        document.querySelectorAll('.sec1-card').forEach(card => {
+            card.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                sec1Cards.style.display = "none";
+                sec1Form.style.display = "flex";
+
+                const selectedService = this.querySelector('p').innerText.trim();
+                const serviceSelect = document.getElementById('service');
+
+                serviceSelect.value = selectedService;
+            });
+        });
+
+        // Card Slider
+        new Swiper('.card-wrapper', {
+            loop: true,
+            spaceBetween: 20,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            breakpoints: {
+                0: {
+                    slidesPerView: 1
+                },
+                768: {
+                    slidesPerView: 2
+                },
+                1024: {
+                    slidesPerView: 3
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

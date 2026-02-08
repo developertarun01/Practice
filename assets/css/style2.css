@@ -187,11 +187,11 @@ input[type="checkbox"]:focus {
 body {
   font-size: 16px;
   color: var(--dark);
-  /* background: radial-gradient(
-    circle at 27% 25%,
-    rgba(255, 230, 0, 0.3) 200px 200px,
+  background: radial-gradient(
+    circle at 90% 80%,
+    rgba(177, 255, 153, 0.3) 200px 200px,
     transparent 400px
-  ); */
+  );
 }
 
 table {
@@ -454,6 +454,30 @@ form {
 }
 
 /* Navbar  */
+#services {
+  cursor: pointer;
+}
+
+.sec-services-cards {
+  position: fixed;
+  top: 70px;
+  left: 61%;
+  transform: translateX(-50%);
+  background-color: white;
+  border-radius: 0px 0px 20px 20px;
+  border: 2px solid var(--button);
+  display: none;
+}
+
+.sec-services-cards.active {
+  display: block;
+}
+
+.sec-services-card {
+  padding: 20px 40px;
+  border-top: 2px solid var(--button);
+}
+
 .logo-mobile {
   display: none;
 }
@@ -558,6 +582,22 @@ form {
     width: 40px;
     height: 40px;
     margin-top: 10px;
+  }
+
+  .sec-services-cards {
+    position: fixed;
+    top: 120px;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 0px 0px 20px 20px;
+    border: 2px solid var(--button);
+    display: none;
+  }
+
+  .sec-services-card {
+    flex-direction: row;
   }
 
   .nav {

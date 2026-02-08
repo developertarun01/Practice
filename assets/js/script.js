@@ -45,3 +45,24 @@ if (elements) {
     elements.forEach(el => observer.observe(el));
     elementsAnti.forEach(el => observer.observe(el));
 }
+
+// Services 
+const services = document.getElementById('services');
+const serviceCard = document.querySelector('.sec-services-cards');
+
+if (services && serviceCard) {
+    services.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent document click
+        serviceCard.classList.toggle('active');
+    });
+
+    // close when clicking outside
+    document.addEventListener('click', () => {
+        serviceCard.classList.remove('active');
+    });
+
+    // prevent closing when clicking inside dropdown
+    serviceCard.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+}
