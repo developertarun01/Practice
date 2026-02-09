@@ -452,6 +452,67 @@ function openNewUserModal() {
     document.body.insertAdjacentHTML('beforeend', html);
 }
 
+function openCreateFollowUpModal(leadId, leadName) {
+    const html = `
+        <div id="followUpModal" class="modal active">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('followUpModal')">&times;</span>
+                <h2>Create Follow-up for ${htmlEscape(leadName)}</h2>
+                <form id="followUpForm" onsubmit="handleCreateFollowUp(event, ${leadId})">
+                    <input type="hidden" name="lead_id" value="${leadId}">
+                    
+                    <div class="form-group">
+                        <label>Lead Name</label>
+                        <input type="text" value="${htmlEscape(leadName)}" disabled style="background-color: #f3f4f6; cursor: not-allowed;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Direction *</label>
+                        <select name="direction" required>
+                            <option value="">Select Direction</option>
+                            <option value="Inbound">Inbound</option>
+                            <option value="Outbound">Outbound</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Channel *</label>
+                        <select name="channel" required>
+                            <option value="">Select Channel</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Email">Email</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="SMS">SMS</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Comments</label>
+                        <textarea name="comments" rows="4" placeholder="Enter follow-up notes..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Reminder Date & Time</label>
+                        <input type="datetime-local" name="reminder_at">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Create Follow-up</button>
+                </form>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function htmlEscape(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // ============================
 // FORM SUBMISSION HANDLERS
 // ============================
@@ -575,6 +636,41 @@ async function handleCreateUser(e) {
     } catch (error) {
         console.error('Create user error:', error);
         alert('Network error. Please check if the API file exists.');
+    }
+}
+
+async function handleCreateFollowUp(e, leadId) {
+    e.preventDefault();
+    const form = e.target;
+
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('../api/create-follow-up.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server error:', response.status, text);
+            alert('Server error (' + response.status + '). Check console for details.');
+            return;
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Follow-up created successfully!');
+            closeModal('followUpModal');
+            setTimeout(() => location.reload(), 500);
+        } else {
+            const errorMsg = data.errors ? data.errors.join(', ') : data.message;
+            alert('Error: ' + errorMsg);
+        }
+    } catch (error) {
+        console.error('Follow-up creation error:', error);
+        alert('Network error: ' + error.message);
     }
 }
 

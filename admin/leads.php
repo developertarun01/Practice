@@ -178,7 +178,8 @@ $leads = $conn->query("SELECT l.*, u.name as updated_by_name FROM leads l LEFT J
                                     echo "<td>" . date('M d, Y H:i', strtotime($lead['created_at'])) . "</td>";
                                     echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
-                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a>";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
+                                    echo "<a href='#' class='action-btn' onclick='openCreateFollowUpModal(" . $lead['id'] . ", \"" . htmlspecialchars($lead['name']) . "\"); return false;' style='background-color: #10b981;'>Follow-up</a>";
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;
