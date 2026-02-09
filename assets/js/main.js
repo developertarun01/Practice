@@ -111,7 +111,7 @@ async function handleFormSubmit(e) {
     const message = form.querySelector('#formMessage');
 
     try {
-        const response = await fetch('../api/submit-lead.php', {
+        const response = await fetch('./api/submit-lead.php', {
             method: 'POST',
             body: formData
         });
