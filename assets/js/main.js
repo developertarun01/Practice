@@ -1442,5 +1442,140 @@ async function handleEditUser(e, userId) {
     }
 }
 
+// ============================
+// FOLLOW-UP VIEW/EDIT HANDLERS
+// ============================
+async function viewFollowUp(followUpId) {
+    removeAllModals();
+    try {
+        const response = await fetch(`../api/get-follow-up.php?id=${followUpId}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            alert('Error: ' + data.message);
+            return;
+        }
+
+        const fu = data.data;
+
+        const html = `
+            <div id="viewFollowUpModal" class="modal active">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('viewFollowUpModal')">&times;</span>
+                    <h2>Follow-up Details</h2>
+                    <div class="follow-up-details">
+                        <p><strong>Lead Name:</strong> ${fu.lead_name || 'N/A'}</p>
+                        <p><strong>Lead Phone:</strong> ${fu.lead_phone || 'N/A'}</p>
+                        <p><strong>Direction:</strong> ${fu.direction}</p>
+                        <p><strong>Channel:</strong> ${fu.channel}</p>
+                        <p><strong>Comments:</strong> ${fu.comments ? htmlEscape(fu.comments) : 'N/A'}</p>
+                        <p><strong>Reminder At:</strong> ${fu.reminder_at ? new Date(fu.reminder_at).toLocaleString() : 'No reminder set'}</p>
+                        <p><strong>Created By:</strong> ${fu.user_name || 'N/A'}</p>
+                        <p><strong>Created At:</strong> ${new Date(fu.created_at).toLocaleString()}</p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="editFollowUp(${followUpId})">Edit</button>
+                    <button class="btn btn-secondary" onclick="closeModal('viewFollowUpModal')">Close</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', html);
+    } catch (error) {
+        console.error(error);
+        alert('Error loading follow-up details');
+    }
+}
+
+async function editFollowUp(followUpId) {
+    removeAllModals();
+    try {
+        const response = await fetch(`../api/get-follow-up.php?id=${followUpId}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            alert('Error: ' + data.message);
+            return;
+        }
+
+        const fu = data.data;
+
+        const html = `
+            <div id="editFollowUpModal" class="modal active">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('editFollowUpModal')">&times;</span>
+                    <h2>Edit Follow-up</h2>
+                    <form id="editFollowUpForm" onsubmit="handleEditFollowUp(event, ${followUpId})">
+                        <div class="form-group">
+                            <label>Lead Name</label>
+                            <input type="text" value="${htmlEscape(fu.lead_name || '')}" disabled style="background-color: #f3f4f6; cursor: not-allowed;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Direction *</label>
+                            <select name="direction" required>
+                                <option value="Inbound" ${fu.direction === 'Inbound' ? 'selected' : ''}>Inbound</option>
+                                <option value="Outbound" ${fu.direction === 'Outbound' ? 'selected' : ''}>Outbound</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Channel *</label>
+                            <select name="channel" required>
+                                <option value="Phone" ${fu.channel === 'Phone' ? 'selected' : ''}>Phone</option>
+                                <option value="Email" ${fu.channel === 'Email' ? 'selected' : ''}>Email</option>
+                                <option value="WhatsApp" ${fu.channel === 'WhatsApp' ? 'selected' : ''}>WhatsApp</option>
+                                <option value="SMS" ${fu.channel === 'SMS' ? 'selected' : ''}>SMS</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Comments</label>
+                            <textarea name="comments" rows="4">${htmlEscape(fu.comments || '')}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Reminder Date & Time</label>
+                            <input type="datetime-local" name="reminder_at" value="${fu.reminder_at ? fu.reminder_at.replace(' ', 'T').substring(0, 16) : ''}">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Update Follow-up</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('editFollowUpModal')">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', html);
+    } catch (error) {
+        console.error(error);
+        alert('Error loading follow-up details');
+    }
+}
+
+async function handleEditFollowUp(e, followUpId) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append('follow_up_id', followUpId);
+
+    try {
+        const response = await fetch('../api/update-follow-up.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Follow-up updated successfully!');
+            closeModal('editFollowUpModal');
+            setTimeout(() => location.reload(), 500);
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error');
+    }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', setupViewButtons);
