@@ -312,7 +312,8 @@ function openNewProfessionalModal() {
             <div class="modal-content">
                 <span class="close" onclick="closeModal('newProfessionalModal')">&times;</span>
                 <h2>Add New Professional</h2>
-                <form id="newProfessionalForm" onsubmit="handleCreateProfessional(event)">
+                <div id="formErrors" style="display: none; padding: 10px; margin-bottom: 15px; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 4px; color: #991b1b;"></div>
+                <form id="newProfessionalForm" onsubmit="handleCreateProfessional(event)" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Name *</label>
                         <input type="text" name="name" required>
@@ -351,8 +352,20 @@ function openNewProfessionalModal() {
                         <input type="number" name="experience" min="0">
                     </div>
                     <div class="form-group">
+                        <label>Hours Per Day</label>
+                        <input type="number" name="hours" min="1" max="24" value="8" placeholder="e.g., 8 hours">
+                    </div>
+                    <div class="form-group">
                         <label>Location</label>
                         <input type="text" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label>Staff Photo (JPG, PNG, GIF - Max 5MB)</label>
+                        <input type="file" name="staff_image" accept=".jpg,.jpeg,.png,.gif">
+                    </div>
+                    <div class="form-group">
+                        <label>ID Proof Document (JPG, PNG, PDF - Max 5MB)</label>
+                        <input type="file" name="id_proof_image" accept=".jpg,.jpeg,.png,.pdf">
                     </div>
                     <button type="submit" class="btn btn-primary">Add Professional</button>
                 </form>
@@ -531,6 +544,7 @@ async function handleCreateProfessional(e) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
+    const errorDiv = document.getElementById('formErrors');
 
     try {
         const response = await fetch('../api/create-professional.php', {
@@ -545,11 +559,21 @@ async function handleCreateProfessional(e) {
             closeModal('newProfessionalModal');
             setTimeout(() => location.reload(), 500);
         } else {
-            alert('Error: ' + (data.message || 'Unknown error'));
+            // Display error message
+            if (data.errors && Array.isArray(data.errors)) {
+                errorDiv.innerHTML = '<strong>❌ Errors:</strong><ul>' +
+                    data.errors.map(e => '<li>' + e + '</li>').join('') +
+                    '</ul>';
+            } else {
+                errorDiv.innerHTML = '<strong>❌ Error:</strong> ' + (data.message || 'Unknown error');
+            }
+            errorDiv.style.display = 'block';
+            errorDiv.scrollIntoView({ behavior: 'smooth' });
         }
     } catch (error) {
         console.error(error);
-        alert('Network error');
+        errorDiv.innerHTML = '<strong>❌ Error:</strong> Network error: ' + error.message;
+        errorDiv.style.display = 'block';
     }
 }
 
@@ -1081,10 +1105,39 @@ async function handleEditPayment(e, paymentId) {
 
 // Professional view/edit functions
 async function viewProfessional(professionalId) {
+    // Prevent default if called from event
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     removeAllModals();
+    // console.log('Attempting to view professional with ID:', professionalId);
+
     try {
         const response = await fetch(`../api/get-professional.php?id=${professionalId}`);
-        const data = await response.json();
+        // console.log('Response status:', response.status);
+
+        // Check if response is OK
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server error:', response.status, text);
+            alert(`Server error (${response.status}). Check console for details.`);
+            return;
+        }
+
+        const responseText = await response.text();
+        // console.log('Raw response:', responseText.substring(0, 200) + '...'); // Log first 200 chars
+
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            console.error('Response was:', responseText);
+            alert('Invalid response from server - expected JSON but got HTML. Check console for details.');
+            return;
+        }
 
         if (!data.success) {
             alert('Error: ' + data.message);
@@ -1092,6 +1145,9 @@ async function viewProfessional(professionalId) {
         }
 
         const prof = data.data;
+        // console.log('Professional data:', prof);
+
+        const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
 
         const html = `
             <div id="viewProfessionalModal" class="modal active">
@@ -1099,17 +1155,29 @@ async function viewProfessional(professionalId) {
                     <span class="close" onclick="closeModal('viewProfessionalModal')">&times;</span>
                     <h2>Professional Details</h2>
                     <div class="professional-details">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            ${prof.staff_image ? `<div><strong>Staff Photo:</strong><br><img src="${prof.staff_image}" style="max-width: 200px; max-height: 200px; border-radius: 4px; object-fit: cover;"></div>` : ''}
+                            ${prof.id_proof_image ? `<div><strong>ID Proof:</strong><br><a href="${prof.id_proof_image}" target="_blank" style="color: #007bff; text-decoration: none;">📄 View Document</a></div>` : ''}
+                        </div>
                         <p><strong>Name:</strong> ${prof.name}</p>
                         <p><strong>Phone:</strong> ${prof.phone}</p>
                         <p><strong>Email:</strong> ${prof.email || '-'}</p>
                         <p><strong>Service:</strong> ${prof.service}</p>
                         <p><strong>Gender:</strong> ${prof.gender}</p>
                         <p><strong>Experience:</strong> ${prof.experience || 0} years</p>
+                        <p><strong>Hours Per Day:</strong> ${prof.hours || 8} hours</p>
                         <p><strong>Rating:</strong> ⭐ ${prof.rating}</p>
                         <p><strong>Status:</strong> <span class="badge">${prof.status}</span></p>
                         <p><strong>Verification:</strong> <span class="badge">${prof.verify_status}</span></p>
                         <p><strong>Location:</strong> ${prof.location || '-'}</p>
                         ${prof.updated_by_name ? `<p><strong>Last Edited By:</strong> ${prof.updated_by_name}</p>` : ''}
+                    </div>
+                    <div style="margin-top: 20px; padding: 10px; background-color: #f0f9ff; border-radius: 4px;">
+                        <p><strong>🔗 Share Profile Link:</strong></p>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="text" value="${profileUrl}" readonly style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard('${profileUrl}')">📋 Copy</button>
+                        </div>
                     </div>
                     <button class="btn btn-secondary" onclick="editProfessional(${professionalId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewProfessionalModal')">Close</button>
@@ -1117,9 +1185,10 @@ async function viewProfessional(professionalId) {
             </div>
         `;
         document.body.insertAdjacentHTML('beforeend', html);
+
     } catch (error) {
-        console.error(error);
-        alert('Error loading professional details');
+        console.error('View professional error:', error);
+        alert('Error loading professional details: ' + error.message);
     }
 }
 
@@ -1141,14 +1210,27 @@ async function editProfessional(professionalId) {
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('editProfessionalModal')">&times;</span>
                     <h2>Edit Professional</h2>
-                    <form id="editProfessionalForm" onsubmit="handleEditProfessional(event, ${professionalId})">
+                    <div id="editFormErrors" style="display: none; padding: 10px; margin-bottom: 15px; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 4px; color: #991b1b;"></div>
+                    <form id="editProfessionalForm" onsubmit="handleEditProfessional(event, ${professionalId})" enctype="multipart/form-data">
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" name="name" value="${prof.name}">
                         </div>
                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" value="${prof.email || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" name="phone" value="${prof.phone}" pattern="[0-9]{10}">
+                        </div>
+                        <div class="form-group">
                             <label>Experience (Years)</label>
                             <input type="number" name="experience" value="${prof.experience || 0}">
+                        </div>
+                        <div class="form-group">
+                            <label>Hours Per Day</label>
+                            <input type="number" name="hours" min="1" max="24" value="${prof.hours || 8}">
                         </div>
                         <div class="form-group">
                             <label>Rating</label>
@@ -1170,6 +1252,16 @@ async function editProfessional(professionalId) {
                                 <option value="Rejected" ${prof.verify_status === 'Rejected' ? 'selected' : ''}>Rejected</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Staff Photo ${prof.staff_image ? '(Current: ✓)' : ''}</label>
+                            <input type="file" name="staff_image" accept=".jpg,.jpeg,.png,.gif">
+                            <small>JPG, PNG, GIF - Max 5MB. Upload to replace current image.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>ID Proof Document ${prof.id_proof_image ? '(Current: ✓)' : ''}</label>
+                            <input type="file" name="id_proof_image" accept=".jpg,.jpeg,.png,.pdf">
+                            <small>JPG, PNG, PDF - Max 5MB. Upload to replace current document.</small>
+                        </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editProfessionalModal')">Cancel</button>
                     </form>
@@ -1188,6 +1280,7 @@ async function handleEditProfessional(e, professionalId) {
     const form = e.target;
     const formData = new FormData(form);
     formData.append('professional_id', professionalId);
+    const errorDiv = document.getElementById('editFormErrors');
 
     try {
         const response = await fetch('../api/update-professional.php', {
@@ -1202,16 +1295,32 @@ async function handleEditProfessional(e, professionalId) {
             closeModal('editProfessionalModal');
             setTimeout(() => location.reload(), 500);
         } else {
-            alert('Error: ' + (data.message || 'Unknown error'));
+            // Display error message
+            if (data.errors && Array.isArray(data.errors)) {
+                errorDiv.innerHTML = '<strong>❌ Errors:</strong><ul>' +
+                    data.errors.map(e => '<li>' + e + '</li>').join('') +
+                    '</ul>';
+            } else {
+                errorDiv.innerHTML = '<strong>❌ Error:</strong> ' + (data.message || 'Unknown error');
+            }
+            errorDiv.style.display = 'block';
+            errorDiv.scrollIntoView({ behavior: 'smooth' });
         }
     } catch (error) {
         console.error(error);
-        alert('Network error');
+        errorDiv.innerHTML = '<strong>❌ Error:</strong> Network error: ' + error.message;
+        errorDiv.style.display = 'block';
     }
 }
 
 // User view/edit functions
 async function viewUser(userId) {
+    // Prevent default if called from event
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     removeAllModals();
     console.log('Attempting to view user with ID:', userId);
 
@@ -1219,15 +1328,24 @@ async function viewUser(userId) {
         const response = await fetch(`../api/get-user.php?id=${userId}`);
         console.log('Response status:', response.status);
 
+        // Check if response is OK
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server error:', response.status, text);
+            alert(`Server error (${response.status}). Check console for details.`);
+            return;
+        }
+
         const responseText = await response.text();
-        console.log('Raw response:', responseText);
+        console.log('Raw response:', responseText.substring(0, 200) + '...');
 
         let data;
         try {
             data = JSON.parse(responseText);
         } catch (e) {
             console.error('Failed to parse JSON:', e);
-            alert('Invalid response from server');
+            console.error('Full response:', responseText);
+            alert('Invalid response from server - expected JSON but got HTML. Check console for details.');
             return;
         }
 
@@ -1250,7 +1368,7 @@ async function viewUser(userId) {
                         <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
                         <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
                         <p><strong>Role:</strong> ${user.role || 'N/A'}</p>
-                        <p><strong>Status:</strong> <span class="badge">${user.enabled ? 'Enabled' : 'Disabled'}</span></p>
+                        <p><strong>Status:</strong> <span class="badge" style="background-color: ${user.enabled ? '#d1fae5' : '#fee2e2'};">${user.enabled ? 'Enabled' : 'Disabled'}</span></p>
                         <p><strong>Created At:</strong> ${user.created_at ? new Date(user.created_at).toLocaleString() : 'N/A'}</p>
                         ${user.updated_by_name ? `<p><strong>Last Edited By:</strong> ${user.updated_by_name}</p>` : ''}
                     </div>
@@ -1275,15 +1393,15 @@ async function viewUser(userId) {
 }
 
 async function editUser(userId) {
-    console.log('Attempting to edit user with ID:', userId);
+    // console.log('Attempting to edit user with ID:', userId);
 
     try {
         // FIX: Add ../ to go up one level from admin to api folder
         const response = await fetch(`../api/get-user.php?id=${userId}`);
-        console.log('Response status:', response.status);
+        // console.log('Response status:', response.status);
 
         const responseText = await response.text();
-        console.log('Raw response:', responseText);
+        // console.log('Raw response:', responseText);
 
         let data;
         try {
@@ -1530,3 +1648,30 @@ async function handleEditFollowUp(e, followUpId) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', setupViewButtons);
+
+// ============================
+// UTILITY FUNCTIONS
+// ============================
+
+// Copy to clipboard function
+function copyToClipboard(text) {
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+
+    // Select and copy the text
+    textarea.select();
+    try {
+        document.execCommand('copy');
+        alert('✓ Profile link copied to clipboard!');
+    } catch (err) {
+        console.error('Failed to copy:', err);
+        alert('Failed to copy link');
+    }
+
+    // Remove the temporary textarea
+    document.body.removeChild(textarea);
+}

@@ -17,6 +17,7 @@ $gender = isset($_POST['gender']) ? esc($_POST['gender']) : '';
 $experience = isset($_POST['experience']) ? intval($_POST['experience']) : 0;
 $location = isset($_POST['location']) ? esc($_POST['location']) : '';
 $status = isset($_POST['status']) ? esc($_POST['status']) : 'Active';
+$hours = isset($_POST['hours']) ? intval($_POST['hours']) : 8;
 
 // Validation
 $errors = [];
@@ -36,9 +37,63 @@ if ($check->num_rows > 0) {
     die(json_encode(['success' => false, 'message' => 'Phone number already exists']));
 }
 
+// Handle file uploads
+$staff_image = '';
+$id_proof_image = '';
+
+// Create uploads directory if it doesn't exist
+if (!is_dir('../uploads/professionals')) {
+    mkdir('../uploads/professionals', 0755, true);
+}
+
+// Upload staff image
+if (isset($_FILES['staff_image']) && $_FILES['staff_image']['error'] == 0) {
+    $file = $_FILES['staff_image'];
+    $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (in_array($ext, $allowed) && $file['size'] <= 5000000) { // 5MB max
+        $new_filename = 'staff_' . time() . '_' . uniqid() . '.' . $ext;
+        $upload_path = '../uploads/professionals/' . $new_filename;
+
+        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+            $staff_image = 'uploads/professionals/' . $new_filename;
+        } else {
+            die(json_encode(['success' => false, 'message' => 'Failed to upload staff image']));
+        }
+    } else {
+        die(json_encode(['success' => false, 'message' => 'Invalid staff image format or size']));
+    }
+}
+
+// Upload ID proof image
+if (isset($_FILES['id_proof_image']) && $_FILES['id_proof_image']['error'] == 0) {
+    $file = $_FILES['id_proof_image'];
+    $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (in_array($ext, $allowed) && $file['size'] <= 5000000) { // 5MB max
+        $new_filename = 'idproof_' . time() . '_' . uniqid() . '.' . $ext;
+        $upload_path = '../uploads/professionals/' . $new_filename;
+
+        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+            $id_proof_image = 'uploads/professionals/' . $new_filename;
+        } else {
+            die(json_encode(['success' => false, 'message' => 'Failed to upload ID proof']));
+        }
+    } else {
+        die(json_encode(['success' => false, 'message' => 'Invalid ID proof format or size']));
+    }
+}
+
+// Generate slug for public sharing
+$professional_slug = strtolower(str_replace(' ', '-', $name)) . '-' . uniqid();
+
 // Create professional
-$sql = "INSERT INTO professionals (name, phone, email, service, gender, experience, location, status, verify_status) 
-        VALUES ('$name', '$phone', '$email', '$service', '$gender', $experience, '$location', '$status', 'Pending')";
+$sql = "INSERT INTO professionals (name, phone, email, service, gender, experience, location, status, verify_status, hours, staff_image, id_proof_image, professional_slug, updated_by) 
+        VALUES ('$name', '$phone', '$email', '$service', '$gender', $experience, '$location', '$status', 'Pending', $hours, '$staff_image', '$id_proof_image', '$professional_slug', " . intval($_SESSION['user_id']) . ")";
 
 if ($conn->query($sql) === TRUE) {
     $prof_id = $conn->insert_id;
@@ -49,7 +104,7 @@ if ($conn->query($sql) === TRUE) {
         'professional_id' => $prof_id
     ]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Error adding professional']);
+    echo json_encode(['success' => false, 'message' => 'Error adding professional: ' . $conn->error]);
 }
 
 $conn->close();

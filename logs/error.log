@@ -1,113 +1,21 @@
-[12-Feb-2026 09:24:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'l.updated_by' in 'ON' in /home/u161425727/domains/servon.in/public_html/admin/dashboard.php:13
-Stack trace:
-#0 /home/u161425727/domains/servon.in/public_html/admin/dashboard.php(13): mysqli->query()
-#1 {main}
-  thrown in /home/u161425727/domains/servon.in/public_html/admin/dashboard.php on line 13
-[12-Feb-2026 10:07:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in WHERE is ambiguous in /home/u161425727/domains/servon.in/public_html/admin/users.php:18
-Stack trace:
-#0 /home/u161425727/domains/servon.in/public_html/admin/users.php(18): mysqli->query()
-#1 {main}
-  thrown in /home/u161425727/domains/servon.in/public_html/admin/users.php on line 18
-[16-Feb-2026 08:55:38 UTC] New lead created: ID=3, Name=surbhi nayyar, Phone=9811107833, Service=All Rounder
-[16-Feb-2026 08:55:50 UTC] New lead created: ID=4, Name=surbhi nayyar, Phone=9811107833, Service=House Maid
-[21-Feb-2026 08:45:52 UTC] New lead created: ID=5, Name=Tarun ‎, Phone=7986596423, Service=All Rounder
-[21-Feb-2026 12:00:46 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:00:52 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:02:52 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:02:59 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:04:31 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:04:35 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:04:58 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:22
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(22): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 22
-[21-Feb-2026 12:16:00 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\leads.php:58
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\leads.php(58): mysqli->query('\r\n    SELECT l....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\leads.php on line 58
-[21-Feb-2026 12:16:06 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\leads.php:58
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\leads.php(58): mysqli->query('\r\n    SELECT l....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\leads.php on line 58
-[21-Feb-2026 12:16:25 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\leads.php:58
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\leads.php(58): mysqli->query('\r\n    SELECT l....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\leads.php on line 58
-[21-Feb-2026 12:16:46 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\leads.php:58
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\leads.php(58): mysqli->query('\r\n    SELECT l....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\leads.php on line 58
-[21-Feb-2026 12:22:07 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:63
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(63): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 63
-[21-Feb-2026 12:22:27 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: FUNCTION p.DATE does not exist. Check the 'Function Name Parsing and Resolution' section in the Reference Manual in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:63
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(63): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 63
-[21-Feb-2026 12:23:23 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:63
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(63): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 63
-[21-Feb-2026 12:23:38 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:63
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(63): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 63
-[21-Feb-2026 12:23:44 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\professionals.php:63
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\professionals.php(63): mysqli->query('\r\n    SELECT p....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\professionals.php on line 63
-[21-Feb-2026 12:38:00 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\users.php:56
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\users.php(56): mysqli->query('\r\n    SELECT u....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\users.php on line 56
-[21-Feb-2026 12:38:31 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'role' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\users.php:56
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\users.php(56): mysqli->query('\r\n    SELECT u....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\users.php on line 56
-[21-Feb-2026 12:38:51 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'enabled' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\users.php:56
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\users.php(56): mysqli->query('\r\n    SELECT u....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\users.php on line 56
-[21-Feb-2026 12:39:01 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'created_at' in where clause is ambiguous in C:\xampp\htdocs\freelance\public_html\admin\users.php:56
-Stack trace:
-#0 C:\xampp\htdocs\freelance\public_html\admin\users.php(56): mysqli->query('\r\n    SELECT u....')
-#1 {main}
-  thrown in C:\xampp\htdocs\freelance\public_html\admin\users.php on line 56
+[21-Feb-2026 13:47:50 Europe/Berlin] get-professional.php called with ID: 4
+[21-Feb-2026 13:47:53 Europe/Berlin] get-professional.php called with ID: 4
+[21-Feb-2026 13:48:12 Europe/Berlin] get-professional.php called with ID: 4
+[21-Feb-2026 13:48:13 Europe/Berlin] get-professional.php called with ID: 4
+[21-Feb-2026 13:48:18 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:49:28 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:49:30 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:49:34 Europe/Berlin] get-professional.php called with ID: 2
+[21-Feb-2026 13:49:38 Europe/Berlin] get-professional.php called with ID: 2
+[21-Feb-2026 13:49:50 Europe/Berlin] update-professional.php called
+[21-Feb-2026 13:49:59 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:50:36 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:50:46 Europe/Berlin] get-professional.php called with ID: 1
+[21-Feb-2026 13:50:49 Europe/Berlin] update-professional.php called
+[21-Feb-2026 13:50:57 Europe/Berlin] get-professional.php called with ID: 2
+[21-Feb-2026 13:54:24 Europe/Berlin] get-professional.php called with ID: 3
+[21-Feb-2026 13:55:09 Europe/Berlin] get-professional.php called with ID: 3
+[21-Feb-2026 13:55:16 Europe/Berlin] update-professional.php called
+[21-Feb-2026 14:00:01 Europe/Berlin] get-user.php called with ID: 3
+[21-Feb-2026 14:00:04 Europe/Berlin] get-user.php called with ID: 3
+[21-Feb-2026 14:00:09 Europe/Berlin] update-user.php called

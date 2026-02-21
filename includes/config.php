@@ -82,7 +82,7 @@ function has_role($required_roles)
 function require_login()
 {
     if (!is_logged_in()) {
-        header('Location: ' . BASE_URL . 'login.php');
+        header('Location: ' . ADMIN_URL . 'index.html');
         exit;
     }
 }
