@@ -1,0 +1,13 @@
+[12-Feb-2026 09:24:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'l.updated_by' in 'ON' in /home/u161425727/domains/servon.in/public_html/admin/dashboard.php:13
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/admin/dashboard.php(13): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/admin/dashboard.php on line 13
+[12-Feb-2026 10:07:47 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'name' in WHERE is ambiguous in /home/u161425727/domains/servon.in/public_html/admin/users.php:18
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/admin/users.php(18): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/admin/users.php on line 18
+[16-Feb-2026 08:55:38 UTC] New lead created: ID=3, Name=surbhi nayyar, Phone=9811107833, Service=All Rounder
+[16-Feb-2026 08:55:50 UTC] New lead created: ID=4, Name=surbhi nayyar, Phone=9811107833, Service=House Maid
+[21-Feb-2026 08:45:52 UTC] New lead created: ID=5, Name=Tarun ‎, Phone=7986596423, Service=All Rounder

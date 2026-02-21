@@ -1,12 +1,13 @@
 <?php
+
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_USER', 'servon_user');
-define('DB_PASS', 'localhost');
-define('DB_NAME', 'servon_db');
+define('DB_USER', 'u161425727_servon_user');
+define('DB_PASS', 'Tarun.Servon@123');
+define('DB_NAME', 'u161425727_servon_db');
 
 // Base URLs
-define('BASE_URL', 'http://localhost/servon/'); // Change to your domain
+define('BASE_URL', 'https://servon.in/');
 define('ADMIN_URL', BASE_URL . 'admin/');
 define('API_URL', BASE_URL . 'api/');
 
@@ -17,6 +18,12 @@ define('ADMIN_EMAIL', 'admin@servon.com');
 // Session settings
 ini_set('session.gc_maxlifetime', 86400); // 24 hours
 session_start();
+session_regenerate_id(true);
+
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    exit();
+}
 
 // Create database connection
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -29,11 +36,10 @@ if ($conn->connect_error) {
 // Set charset
 $conn->set_charset('utf8mb4');
 
-// Error handling
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/../logs/error.log');
+ini_set('error_log', __DIR__ . '/../logs/error.log');
 
 // Helper function to escape strings
 function esc($string)

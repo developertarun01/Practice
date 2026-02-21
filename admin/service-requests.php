@@ -62,9 +62,6 @@ $service_requests = $conn->query("SELECT s.*, p.name as prof_name, p.phone as pr
                                 <label>To Date</label>
                                 <input type="date" name="to_date" value="<?php echo $to_date; ?>">
                             </div>
-                            <div class="filter-group" style="display: flex; align-items: flex-end;">
-                                <button type="submit" class="btn btn-primary" style="width: 100%; margin: 0;">Filter</button>
-                            </div>
                         </form>
                     </div>
 

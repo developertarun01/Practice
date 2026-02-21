@@ -101,9 +101,6 @@ $professionals = $conn->query("
                                     <option value="Rejected" <?php echo $verify_status == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
                                 </select>
                             </div>
-                            <div class="filter-group" style="display: flex; align-items: flex-end;">
-                                <button type="submit" class="btn btn-primary" style="width: 100%; margin: 0;">Filter</button>
-                            </div>
                         </form>
                     </div>
 
