@@ -2,12 +2,21 @@
 
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_USER', 'u161425727_servon_user');
-define('DB_PASS', 'Tarun.Servon@123');
-define('DB_NAME', 'u161425727_servon_db');
+define('DB_USER', 'servon_user');
+define('DB_PASS', 'localhost');
+define('DB_NAME', 'servon_db');
 
-// Base URLs
-define('BASE_URL', 'https://servon.in/');
+define('BASE_URL', 'http://localhost/freelance/public_html/');
+
+// Database Configuration
+// define('DB_HOST', 'localhost');
+// define('DB_USER', 'u161425727_servon_user');
+// define('DB_PASS', 'Tarun.Servon@123');
+// define('DB_NAME', 'u161425727_servon_db');
+
+// define('BASE_URL', 'https://servon.in/');
+
+// Common Part 
 define('ADMIN_URL', BASE_URL . 'admin/');
 define('API_URL', BASE_URL . 'api/');
 
@@ -20,10 +29,10 @@ ini_set('session.gc_maxlifetime', 86400); // 24 hours
 session_start();
 session_regenerate_id(true);
 
-if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
-    header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-    exit();
-}
+// if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+//     header("Location: https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+//     exit();
+// }
 
 // Create database connection
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);

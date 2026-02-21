@@ -1,8 +1,15 @@
+Act as a PHP Developer. There are some issue with my filters because it's not working properlly and leading me to blank pages. Analyse the code and make filters funtion correctly.
+Note: Remove "Apply Filter" button if availble and make it automatic on typing or any change and a "Reset Filter" button to remove all the filters. Also Change "From Date" and "To Date" with "Created Before" Like given in below example.
+
+File to be changed: 
+
+
+Take Idea from this (Working Good): 
 <?php
 require_once '../includes/config.php';
-require_role(['Admin', 'Allocation']);
+require_role(['Admin', 'Sales', 'Allocation']);
 
-// Define esc function if not already defined
+// Define esc function if not already defined in config.php
 if (!function_exists('esc')) {
     function esc($str)
     {
@@ -12,47 +19,43 @@ if (!function_exists('esc')) {
 }
 
 // Get min and max dates from database for context
-$date_range_result = $conn->query("SELECT MIN(DATE(created_at)) as min_date, MAX(DATE(created_at)) as max_date FROM professionals");
+$date_range_result = $conn->query("SELECT MIN(DATE(created_at)) as min_date, MAX(DATE(created_at)) as max_date FROM bookings");
 $date_range = $date_range_result->fetch_assoc();
-$min_date = $date_range['min_date'] ?? date('Y-m-d', strtotime('-1 year'));
+$min_date = $date_range['min_date'] ?? date('Y-m-d', strtotime('-30 days'));
 $max_date = $date_range['max_date'] ?? date('Y-m-d');
 
 // Get filter parameters
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $service = isset($_GET['service']) ? trim($_GET['service']) : '';
+$location = isset($_GET['location']) ? trim($_GET['location']) : '';
 $status = isset($_GET['status']) ? trim($_GET['status']) : '';
-$gender = isset($_GET['gender']) ? trim($_GET['gender']) : '';
-$verify_status = isset($_GET['verify_status']) ? trim($_GET['verify_status']) : '';
 $created_before = isset($_GET['created_before']) ? trim($_GET['created_before']) : '';
 
 // Build query with proper escaping
 $where = array("1=1");
+$params = array();
 
 if (!empty($search)) {
     $search_esc = esc($search);
-    $where[] = "(p.name LIKE '%$search_esc%' OR p.phone LIKE '%$search_esc%' OR p.location LIKE '%$search_esc%')";
+    $where[] = "(customer_name LIKE '%$search_esc%' OR customer_phone LIKE '%$search_esc%')";
 }
 if (!empty($service)) {
     $service_esc = esc($service);
     $where[] = "service = '$service_esc'";
 }
+if (!empty($location)) {
+    $location_esc = esc($location);
+    $where[] = "full_address LIKE '%$location_esc%'";
+}
 if (!empty($status)) {
     $status_esc = esc($status);
     $where[] = "status = '$status_esc'";
-}
-if (!empty($gender)) {
-    $gender_esc = esc($gender);
-    $where[] = "gender = '$gender_esc'";
-}
-if (!empty($verify_status)) {
-    $verify_status_esc = esc($verify_status);
-    $where[] = "verify_status = '$verify_status_esc'";
 }
 if (!empty($created_before)) {
     // Validate date format
     if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $created_before)) {
         $created_before_esc = esc($created_before);
-        $where[] = "DATE(p.created_at) <= '$created_before_esc'";
+        $where[] = "DATE(b.created_at) <= '$created_before_esc'";
     }
 }
 
@@ -60,21 +63,21 @@ if (!empty($created_before)) {
 $where_clause = implode(" AND ", $where);
 
 // Execute query with error handling
-$professionals = $conn->query("
-    SELECT p.*, 
+$bookings = $conn->query("
+    SELECT b.*, 
            u.name as updated_by_name
-    FROM professionals p
-    LEFT JOIN users u ON p.updated_by = u.id
+    FROM bookings b
+    LEFT JOIN users u ON b.updated_by = u.id
     WHERE $where_clause 
-    ORDER BY p.created_at DESC
+    ORDER BY b.created_at DESC
 ");
 
-if (!$professionals) {
+if (!$bookings) {
     die("Query failed: " . $conn->error);
 }
 
 // Get total count without filters for context
-$total_count_result = $conn->query("SELECT COUNT(*) as total FROM professionals");
+$total_count_result = $conn->query("SELECT COUNT(*) as total FROM bookings");
 $total_count = $total_count_result->fetch_assoc()['total'];
 ?>
 <!DOCTYPE html>
@@ -83,7 +86,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professionals - Servon Admin</title>
+    <title>Bookings - Servon Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .reset-filter-btn {
@@ -186,28 +189,31 @@ $total_count = $total_count_result->fetch_assoc()['total'];
 
         <div class="main-content">
             <div class="header">
-                <h1>Professionals Management</h1>
+                <h1>Bookings Management</h1>
                 <div class="user-menu">
-                    <span>Welcome, <?php echo $_SESSION['user_name']; ?></span>
+                    <span>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
                     <a href="../api/logout.php" class="btn btn-secondary">Logout</a>
                 </div>
             </div>
 
             <div class="content">
+                <!-- New Booking Button -->
                 <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-                    <button class="btn btn-primary" onclick="openNewProfessionalModal()">+ Add Professional</button>
+                    <button class="btn btn-primary" onclick="openNewBookingModal()">+ New Booking</button>
                     <div style="color: #6c757d; font-size: 14px;">
-                        Total Professionals: <strong><?php echo $total_count; ?></strong>
+                        Total Bookings: <strong><?php echo $total_count; ?></strong>
                     </div>
                 </div>
 
+                <!-- Filter Section -->
                 <div class="table-container">
                     <div class="filter-section">
                         <form method="GET" id="filterForm">
                             <div class="filter-group">
                                 <label>Search</label>
-                                <input type="text" name="search" placeholder="Name, Phone or Location" value="<?php echo htmlspecialchars($search); ?>">
+                                <input type="text" name="search" placeholder="Name or Phone" value="<?php echo htmlspecialchars($search); ?>">
                             </div>
+
                             <div class="filter-group">
                                 <label>Service</label>
                                 <select name="service">
@@ -220,32 +226,20 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     <option value="Security Guard" <?php echo $service == 'Security Guard' ? 'selected' : ''; ?>>Security Guard</option>
                                 </select>
                             </div>
+
                             <div class="filter-group">
                                 <label>Status</label>
                                 <select name="status">
                                     <option value="">All Status</option>
-                                    <option value="Active" <?php echo $status == 'Active' ? 'selected' : ''; ?>>Active</option>
-                                    <option value="Inactive" <?php echo $status == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
-                                    <option value="On Leave" <?php echo $status == 'On Leave' ? 'selected' : ''; ?>>On Leave</option>
+                                    <option value="In progress" <?php echo $status == 'In progress' ? 'selected' : ''; ?>>In Progress</option>
+                                    <option value="Shortlisted" <?php echo $status == 'Shortlisted' ? 'selected' : ''; ?>>Shortlisted</option>
+                                    <option value="Assigned" <?php echo $status == 'Assigned' ? 'selected' : ''; ?>>Assigned</option>
+                                    <option value="Deployed" <?php echo $status == 'Deployed' ? 'selected' : ''; ?>>Deployed</option>
+                                    <option value="Canceled" <?php echo $status == 'Canceled' ? 'selected' : ''; ?>>Canceled</option>
+                                    <option value="Unpaid" <?php echo $status == 'Unpaid' ? 'selected' : ''; ?>>Unpaid</option>
                                 </select>
                             </div>
-                            <div class="filter-group">
-                                <label>Gender</label>
-                                <select name="gender">
-                                    <option value="">All</option>
-                                    <option value="Male" <?php echo $gender == 'Male' ? 'selected' : ''; ?>>Male</option>
-                                    <option value="Female" <?php echo $gender == 'Female' ? 'selected' : ''; ?>>Female</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label>Verification</label>
-                                <select name="verify_status">
-                                    <option value="">All</option>
-                                    <option value="Verified" <?php echo $verify_status == 'Verified' ? 'selected' : ''; ?>>Verified</option>
-                                    <option value="Pending" <?php echo $verify_status == 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                                    <option value="Rejected" <?php echo $verify_status == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
-                                </select>
-                            </div>
+
                             <div class="filter-group">
                                 <label>Created Before</label>
                                 <input type="date" name="created_before"
@@ -262,9 +256,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                     if (!empty($search)) $active_filters[] = ['type' => 'search', 'label' => "Search: \"$search\"", 'param' => 'search'];
                     if (!empty($service)) $active_filters[] = ['type' => 'service', 'label' => "Service: $service", 'param' => 'service'];
                     if (!empty($status)) $active_filters[] = ['type' => 'status', 'label' => "Status: $status", 'param' => 'status'];
-                    if (!empty($gender)) $active_filters[] = ['type' => 'gender', 'label' => "Gender: $gender", 'param' => 'gender'];
-                    if (!empty($verify_status)) $active_filters[] = ['type' => 'verify_status', 'label' => "Verification: $verify_status", 'param' => 'verify_status'];
-                    if (!empty($created_before)) $active_filters[] = ['type' => 'date', 'label' => "Created Before: $created_before", 'param' => 'created_before'];
+                    if (!empty($created_before)) $active_filters[] = ['type' => 'date', 'label' => "Until: $created_before", 'param' => 'created_before'];
 
                     if (!empty($active_filters)):
                     ?>
@@ -280,11 +272,12 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                         </div>
                     <?php endif; ?>
 
+                    <!-- Table -->
                     <div class="table-header">
-                        <h3>All Professionals</h3>
-                        <?php if ($professionals && $professionals->num_rows > 0): ?>
+                        <h3>All Bookings</h3>
+                        <?php if ($bookings && $bookings->num_rows > 0): ?>
                             <div style="text-align: right; color: #6c757d; font-size: 13px;">
-                                Showing <?php echo $professionals->num_rows; ?> professional(s)
+                                Showing <?php echo $bookings->num_rows; ?> booking(s)
                             </div>
                         <?php endif; ?>
                     </div>
@@ -292,14 +285,12 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                     <table>
                         <thead>
                             <tr>
-                                <th>Serial No</th>
-                                <th>Name</th>
+                                <th>#</th>
+                                <th>Customer</th>
                                 <th>Phone</th>
                                 <th>Service</th>
-                                <th>Location</th>
-                                <th>Experience</th>
                                 <th>Status</th>
-                                <th>Verification</th>
+                                <th>Starts At</th>
                                 <th>Created At</th>
                                 <th>Last Edited By</th>
                                 <th>Action</th>
@@ -307,47 +298,53 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                         </thead>
                         <tbody>
                             <?php
-                            if ($professionals && $professionals->num_rows > 0) {
+                            if ($bookings && $bookings->num_rows > 0) {
                                 $counter = 1;
-                                while ($prof = $professionals->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $counter . "</td>";
-                                    echo "<td>" . htmlspecialchars($prof['name']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($prof['phone']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($prof['service']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($prof['location']) . "</td>";
-                                    echo "<td>" . ($prof['experience'] ? $prof['experience'] . " yrs" : "-") . "</td>";
-                                    echo "<td>" . $prof['status'] . "</td>";
-                                    echo "<td>";
-                                    $v_color = match ($prof['verify_status']) {
-                                        'Verified' => '#d1fae5',
-                                        'Pending' => '#fef3c7',
-                                        'Rejected' => '#fee2e2',
+                                while ($booking = $bookings->fetch_assoc()) {
+                                    $status_color = match ($booking['status']) {
+                                        'In progress' => '#dbeafe',
+                                        'Shortlisted' => '#fef3c7',
+                                        'Assigned' => '#ddd6fe',
+                                        'Deployed' => '#d1fae5',
+                                        'Canceled' => '#fee2e2',
+                                        'Unpaid' => '#fecaca',
                                         default => '#f3f4f6'
                                     };
-                                    echo "<span style='padding: 4px 8px; border-radius: 4px; background-color: $v_color;'>" . $prof['verify_status'] . "</span></td>";
-                                    echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
-                                    echo "<td>" . ($prof['updated_by_name'] ? htmlspecialchars($prof['updated_by_name']) : '-') . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a></td>";
+
+                                    echo "<tr>";
+                                    echo "<td>" . $counter . "</td>";
+                                    echo "<td>" . htmlspecialchars($booking['customer_name'] ?? '') . "</td>";
+                                    echo "<td>" . htmlspecialchars($booking['customer_phone'] ?? '') . "</td>";
+                                    echo "<td>" . htmlspecialchars($booking['service'] ?? '') . "</td>";
+                                    echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color;'>" . htmlspecialchars($booking['status'] ?? '') . "</span></td>";
+                                    echo "<td>" . ($booking['starts_at'] ? date('M d, Y', strtotime($booking['starts_at'])) : '-') . "</td>";
+                                    echo "<td>" . ($booking['created_at'] ? date('M d, Y', strtotime($booking['created_at'])) : '-') . "</td>";
+                                    echo "<td>" . ($booking['updated_by_name'] ? htmlspecialchars($booking['updated_by_name']) : '-') . "</td>";
+                                    echo "<td>";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $booking['id'] . "' data-type='booking' onclick='viewBooking(" . $booking['id'] . "); return false;'>View</a>";
+                                    echo "</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
                             } else {
                                 echo "<tr>";
-                                echo "<td colspan='11' class='no-results'>";
-                                echo "<div style='font-size: 24px; margin-bottom: 10px;'>👥</div>";
-                                echo "<div style='font-size: 18px; font-weight: 500; margin-bottom: 10px;'>No Professionals Found</div>";
+                                echo "<td colspan='9' class='no-results'>";
+                                echo "<div style='font-size: 24px; margin-bottom: 10px;'>📭</div>";
+                                echo "<div style='font-size: 18px; font-weight: 500; margin-bottom: 10px;'>No Bookings Found</div>";
 
                                 if (!empty($active_filters)) {
-                                    echo "<div class='suggestion'>No professionals match your current filters. Try:</div>";
+                                    echo "<div class='suggestion'>No bookings match your current filters. Try:</div>";
                                     echo "<div class='action-buttons'>";
                                     echo "<button class='btn btn-secondary' onclick='clearAllFilters()'>Clear All Filters</button>";
-                                    echo "<button class='btn btn-primary' onclick='window.location.href=\"" . $_SERVER['PHP_SELF'] . "\"'>View All Professionals</button>";
+                                    if (!empty($created_before)) {
+                                        $suggested_date = $max_date;
+                                        echo "<button class='btn btn-primary' onclick='useSuggestedDate(\"$suggested_date\")'>Show latest bookings</button>";
+                                    }
                                     echo "</div>";
                                 } else {
-                                    echo "<div class='suggestion'>Get started by adding your first professional!</div>";
+                                    echo "<div class='suggestion'>Get started by creating your first booking!</div>";
                                     echo "<div class='action-buttons'>";
-                                    echo "<button class='btn btn-primary' onclick='openNewProfessionalModal()'>+ Add Professional</button>";
+                                    echo "<button class='btn btn-primary' onclick='openNewBookingModal()'>+ Create New Booking</button>";
                                     echo "</div>";
                                 }
 
@@ -357,6 +354,8 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                             ?>
                         </tbody>
                     </table>
+
+
                 </div>
             </div>
         </div>
@@ -375,58 +374,135 @@ $total_count = $total_count_result->fetch_assoc()['total'];
             window.location.href = window.location.pathname;
         }
 
-        // Auto-submit filters on change
+        // Function to use suggested date
+        function useSuggestedDate(date) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('created_before', date);
+            window.location.href = url.toString();
+        }
+
+        // ============================
+        // ADMIN FILTERS - IMPROVED VERSION
+        // ============================
+
         let filterTimeout;
 
         function setupAutoFilters() {
-            const filterForm = document.querySelector('.filter-section form');
+            const filterForms = document.querySelectorAll('.filter-section form');
 
-            if (!filterForm) return;
-
-            // Handle text inputs with debounce
-            filterForm.querySelectorAll('input[type="text"]').forEach(input => {
-                input.addEventListener('keyup', function(e) {
-                    clearTimeout(filterTimeout);
-                    filterTimeout = setTimeout(() => {
-                        filterForm.submit();
-                    }, 800);
+            filterForms.forEach((form) => {
+                // Text inputs
+                form.querySelectorAll('input[type="text"], input[type="search"]').forEach(input => {
+                    input.removeEventListener('keyup', handleKeyUp);
+                    input.removeEventListener('blur', handleBlur);
+                    input.addEventListener('keyup', handleKeyUp);
+                    input.addEventListener('blur', handleBlur);
                 });
+
+                // Select dropdowns
+                form.querySelectorAll('select').forEach(select => {
+                    select.removeEventListener('change', handleChange);
+                    select.addEventListener('change', handleChange);
+                });
+
+                // Date inputs
+                form.querySelectorAll('input[type="date"]').forEach(dateInput => {
+                    dateInput.removeEventListener('change', handleDateChange);
+                    dateInput.addEventListener('change', handleDateChange);
+                });
+
+                // Add reset button
+                addResetButton(form);
+            });
+        }
+
+        function handleKeyUp(e) {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(() => submitFilter(e.target), 800);
+        }
+
+        function handleBlur(e) {
+            submitFilter(e.target);
+        }
+
+        function handleChange(e) {
+            submitFilter(e.target);
+        }
+
+        function handleDateChange(e) {
+            const dateInput = e.target;
+            const selectedDate = dateInput.value;
+
+            // Check if date is within allowed range
+            const min = dateInput.getAttribute('min');
+            const max = dateInput.getAttribute('max');
+
+            if (min && selectedDate < min) {
+                alert(`Date cannot be before ${min}`);
+                dateInput.value = '';
+                return;
+            }
+
+            if (max && selectedDate > max) {
+                alert(`Date cannot be after ${max}`);
+                dateInput.value = '';
+                return;
+            }
+
+            submitFilter(dateInput);
+        }
+
+        function submitFilter(element) {
+            const form = element.closest('form');
+            if (!form) return;
+
+            const params = new URLSearchParams();
+            let hasActiveFilter = false;
+
+            // Collect all non-empty values
+            form.querySelectorAll('input[type="text"], input[type="search"], select, input[type="date"]').forEach(field => {
+                const value = field.value ? field.value.trim() : '';
+                if (value && field.name) {
+                    params.append(field.name, value);
+                    hasActiveFilter = true;
+                }
             });
 
-            // Handle select changes immediately
-            filterForm.querySelectorAll('select').forEach(select => {
-                select.addEventListener('change', function() {
-                    filterForm.submit();
-                });
+            const baseUrl = window.location.pathname;
+            window.location.href = hasActiveFilter ? baseUrl + '?' + params.toString() : baseUrl;
+        }
+
+        function addResetButton(form) {
+            // Remove existing reset button if any
+            const existingBtn = form.querySelector('.reset-filter-btn');
+            if (existingBtn) existingBtn.remove();
+
+            // Create new reset button
+            const resetBtn = document.createElement('button');
+            resetBtn.type = 'button';
+            resetBtn.className = 'btn btn-secondary reset-filter-btn';
+            resetBtn.textContent = 'Clear Filters';
+            resetBtn.style.cssText = 'width: 100%; background-color: #dc3545; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer;';
+
+            resetBtn.addEventListener('click', () => {
+                window.location.href = window.location.pathname;
             });
 
-            // Handle date changes immediately
-            filterForm.querySelectorAll('input[type="date"]').forEach(dateInput => {
-                dateInput.addEventListener('change', function(e) {
-                    const selectedDate = this.value;
-                    const min = this.getAttribute('min');
-                    const max = this.getAttribute('max');
+            const resetContainer = document.createElement('div');
+            resetContainer.className = 'filter-group';
+            resetContainer.style.display = 'flex';
+            resetContainer.style.alignItems = 'flex-end';
+            resetContainer.appendChild(resetBtn);
 
-                    if (min && selectedDate < min) {
-                        alert(`Date cannot be before ${min}`);
-                        this.value = '';
-                        return;
-                    }
-
-                    if (max && selectedDate > max) {
-                        alert(`Date cannot be after ${max}`);
-                        this.value = '';
-                        return;
-                    }
-
-                    filterForm.submit();
-                });
-            });
+            form.appendChild(resetContainer);
         }
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoFilters();
+            setActiveMenu();
+            autoHideMessages();
+            setupViewButtons();
         });
     </script>
 

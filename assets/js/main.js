@@ -34,12 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-
-    // Admin init
-    initDateRangeFilters();
-    setActiveMenu();
-    autoHideMessages();
-    setupViewButtons();
 });
 
 // ============================
@@ -184,207 +178,6 @@ window.addEventListener('click', function (e) {
 });
 
 // ============================
-// ADMIN FILTERS
-// ============================
-function applyFilters(formId, tableId) {
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const params = new URLSearchParams(new FormData(form));
-
-        fetch('?' + params.toString())
-            .then(res => res.text())
-            .then(html => {
-                const doc = new DOMParser().parseFromString(html, 'text/html');
-                const newTable = doc.getElementById(tableId);
-                if (newTable) {
-                    document.getElementById(tableId).innerHTML = newTable.innerHTML;
-                }
-            })
-            .catch(console.error);
-    });
-}
-
-// ============================
-// DATE RANGE FILTER
-// ============================
-function initDateRangeFilters() {
-    document.querySelectorAll('[data-date-from]').forEach(from => {
-        from.addEventListener('change', function () {
-            const to = document.querySelector(this.dataset.dateFrom);
-            if (to && this.value > to.value) to.value = this.value;
-            // Auto-submit on change
-            autoSubmitFilter(this);
-        });
-    });
-
-    document.querySelectorAll('[data-date-to]').forEach(to => {
-        to.addEventListener('change', function () {
-            const from = document.querySelector(this.dataset.dateTo);
-            if (from && this.value < from.value) from.value = this.value;
-            // Auto-submit on change
-            autoSubmitFilter(this);
-        });
-    });
-
-    // Setup auto-filter for all filter forms
-    setupAutoFilters();
-}
-
-// Auto-filter functions
-let filterTimeout;
-
-function setupAutoFilters() {
-    const filterForms = document.querySelectorAll('.filter-section form');
-    console.log('Found ' + filterForms.length + ' filter forms');
-    
-    filterForms.forEach((form, index) => {
-        console.log('Setting up filter form ' + (index + 1));
-        
-        // Store original URL params to detect actual changes
-        const originalParams = new URLSearchParams(window.location.search);
-        
-        // Text inputs - submit on blur or after typing stops
-        form.querySelectorAll('input[type="text"], input[type="search"]').forEach(input => {
-            console.log('Added listener to text input:', input.name);
-            
-            input.addEventListener('blur', function() {
-                console.log('Blur event on input:', this.name, 'value:', this.value);
-                autoSubmitFilter(this);
-            });
-            
-            input.addEventListener('keyup', function(e) {
-                const inputElement = this;
-                if (e.key === 'Enter') {
-                    console.log('Enter pressed on input:', this.name);
-                    autoSubmitFilter(this);
-                } else {
-                    clearTimeout(filterTimeout);
-                    filterTimeout = setTimeout(() => {
-                        console.log('Auto-submit triggered for input:', inputElement.name, 'value:', inputElement.value);
-                        autoSubmitFilter(inputElement);
-                    }, 800);
-                }
-            });
-        });
-
-        // Select dropdowns - submit immediately on change
-        form.querySelectorAll('select').forEach(select => {
-            console.log('Added listener to select:', select.name);
-            
-            select.addEventListener('change', function() {
-                console.log('Change event on select:', this.name, 'value:', this.value);
-                autoSubmitFilter(this);
-            });
-        });
-
-        // Date inputs - submit immediately on change
-        form.querySelectorAll('input[type="date"], input[type="datetime-local"]').forEach(dateInput => {
-            console.log('Added listener to date input:', dateInput.name);
-            
-            dateInput.addEventListener('change', function() {
-                console.log('Change event on date input:', this.name, 'value:', this.value);
-                autoSubmitFilter(this);
-            });
-        });
-
-        // Add reset button
-        addResetButton(form);
-    });
-}
-
-function autoSubmitFilter(element) {
-    const form = element.closest('form');
-    if (!form) {
-        console.log('Could not find form for element:', element);
-        return;
-    }
-    
-    // Collect all non-empty filter values
-    const params = new URLSearchParams();
-    let hasActiveFilter = false;
-    
-    // Text and search inputs
-    form.querySelectorAll('input[type="text"], input[type="search"]').forEach(input => {
-        const value = input.value ? input.value.trim() : '';
-        if (value) {
-            params.append(input.name, value);
-            console.log('Adding filter:', input.name, '=', value);
-            hasActiveFilter = true;
-        }
-    });
-    
-    // Select dropdowns
-    form.querySelectorAll('select').forEach(select => {
-        const value = select.value ? select.value.trim() : '';
-        if (value) {
-            params.append(select.name, value);
-            console.log('Adding filter:', select.name, '=', value);
-            hasActiveFilter = true;
-        }
-    });
-    
-    // Date inputs
-    form.querySelectorAll('input[type="date"], input[type="datetime-local"]').forEach(dateInput => {
-        const value = dateInput.value ? dateInput.value.trim() : '';
-        if (value) {
-            params.append(dateInput.name, value);
-            console.log('Adding filter:', dateInput.name, '=', value);
-            hasActiveFilter = true;
-        }
-    });
-
-    // Only navigate if there's at least one active filter
-    if (hasActiveFilter) {
-        const baseUrl = window.location.pathname;
-        const newUrl = baseUrl + '?' + params.toString();
-        console.log('Navigating to:', newUrl);
-        window.location.href = newUrl;
-    } else {
-        console.log('No active filters detected');
-    }
-}
-
-function addResetButton(form) {
-    const existingReset = form.querySelector('.reset-filter-btn');
-    if (existingReset) return;
-
-    const resetBtn = document.createElement('button');
-    resetBtn.type = 'button';
-    resetBtn.className = 'btn btn-secondary reset-filter-btn';
-    resetBtn.textContent = 'Clear Filters';
-    resetBtn.style.cssText = 'width: 100%; margin: 0;';
-    
-    resetBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Clear all inputs
-        form.querySelectorAll('input[type="text"], input[type="search"], input[type="date"], input[type="datetime-local"]').forEach(input => {
-            input.value = '';
-        });
-        form.querySelectorAll('select').forEach(select => {
-            select.value = '';
-        });
-
-        // Redirect to clear all filters
-        const baseUrl = window.location.pathname;
-        window.location.href = baseUrl;
-    });
-
-    const lastFilterGroup = form.querySelector('.filter-group:last-of-type');
-    if (lastFilterGroup && lastFilterGroup.nextElementSibling) {
-        lastFilterGroup.nextElementSibling.insertBefore(resetBtn, lastFilterGroup.nextElementSibling.firstChild);
-    } else if (lastFilterGroup) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'filter-group';
-        wrapper.appendChild(resetBtn);
-        form.appendChild(wrapper);
-    }
-}
-
-// ============================
 // ADMIN UI HELPERS
 // ============================
 function setActiveMenu() {
@@ -442,7 +235,7 @@ function openNewBookingModal() {
                     </div>
                     <div class="form-group">
                         <label>Full Address</label>
-                        <textarea name="full_address" rows="3"></textarea>
+                        <textarea style="width: 100%" rows="7" name="full_address"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Starts At</label>
@@ -646,7 +439,7 @@ function openCreateFollowUpModal(leadId, leadName) {
                     
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea name="comments" rows="4" placeholder="Enter follow-up notes..."></textarea>
+                        <textarea style="width: 100%" rows="7" name="comments" placeholder="Enter follow-up notes..."></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -880,7 +673,7 @@ async function viewLead(leadId) {
                     <h3>Comments</h3>
                     ${commentsHtml}
                     <form id="addCommentForm" onsubmit="handleAddComment(event, ${leadId})">
-                        <textarea name="comment" placeholder="Add a comment..." required></textarea>
+                        <textarea style="width: 100%" rows="7" name="comment" placeholder="Add a comment..." required></textarea>
                         <button type="submit" class="btn btn-primary">Add Comment</button>
                     </form>
                     <button class="btn btn-secondary" onclick="editLead(${leadId})">Edit</button>
@@ -1687,7 +1480,7 @@ async function editFollowUp(followUpId) {
                         
                         <div class="form-group">
                             <label>Comments</label>
-                            <textarea name="comments" rows="4">${htmlEscape(fu.comments || '')}</textarea>
+                            <textarea style="width: 100%" rows="7" name="comments">${htmlEscape(fu.comments || '')}</textarea>
                         </div>
                         
                         <div class="form-group">
