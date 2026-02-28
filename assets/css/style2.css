@@ -64,7 +64,7 @@ h1,
 h2,
 h3,
 b {
-  /* font-family: "Montserrat", sans-serif; */
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -72,7 +72,7 @@ b {
 h4,
 h5,
 h6 {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Poppins", sans-serif;
   line-height: 1.6;
 }
 
@@ -85,7 +85,7 @@ input,
 textarea,
 select,
 option {
-  font-family: "Inter", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 500;
   line-height: 1.6;
   font-size: 16px;
@@ -394,19 +394,19 @@ form {
 }
 
 .mt-10 {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .mt-20 {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .mt-30 {
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .mt-40 {
-  margin-top: 40px;
+  margin-top: 32px;
 }
 
 .mr-10 {
@@ -457,6 +457,7 @@ form {
 /* Navbar  */
 #services {
   cursor: pointer;
+  font-weight: 600;
 }
 
 .sec-services-cards {

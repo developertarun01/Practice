@@ -19,3 +19,95 @@
 [21-Feb-2026 14:00:01 Europe/Berlin] get-user.php called with ID: 3
 [21-Feb-2026 14:00:04 Europe/Berlin] get-user.php called with ID: 3
 [21-Feb-2026 14:00:09 Europe/Berlin] update-user.php called
+[21-Feb-2026 13:08:26 UTC] New lead created: ID=6, Name=Servon, Phone=9876543210, Service=All Rounder
+[21-Feb-2026 13:09:03 UTC] get-professional.php called with ID: 39
+[21-Feb-2026 13:10:20 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:10:22 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:10:30 UTC] update-professional.php called
+[21-Feb-2026 13:10:35 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:13:05 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:13:31 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:13:37 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:13:41 UTC] get-professional.php called with ID: 40
+[21-Feb-2026 13:13:49 UTC] update-professional.php called
+[22-Feb-2026 06:00:56 UTC] get-professional.php called with ID: 1
+[22-Feb-2026 06:01:03 UTC] get-professional.php called with ID: 1
+[22-Feb-2026 06:02:03 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:02:05 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:02:40 UTC] update-professional.php called
+[22-Feb-2026 06:03:38 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:03:50 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:11:06 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:12:22 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:12:54 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:12:56 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:13:17 UTC] update-professional.php called
+[22-Feb-2026 06:13:25 UTC] get-professional.php called with ID: 8
+[22-Feb-2026 06:13:59 UTC] get-professional.php called with ID: 2
+[22-Feb-2026 06:14:15 UTC] get-professional.php called with ID: 2
+[23-Feb-2026 05:55:05 UTC] get-professional.php called with ID: 8
+[23-Feb-2026 05:55:16 UTC] get-professional.php called with ID: 8
+[23-Feb-2026 06:01:43 UTC] get-professional.php called with ID: 40
+[23-Feb-2026 06:03:35 UTC] get-professional.php called with ID: 41
+[23-Feb-2026 06:03:37 UTC] get-professional.php called with ID: 41
+[23-Feb-2026 06:03:52 UTC] update-professional.php called
+[23-Feb-2026 06:04:01 UTC] get-professional.php called with ID: 41
+[23-Feb-2026 06:04:06 UTC] get-professional.php called with ID: 41
+[23-Feb-2026 06:04:09 UTC] get-professional.php called with ID: 41
+[23-Feb-2026 09:52:01 UTC] get-professional.php called with ID: 43
+[23-Feb-2026 09:52:08 UTC] get-professional.php called with ID: 43
+[23-Feb-2026 09:52:10 UTC] get-professional.php called with ID: 43
+[23-Feb-2026 09:52:17 UTC] update-professional.php called
+[24-Feb-2026 05:45:57 UTC] New lead created: ID=7, Name=YOGINDER ADHANA, Phone=9560688596, Service=Baby Caretaker
+[24-Feb-2026 06:51:57 UTC] get-professional.php called with ID: 44
+[24-Feb-2026 06:52:00 UTC] get-professional.php called with ID: 44
+[24-Feb-2026 06:52:11 UTC] update-professional.php called
+[24-Feb-2026 06:58:29 UTC] get-professional.php called with ID: 44
+[24-Feb-2026 06:58:31 UTC] get-professional.php called with ID: 44
+[24-Feb-2026 06:58:40 UTC] update-professional.php called
+[24-Feb-2026 07:09:21 UTC] get-professional.php called with ID: 45
+[24-Feb-2026 07:09:51 UTC] get-professional.php called with ID: 2
+[24-Feb-2026 07:09:53 UTC] get-professional.php called with ID: 2
+[24-Feb-2026 07:16:36 UTC] get-professional.php called with ID: 45
+[24-Feb-2026 07:16:41 UTC] get-professional.php called with ID: 45
+[24-Feb-2026 07:16:52 UTC] update-professional.php called
+[24-Feb-2026 09:56:15 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:56:17 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:58:15 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:58:34 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:58:37 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:59:14 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 09:59:17 UTC] get-professional.php called with ID: 51
+[24-Feb-2026 10:11:45 UTC] get-professional.php called with ID: 53
+[24-Feb-2026 10:11:48 UTC] get-professional.php called with ID: 53
+[24-Feb-2026 10:12:13 UTC] update-professional.php called
+[25-Feb-2026 07:41:16 UTC] get-professional.php called with ID: 8
+[26-Feb-2026 17:03:16 UTC] get-professional.php called with ID: 75
+[26-Feb-2026 17:05:38 UTC] get-professional.php called with ID: 71
+[26-Feb-2026 17:06:28 UTC] get-professional.php called with ID: 76
+[26-Feb-2026 17:07:21 UTC] get-professional.php called with ID: 76
+[26-Feb-2026 17:07:36 UTC] get-professional.php called with ID: 76
+[26-Feb-2026 17:07:39 UTC] get-professional.php called with ID: 76
+[26-Feb-2026 17:07:45 UTC] update-professional.php called
+[26-Feb-2026 17:07:49 UTC] get-professional.php called with ID: 76
+[26-Feb-2026 17:09:57 UTC] get-professional.php called with ID: 76
+[27-Feb-2026 14:25:34 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:25:36 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:26:01 UTC] update-professional.php called
+[27-Feb-2026 14:26:07 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:27:26 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:27:44 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:27:48 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:02 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:03 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:22 UTC] update-professional.php called
+[27-Feb-2026 14:28:28 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:29 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:32 UTC] update-professional.php called
+[27-Feb-2026 14:28:36 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:38 UTC] get-professional.php called with ID: 8
+[27-Feb-2026 14:28:46 UTC] update-professional.php called
+[27-Feb-2026 14:28:51 UTC] get-professional.php called with ID: 8
+[28-Feb-2026 06:25:57 UTC] get-professional.php called with ID: 1
+[28-Feb-2026 06:26:04 UTC] get-professional.php called with ID: 1
+[28-Feb-2026 06:26:06 UTC] get-professional.php called with ID: 1

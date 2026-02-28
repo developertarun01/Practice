@@ -1147,7 +1147,8 @@ async function viewProfessional(professionalId) {
         const prof = data.data;
         // console.log('Professional data:', prof);
 
-        const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
+        // const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
+        const profileUrl = `${window.location.origin}/professional-profile.php?slug=${prof.professional_slug}`;
 
         const html = `
             <div id="viewProfessionalModal" class="modal active">
