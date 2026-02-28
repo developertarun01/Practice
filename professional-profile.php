@@ -13,8 +13,6 @@ if (empty($slug)) {
 $prof_result = $conn->query("
     SELECT * FROM professionals 
     WHERE professional_slug = '$slug' 
-    AND status = 'Active' 
-    AND verify_status = 'Verified' 
     LIMIT 1
 ");
 
@@ -324,34 +322,6 @@ $professional = $prof_result->fetch_assoc();
                 </div>
             <?php endif; ?>
         </div>
-
-        <div class="contact-section">
-            <h2>Get In Touch</h2>
-            <p>Interested in booking this professional? Contact us now!</p>
-            <div class="contact-buttons">
-                <a href="tel:<?php echo rawurlencode($professional['phone']); ?>" class="contact-btn phone">📞 Call Now</a>
-                <?php if (!empty($professional['email'])): ?>
-                    <a href="mailto:<?php echo rawurlencode($professional['email']); ?>" class="contact-btn email">📧 Send Email</a>
-                <?php endif; ?>
-                <a href="https://wa.me/91<?php echo substr($professional['phone'], -10); ?>" target="_blank" class="contact-btn email" style="background-color: #25d366;">💬 WhatsApp</a>
-            </div>
-        </div>
-
-        <?php if (!empty($professional['staff_image']) || !empty($professional['id_proof_image'])): ?>
-            <div class="documents-section">
-                <h3>📄 Documents & Verification</h3>
-                <?php if (!empty($professional['staff_image'])): ?>
-                    <div class="document-item">
-                        <a href="<?php echo htmlspecialchars($professional['staff_image']); ?>" target="_blank">📸 View Staff Photo</a>
-                    </div>
-                <?php endif; ?>
-                <?php if (!empty($professional['id_proof_image'])): ?>
-                    <div class="document-item">
-                        <a href="<?php echo htmlspecialchars($professional['id_proof_image']); ?>" target="_blank">🆔 View ID Proof</a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
 
         <div class="footer-text">
             <p>This is a verified professional profile on Servon. All professionals are thoroughly vetted and verified.</p>

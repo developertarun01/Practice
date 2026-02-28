@@ -168,6 +168,37 @@ if (!$leads) {
             color: #6c757d;
             margin-top: 3px;
         }
+
+        /* Add Lead button styles */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-add-lead {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-add-lead:hover {
+            background-color: #218838;
+        }
+
+        .btn-add-lead i {
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -178,13 +209,20 @@ if (!$leads) {
         <div class="main-content">
             <div class="header">
                 <h1>Leads Management</h1>
-                <div class="user-menu">
-                    <span>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-                    <a href="../api/logout.php" class="btn btn-secondary">Logout</a>
+                <div class="header-actions">
+
+                    <div class="user-menu">
+                        <span>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
+                        <a href="../api/logout.php" class="btn btn-secondary">Logout</a>
+                    </div>
                 </div>
             </div>
 
             <div class="content">
+                <!-- Add Lead Button -->
+                <button onclick="openAddLeadModal()" class="btn-add-lead">
+                    <i>+</i> Add Lead
+                </button>
                 <!-- Filter Section -->
                 <div class="table-container">
                     <div class="filter-section">
@@ -366,7 +404,162 @@ if (!$leads) {
         </div>
     </div>
 
+    <!-- Add Lead Modal -->
+    <div id="addLeadModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addLeadModal')">&times;</span>
+            <h2>Add New Lead</h2>
+            <div id="addLeadErrors" style="display: none; padding: 10px; margin-bottom: 15px; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 4px; color: #991b1b;"></div>
+            <form id="addLeadForm" onsubmit="handleAddLead(event)">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" name="name" required placeholder="Enter full name">
+                    <small id="nameError" class="error-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone *</label>
+                    <input type="tel" name="phone" pattern="[0-9]{10}" required placeholder="10-digit mobile number">
+                    <small id="phoneError" class="error-text"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Service *</label>
+                    <select name="service" required>
+                        <option value="">Select Service</option>
+                        <option value="All Rounder">All Rounder</option>
+                        <option value="Baby Caretaker">Baby Caretaker</option>
+                        <option value="Cooking Maid">Cooking Maid</option>
+                        <option value="House Maid">House Maid</option>
+                        <option value="Elderly Care">Elderly Care</option>
+                        <option value="Security Guard">Security Guard</option>
+                    </select>
+                    <small id="serviceError" class="error-text"></small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Lead</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addLeadModal')">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <script>
+        // Function to open add lead modal
+        function openAddLeadModal() {
+            const modal = document.getElementById('addLeadModal');
+            if (modal) {
+                modal.classList.add('active');
+                // Clear any previous errors
+                document.getElementById('addLeadErrors').style.display = 'none';
+                document.getElementById('addLeadForm').reset();
+            }
+        }
+
+        // Validation functions for add lead form
+        function validateAddLeadName(form) {
+            const input = form.querySelector('[name="name"]');
+            const error = document.querySelector('#addLeadForm .error-text');
+            const value = input.value.trim();
+
+            if (!value) {
+                document.getElementById('addLeadErrors').innerHTML = '<strong>❌ Error:</strong> Name is required';
+                document.getElementById('addLeadErrors').style.display = 'block';
+                return false;
+            }
+
+            if (value.length < 3) {
+                document.getElementById('addLeadErrors').innerHTML = '<strong>❌ Error:</strong> Name must be at least 3 characters';
+                document.getElementById('addLeadErrors').style.display = 'block';
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateAddLeadPhone(form) {
+            const input = form.querySelector('[name="phone"]');
+            const value = input.value.trim();
+
+            if (!value) {
+                document.getElementById('addLeadErrors').innerHTML = '<strong>❌ Error:</strong> Phone number is required';
+                document.getElementById('addLeadErrors').style.display = 'block';
+                return false;
+            }
+
+            if (!/^\d{10}$/.test(value)) {
+                document.getElementById('addLeadErrors').innerHTML = '<strong>❌ Error:</strong> Phone number must be 10 digits';
+                document.getElementById('addLeadErrors').style.display = 'block';
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateAddLeadService(form) {
+            const input = form.querySelector('[name="service"]');
+            const value = input.value;
+
+            if (!value) {
+                document.getElementById('addLeadErrors').innerHTML = '<strong>❌ Error:</strong> Please select a service';
+                document.getElementById('addLeadErrors').style.display = 'block';
+                return false;
+            }
+
+            return true;
+        }
+
+        // Handle add lead form submission
+        async function handleAddLead(e) {
+            e.preventDefault();
+            const form = e.target;
+            const errorDiv = document.getElementById('addLeadErrors');
+
+            // Hide any previous errors
+            errorDiv.style.display = 'none';
+
+            // Validate form
+            if (!validateAddLeadName(form) || !validateAddLeadPhone(form) || !validateAddLeadService(form)) {
+                return;
+            }
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('../api/submit-lead.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Check if response is ok
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error('Server error:', response.status, text);
+                    errorDiv.innerHTML = '<strong>❌ Error:</strong> Server error (' + response.status + '). Please try again.';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Lead added successfully!');
+                    closeModal('addLeadModal');
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    // Display error message
+                    errorDiv.innerHTML = '<strong>❌ Error:</strong> ' + (data.message || 'Unknown error');
+                    errorDiv.style.display = 'block';
+                    errorDiv.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            } catch (error) {
+                console.error('Add lead error:', error);
+                errorDiv.innerHTML = '<strong>❌ Error:</strong> Network error: ' + error.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
         // Function to remove a specific filter
         function removeFilter(paramName) {
             const url = new URL(window.location.href);

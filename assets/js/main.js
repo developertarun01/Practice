@@ -145,12 +145,7 @@ function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('active');
-        // Remove the modal from DOM after closing animation
-        setTimeout(() => {
-            if (modal && modal.parentNode) {
-                modal.remove();
-            }
-        }, 300);
+        // Don't remove the modal from DOM, just hide it
     }
 }
 

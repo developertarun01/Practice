@@ -111,3 +111,18 @@
 [28-Feb-2026 06:25:57 UTC] get-professional.php called with ID: 1
 [28-Feb-2026 06:26:04 UTC] get-professional.php called with ID: 1
 [28-Feb-2026 06:26:06 UTC] get-professional.php called with ID: 1
+[28-Feb-2026 20:23:08 Europe/Berlin] New lead created: ID=50, Name=Tarun, Phone=9876543210, Service=Baby Caretaker
+[28-Feb-2026 20:23:50 Europe/Berlin] New lead created: ID=51, Name=Sanju, Phone=9895663564, Service=Baby Caretaker
+[28-Feb-2026 20:26:07 Europe/Berlin] New lead created: ID=52, Name=Greece, Phone=9876543210, Service=House Maid
+[28-Feb-2026 20:29:35 Europe/Berlin] New lead created: ID=53, Name=Tarun ‎, Phone=6987456321, Service=Security Guard
+[28-Feb-2026 20:33:13 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:33:37 Europe/Berlin] get-professional.php called with ID: 3
+[28-Feb-2026 20:33:59 Europe/Berlin] get-professional.php called with ID: 3
+[28-Feb-2026 20:35:29 Europe/Berlin] get-professional.php called with ID: 3
+[28-Feb-2026 20:35:35 Europe/Berlin] update-professional.php called
+[28-Feb-2026 20:35:38 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:35:41 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:35:49 Europe/Berlin] update-professional.php called
+[28-Feb-2026 20:35:51 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:37:34 Europe/Berlin] get-professional.php called with ID: 2
+[28-Feb-2026 20:40:42 Europe/Berlin] get-professional.php called with ID: 4
