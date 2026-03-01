@@ -119,7 +119,12 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color; color: $status_text_color;'>" . $lead['status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($lead['created_at'])) . "</td>";
                                     echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
-                                    echo "<td><a href='leads.php?action=view&id=" . $lead['id'] . "' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a></td>";
+                                    echo "<td>";
+                                    echo "<a href='leads.php?action=view&id=" . $lead['id'] . "' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo "<a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
+                                    echo "</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }
@@ -159,7 +164,12 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                                     echo "<td>" . htmlspecialchars($payment['customer_phone']) . "</td>";
                                     echo "<td>₹" . number_format($payment['total_amount'], 2) . "</td>";
                                     echo "<td>" . date('M d, Y H:i', strtotime($payment['created_at'])) . "</td>";
-                                    echo "<td><a href='payments.php?action=view&id=" . $payment['id'] . "' class='action-btn view-btn'>View</a></td>";
+                                    echo "<td>";
+                                    echo "<a href='payments.php?action=view&id=" . $payment['id'] . "' class='action-btn view-btn'>View</a> ";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo "<a href='#' class='action-btn' onclick='deleteRecord(" . $payment['id'] . ", \"payment\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
+                                    echo "</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }

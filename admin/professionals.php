@@ -370,7 +370,11 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<span style='padding: 4px 8px; border-radius: 4px; background-color: $v_color;'>" . $prof['verify_status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
                                     echo "<td>" . ($prof['updated_by_name'] ? htmlspecialchars($prof['updated_by_name']) : '-') . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a></td>";
+                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a>";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $prof['id'] . ", \"professional\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
+                                    echo "</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }

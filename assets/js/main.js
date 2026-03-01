@@ -1787,3 +1787,55 @@ function copyToClipboard(text) {
     // Remove the temporary textarea
     document.body.removeChild(textarea);
 }
+// ============================
+// DELETE RECORD FUNCTION
+// ============================
+
+function deleteRecord(recordId, recordType) {
+    // Confirm deletion
+    const confirmDelete = confirm(`Are you sure you want to delete this ${recordType}? This action cannot be undone.`);
+    
+    if (!confirmDelete) {
+        return;
+    }
+
+    // Prepare API endpoint and parameter name
+    const apiEndpoints = {
+        'lead': { endpoint: '../api/delete-lead.php', param: 'lead_id' },
+        'payment': { endpoint: '../api/delete-payment.php', param: 'payment_id' },
+        'booking': { endpoint: '../api/delete-booking.php', param: 'booking_id' },
+        'professional': { endpoint: '../api/delete-professional.php', param: 'professional_id' },
+        'user': { endpoint: '../api/delete-user.php', param: 'user_id' },
+        'follow-up': { endpoint: '../api/delete-follow-up.php', param: 'follow_up_id' }
+    };
+
+    if (!apiEndpoints[recordType]) {
+        alert('Invalid record type');
+        return;
+    }
+
+    const config = apiEndpoints[recordType];
+
+    // Send delete request
+    const formData = new FormData();
+    formData.append(config.param, recordId);
+
+    fetch(config.endpoint, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            // Reload page after successful deletion
+            setTimeout(() => location.reload(), 500);
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network error: ' + error.message);
+    });
+}

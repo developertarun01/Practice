@@ -573,7 +573,7 @@ thead {
 }
 
 th {
-  padding: 15px;
+  padding: 10px;
   text-align: left;
   font-weight: 600;
   color: var(--text-dark);
@@ -582,7 +582,7 @@ th {
 }
 
 td {
-  padding: 15px;
+  padding: 10px;
   border-bottom: 1px solid var(--border-color);
   font-size: 14px;
 }
@@ -599,6 +599,7 @@ tbody tr:hover {
   cursor: pointer;
   border: none;
   text-decoration: none;
+  color: white !important;
   display: inline-block;
 }
 

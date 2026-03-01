@@ -306,7 +306,11 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td><span style='padding: 4px 8px; border-radius: 4px; background-color: $status_color;'>" . $status_text . "</span></td>";
                                     echo "<td>" . ($user['created_at'] ? date('M d, Y', strtotime($user['created_at'])) : '-') . "</td>";
                                     echo "<td>" . ($user['updated_by_name'] ? htmlspecialchars($user['updated_by_name']) : '-') . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $user['id'] . "' data-type='user' onclick='viewUser(" . $user['id'] . "); return false;'>View</a></td>";
+                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $user['id'] . "' data-type='user' onclick='viewUser(" . $user['id'] . "); return false;'>View</a>";
+                                    if ($_SESSION['user_role'] == 'Admin' && $user['id'] != $_SESSION['user_id']) {
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $user['id'] . ", \"user\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
+                                    echo "</td>";
                                     echo "</tr>";
                                     $counter++;
                                 }

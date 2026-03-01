@@ -318,6 +318,9 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' onclick='viewFollowUp(" . $fu['id'] . "); return false;'>View</a> ";
                                     echo "<a href='#' class='action-btn' onclick='editFollowUp(" . $fu['id'] . "); return false;' style='background-color: #f59e0b;'>Edit</a>";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $fu['id'] . ", \"follow-up\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
                                     echo "</td>";
                                     echo "</tr>";
                                 }

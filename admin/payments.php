@@ -149,6 +149,9 @@ $payments = $conn->query("
                                     echo "<td>" . ($payment['updated_by_name'] ? htmlspecialchars($payment['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $payment['id'] . "' data-type='payment' onclick='viewPayment(" . $payment['id'] . "); return false;'>View</a>";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $payment['id'] . ", \"payment\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;

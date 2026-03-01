@@ -376,6 +376,9 @@ if (!$leads) {
                                     echo "<td>";
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
                                     echo "<a href='#' class='action-btn' onclick='openCreateFollowUpModal(" . $lead['id'] . ", \"" . htmlspecialchars($lead['name']) . "\"); return false;' style='background-color: #10b981;'>Follow-up</a>";
+                                    if ($_SESSION['user_role'] == 'Admin') {
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                    }
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;
