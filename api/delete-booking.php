@@ -28,4 +28,3 @@ if ($result) {
 } else {
     die(json_encode(['success' => false, 'message' => 'Failed to delete booking: ' . $conn->error]));
 }
-?>

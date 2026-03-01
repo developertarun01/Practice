@@ -39,4 +39,3 @@ if ($result) {
 } else {
     die(json_encode(['success' => false, 'message' => 'Failed to delete follow-up: ' . $conn->error]));
 }
-?>

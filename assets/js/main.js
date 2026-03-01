@@ -1794,7 +1794,7 @@ function copyToClipboard(text) {
 function deleteRecord(recordId, recordType) {
     // Confirm deletion
     const confirmDelete = confirm(`Are you sure you want to delete this ${recordType}? This action cannot be undone.`);
-    
+
     if (!confirmDelete) {
         return;
     }
@@ -1824,18 +1824,18 @@ function deleteRecord(recordId, recordType) {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            // Reload page after successful deletion
-            setTimeout(() => location.reload(), 500);
-        } else {
-            alert('Error: ' + (data.message || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Network error: ' + error.message);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Reload page after successful deletion
+                setTimeout(() => location.reload(), 500);
+            } else {
+                alert('Error: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Network error: ' + error.message);
+        });
 }
