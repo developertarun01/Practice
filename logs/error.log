@@ -126,3 +126,27 @@
 [28-Feb-2026 20:35:51 Europe/Berlin] get-professional.php called with ID: 4
 [28-Feb-2026 20:37:34 Europe/Berlin] get-professional.php called with ID: 2
 [28-Feb-2026 20:40:42 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:43:50 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:45:01 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:45:04 Europe/Berlin] get-professional.php called with ID: 3
+[28-Feb-2026 20:45:05 Europe/Berlin] get-professional.php called with ID: 2
+[28-Feb-2026 20:46:57 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 20:58:38 Europe/Berlin] get-professional.php called with ID: 4
+[28-Feb-2026 21:00:11 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'skills' in 'field list' in C:\xampp\htdocs\freelance\public_html\api\create-professional.php:144
+Stack trace:
+#0 C:\xampp\htdocs\freelance\public_html\api\create-professional.php(144): mysqli->query('INSERT INTO pro...')
+#1 {main}
+  thrown in C:\xampp\htdocs\freelance\public_html\api\create-professional.php on line 144
+[28-Feb-2026 21:01:34 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'skills' in 'field list' in C:\xampp\htdocs\freelance\public_html\api\create-professional.php:144
+Stack trace:
+#0 C:\xampp\htdocs\freelance\public_html\api\create-professional.php(144): mysqli->query('INSERT INTO pro...')
+#1 {main}
+  thrown in C:\xampp\htdocs\freelance\public_html\api\create-professional.php on line 144
+[01-Mar-2026 20:05:11 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:05:27 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:05:37 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:05:41 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:05:44 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:06:18 Europe/Berlin] update-professional.php called
+[01-Mar-2026 20:10:36 Europe/Berlin] get-professional.php called with ID: 5
+[01-Mar-2026 20:11:10 Europe/Berlin] get-professional.php called with ID: 5

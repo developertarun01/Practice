@@ -18,6 +18,7 @@ $experience = isset($_POST['experience']) ? intval($_POST['experience']) : 0;
 $location = isset($_POST['location']) ? esc($_POST['location']) : '';
 $status = isset($_POST['status']) ? esc($_POST['status']) : 'Active';
 $hours = isset($_POST['hours']) ? intval($_POST['hours']) : 8;
+$skills = isset($_POST['skills']) ? esc($_POST['skills']) : '';
 
 // Validation
 $errors = [];
@@ -39,7 +40,9 @@ if ($check->num_rows > 0) {
 
 // Handle file uploads
 $staff_image = '';
-$id_proof_image = '';
+$id_proof_front = '';
+$id_proof_back = '';
+$police_verification = '';
 
 // Create uploads directory if it doesn't exist
 if (!is_dir('../uploads/professionals')) {
@@ -67,24 +70,66 @@ if (isset($_FILES['staff_image']) && $_FILES['staff_image']['error'] == 0) {
     }
 }
 
-// Upload ID proof image
-if (isset($_FILES['id_proof_image']) && $_FILES['id_proof_image']['error'] == 0) {
-    $file = $_FILES['id_proof_image'];
+// Upload ID proof front
+if (isset($_FILES['id_proof_front']) && $_FILES['id_proof_front']['error'] == 0) {
+    $file = $_FILES['id_proof_front'];
+    $allowed = ['jpg', 'jpeg', 'png'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (in_array($ext, $allowed) && $file['size'] <= 5000000) { // 5MB max
+        $new_filename = 'idproof_front_' . time() . '_' . uniqid() . '.' . $ext;
+        $upload_path = '../uploads/professionals/' . $new_filename;
+
+        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+            $id_proof_front = 'uploads/professionals/' . $new_filename;
+        } else {
+            die(json_encode(['success' => false, 'message' => 'Failed to upload ID proof front']));
+        }
+    } else {
+        die(json_encode(['success' => false, 'message' => 'Invalid ID proof front format or size']));
+    }
+}
+
+// Upload ID proof back
+if (isset($_FILES['id_proof_back']) && $_FILES['id_proof_back']['error'] == 0) {
+    $file = $_FILES['id_proof_back'];
+    $allowed = ['jpg', 'jpeg', 'png'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (in_array($ext, $allowed) && $file['size'] <= 5000000) { // 5MB max
+        $new_filename = 'idproof_back_' . time() . '_' . uniqid() . '.' . $ext;
+        $upload_path = '../uploads/professionals/' . $new_filename;
+
+        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+            $id_proof_back = 'uploads/professionals/' . $new_filename;
+        } else {
+            die(json_encode(['success' => false, 'message' => 'Failed to upload ID proof back']));
+        }
+    } else {
+        die(json_encode(['success' => false, 'message' => 'Invalid ID proof back format or size']));
+    }
+}
+
+// Upload Police verification
+if (isset($_FILES['police_verification']) && $_FILES['police_verification']['error'] == 0) {
+    $file = $_FILES['police_verification'];
     $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
     $filename = $file['name'];
     $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
     if (in_array($ext, $allowed) && $file['size'] <= 5000000) { // 5MB max
-        $new_filename = 'idproof_' . time() . '_' . uniqid() . '.' . $ext;
+        $new_filename = 'police_verification_' . time() . '_' . uniqid() . '.' . $ext;
         $upload_path = '../uploads/professionals/' . $new_filename;
 
         if (move_uploaded_file($file['tmp_name'], $upload_path)) {
-            $id_proof_image = 'uploads/professionals/' . $new_filename;
+            $police_verification = 'uploads/professionals/' . $new_filename;
         } else {
-            die(json_encode(['success' => false, 'message' => 'Failed to upload ID proof']));
+            die(json_encode(['success' => false, 'message' => 'Failed to upload police verification']));
         }
     } else {
-        die(json_encode(['success' => false, 'message' => 'Invalid ID proof format or size']));
+        die(json_encode(['success' => false, 'message' => 'Invalid police verification format or size']));
     }
 }
 
@@ -92,8 +137,9 @@ if (isset($_FILES['id_proof_image']) && $_FILES['id_proof_image']['error'] == 0)
 $professional_slug = strtolower(str_replace(' ', '-', $name)) . '-' . uniqid();
 
 // Create professional
-$sql = "INSERT INTO professionals (name, phone, email, service, gender, experience, location, status, verify_status, hours, staff_image, id_proof_image, professional_slug, updated_by) 
-        VALUES ('$name', '$phone', '$email', '$service', '$gender', $experience, '$location', '$status', 'Pending', $hours, '$staff_image', '$id_proof_image', '$professional_slug', " . intval($_SESSION['user_id']) . ")";
+// Use IGNORE to handle cases where new columns don't exist yet
+$sql = "INSERT INTO professionals (name, phone, email, service, gender, experience, location, status, verify_status, hours, skills, staff_image, id_proof_front, id_proof_back, police_verification, professional_slug, updated_by) 
+        VALUES ('$name', '$phone', '$email', '$service', '$gender', $experience, '$location', '$status', 'Pending', $hours, '$skills', '$staff_image', '$id_proof_front', '$id_proof_back', '$police_verification', '$professional_slug', " . intval($_SESSION['user_id']) . ")";
 
 if ($conn->query($sql) === TRUE) {
     $prof_id = $conn->insert_id;

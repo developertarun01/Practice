@@ -26,6 +26,7 @@ $status = isset($_POST['status']) ? trim($_POST['status']) : null;
 $verify_status = isset($_POST['verify_status']) ? trim($_POST['verify_status']) : null;
 $rating = isset($_POST['rating']) ? floatval($_POST['rating']) : null;
 $hours = isset($_POST['hours']) ? intval($_POST['hours']) : null;
+$skills = isset($_POST['skills']) ? trim($_POST['skills']) : null;
 
 if (!$professional_id) {
     echo json_encode(['success' => false, 'message' => 'Professional ID is required']);
@@ -33,7 +34,7 @@ if (!$professional_id) {
 }
 
 // Check if professional exists
-$check = $conn->prepare("SELECT id, staff_image, id_proof_image FROM professionals WHERE id = ?");
+$check = $conn->prepare("SELECT id, staff_image, id_proof_front, id_proof_back, police_verification FROM professionals WHERE id = ?");
 $check->bind_param("i", $professional_id);
 $check->execute();
 $result = $check->get_result();
@@ -90,6 +91,11 @@ if ($hours !== null) {
     $params[] = $hours;
     $types .= "i";
 }
+if ($skills !== null) {
+    $updates[] = "skills = ?";
+    $params[] = $skills;
+    $types .= "s";
+}
 
 // Handle file uploads
 if (isset($_FILES['staff_image']) && $_FILES['staff_image']['error'] == 0) {
@@ -132,19 +138,19 @@ if (isset($_FILES['staff_image']) && $_FILES['staff_image']['error'] == 0) {
     }
 }
 
-if (isset($_FILES['id_proof_image']) && $_FILES['id_proof_image']['error'] == 0) {
-    $file = $_FILES['id_proof_image'];
-    $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+if (isset($_FILES['id_proof_front']) && $_FILES['id_proof_front']['error'] == 0) {
+    $file = $_FILES['id_proof_front'];
+    $allowed = ['jpg', 'jpeg', 'png'];
     $filename = $file['name'];
     $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
     if (!in_array($ext, $allowed)) {
-        echo json_encode(['success' => false, 'message' => 'Invalid ID proof format. Allowed: jpg, png, pdf']);
+        echo json_encode(['success' => false, 'message' => 'Invalid ID proof front format. Allowed: jpg, png']);
         exit;
     }
 
     if ($file['size'] > 5000000) {
-        echo json_encode(['success' => false, 'message' => 'ID proof too large. Max 5MB']);
+        echo json_encode(['success' => false, 'message' => 'ID proof front too large. Max 5MB']);
         exit;
     }
 
@@ -153,21 +159,101 @@ if (isset($_FILES['id_proof_image']) && $_FILES['id_proof_image']['error'] == 0)
         mkdir($upload_dir, 0755, true);
     }
 
-    // Delete old ID proof
-    if (!empty($professional['id_proof_image']) && file_exists('../' . $professional['id_proof_image'])) {
-        unlink('../' . $professional['id_proof_image']);
+    // Delete old ID proof front
+    if (!empty($professional['id_proof_front']) && file_exists('../' . $professional['id_proof_front'])) {
+        unlink('../' . $professional['id_proof_front']);
     }
 
-    $new_filename = 'idproof_' . time() . '_' . uniqid() . '.' . $ext;
+    $new_filename = 'idproof_front_' . time() . '_' . uniqid() . '.' . $ext;
     $upload_path = $upload_dir . $new_filename;
 
     if (move_uploaded_file($file['tmp_name'], $upload_path)) {
-        $id_proof_image = 'uploads/professionals/' . $new_filename;
-        $updates[] = "id_proof_image = ?";
-        $params[] = $id_proof_image;
+        $id_proof_front = 'uploads/professionals/' . $new_filename;
+        $updates[] = "id_proof_front = ?";
+        $params[] = $id_proof_front;
         $types .= "s";
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to upload ID proof']);
+        echo json_encode(['success' => false, 'message' => 'Failed to upload ID proof front']);
+        exit;
+    }
+}
+
+if (isset($_FILES['id_proof_back']) && $_FILES['id_proof_back']['error'] == 0) {
+    $file = $_FILES['id_proof_back'];
+    $allowed = ['jpg', 'jpeg', 'png'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (!in_array($ext, $allowed)) {
+        echo json_encode(['success' => false, 'message' => 'Invalid ID proof back format. Allowed: jpg, png']);
+        exit;
+    }
+
+    if ($file['size'] > 5000000) {
+        echo json_encode(['success' => false, 'message' => 'ID proof back too large. Max 5MB']);
+        exit;
+    }
+
+    $upload_dir = '../uploads/professionals/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    // Delete old ID proof back
+    if (!empty($professional['id_proof_back']) && file_exists('../' . $professional['id_proof_back'])) {
+        unlink('../' . $professional['id_proof_back']);
+    }
+
+    $new_filename = 'idproof_back_' . time() . '_' . uniqid() . '.' . $ext;
+    $upload_path = $upload_dir . $new_filename;
+
+    if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+        $id_proof_back = 'uploads/professionals/' . $new_filename;
+        $updates[] = "id_proof_back = ?";
+        $params[] = $id_proof_back;
+        $types .= "s";
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to upload ID proof back']);
+        exit;
+    }
+}
+
+if (isset($_FILES['police_verification']) && $_FILES['police_verification']['error'] == 0) {
+    $file = $_FILES['police_verification'];
+    $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+    $filename = $file['name'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+    if (!in_array($ext, $allowed)) {
+        echo json_encode(['success' => false, 'message' => 'Invalid police verification format. Allowed: jpg, png, pdf']);
+        exit;
+    }
+
+    if ($file['size'] > 5000000) {
+        echo json_encode(['success' => false, 'message' => 'Police verification too large. Max 5MB']);
+        exit;
+    }
+
+    $upload_dir = '../uploads/professionals/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    // Delete old police verification
+    if (!empty($professional['police_verification']) && file_exists('../' . $professional['police_verification'])) {
+        unlink('../' . $professional['police_verification']);
+    }
+
+    $new_filename = 'police_verification_' . time() . '_' . uniqid() . '.' . $ext;
+    $upload_path = $upload_dir . $new_filename;
+
+    if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+        $police_verification = 'uploads/professionals/' . $new_filename;
+        $updates[] = "police_verification = ?";
+        $params[] = $police_verification;
+        $types .= "s";
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Failed to upload police verification']);
         exit;
     }
 }
@@ -205,4 +291,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

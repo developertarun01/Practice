@@ -17,6 +17,13 @@ $date_range = $date_range_result->fetch_assoc();
 $min_date = $date_range['min_date'] ?? date('Y-m-d', strtotime('-1 year'));
 $max_date = $date_range['max_date'] ?? date('Y-m-d');
 
+// Get distinct hours values for the filter
+$hours_result = $conn->query("SELECT DISTINCT hours FROM professionals WHERE hours IS NOT NULL AND hours > 0 ORDER BY hours ASC");
+$available_hours = [];
+while ($row = $hours_result->fetch_assoc()) {
+    $available_hours[] = $row['hours'];
+}
+
 // Get filter parameters
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $service = isset($_GET['service']) ? trim($_GET['service']) : '';
@@ -24,6 +31,7 @@ $status = isset($_GET['status']) ? trim($_GET['status']) : '';
 $gender = isset($_GET['gender']) ? trim($_GET['gender']) : '';
 $verify_status = isset($_GET['verify_status']) ? trim($_GET['verify_status']) : '';
 $created_before = isset($_GET['created_before']) ? trim($_GET['created_before']) : '';
+$hours = isset($_GET['hours']) ? intval($_GET['hours']) : '';
 
 // Build query with proper escaping
 $where = array("1=1");
@@ -54,6 +62,9 @@ if (!empty($created_before)) {
         $created_before_esc = esc($created_before);
         $where[] = "DATE(p.created_at) <= '$created_before_esc'";
     }
+}
+if (!empty($hours) && is_numeric($hours)) {
+    $where[] = "p.hours = $hours";
 }
 
 // Combine where conditions
@@ -116,6 +127,14 @@ $total_count = $total_count_result->fetch_assoc()['total'];
             border-radius: 4px;
         }
 
+        .filter-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
         .active-filters {
             margin-top: 10px;
             padding: 10px;
@@ -173,6 +192,12 @@ $total_count = $total_count_result->fetch_assoc()['total'];
         }
 
         .date-range-info {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 3px;
+        }
+
+        .filter-hint {
             font-size: 11px;
             color: #6c757d;
             margin-top: 3px;
@@ -253,6 +278,20 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     min="<?php echo $min_date; ?>"
                                     max="<?php echo $max_date; ?>">
                             </div>
+                            <div class="filter-group">
+                                <label>Hours Per Day</label>
+                                <select name="hours">
+                                    <option value="">All Hours</option>
+                                    <?php foreach ($available_hours as $hour): ?>
+                                        <option value="<?php echo $hour; ?>" <?php echo $hours == $hour ? 'selected' : ''; ?>>
+                                            <?php echo $hour; ?> Hour<?php echo $hour > 1 ? 's' : ''; ?> Per Day
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <?php if (empty($available_hours)): ?>
+                                    <div class="filter-hint">No hours data available</div>
+                                <?php endif; ?>
+                            </div>
                         </form>
                     </div>
 
@@ -265,6 +304,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                     if (!empty($gender)) $active_filters[] = ['type' => 'gender', 'label' => "Gender: $gender", 'param' => 'gender'];
                     if (!empty($verify_status)) $active_filters[] = ['type' => 'verify_status', 'label' => "Verification: $verify_status", 'param' => 'verify_status'];
                     if (!empty($created_before)) $active_filters[] = ['type' => 'date', 'label' => "Created Before: $created_before", 'param' => 'created_before'];
+                    if (!empty($hours)) $active_filters[] = ['type' => 'hours', 'label' => "Hours: $hours Per Day", 'param' => 'hours'];
 
                     if (!empty($active_filters)):
                     ?>
@@ -298,6 +338,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                 <th>Service</th>
                                 <th>Location</th>
                                 <th>Experience</th>
+                                <th>Hours/Day</th>
                                 <th>Status</th>
                                 <th>Verification</th>
                                 <th>Created At</th>
@@ -317,6 +358,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td>" . htmlspecialchars($prof['service']) . "</td>";
                                     echo "<td>" . htmlspecialchars($prof['location']) . "</td>";
                                     echo "<td>" . ($prof['experience'] ? $prof['experience'] . " yrs" : "-") . "</td>";
+                                    echo "<td>" . ($prof['hours'] ? $prof['hours'] . " hrs" : "-") . "</td>";
                                     echo "<td>" . $prof['status'] . "</td>";
                                     echo "<td>";
                                     $v_color = match ($prof['verify_status']) {
@@ -334,7 +376,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                 }
                             } else {
                                 echo "<tr>";
-                                echo "<td colspan='11' class='no-results'>";
+                                echo "<td colspan='12' class='no-results'>";
                                 echo "<div style='font-size: 24px; margin-bottom: 10px;'>👥</div>";
                                 echo "<div style='font-size: 18px; font-weight: 500; margin-bottom: 10px;'>No Professionals Found</div>";
 

@@ -355,12 +355,35 @@ function openNewProfessionalModal() {
                         <input type="text" name="location">
                     </div>
                     <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="On Leave">On Leave</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Skills (comma-separated)</label>
+                        <textarea name="skills" rows="3" placeholder="e.g., Cooking, Cleaning, Childcare"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label>Staff Photo (JPG, PNG, GIF - Max 5MB)</label>
                         <input type="file" name="staff_image" accept=".jpg,.jpeg,.png,.gif">
                     </div>
+                    <div style="background-color: #f0f9ff; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                        <h4 style="margin-top: 0; color: #0369a1;">ID Proof Document (Separate Front and Back)</h4>
+                        <div class="form-group">
+                            <label>ID Proof Front (JPG, PNG - Max 5MB)</label>
+                            <input type="file" name="id_proof_front" accept=".jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group">
+                            <label>ID Proof Back (JPG, PNG - Max 5MB)</label>
+                            <input type="file" name="id_proof_back" accept=".jpg,.jpeg,.png">
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label>ID Proof Document (JPG, PNG, PDF - Max 5MB)</label>
-                        <input type="file" name="id_proof_image" accept=".jpg,.jpeg,.png,.pdf">
+                        <label>Police Verification Document (JPG, PNG, PDF - Max 5MB)</label>
+                        <input type="file" name="police_verification" accept=".jpg,.jpeg,.png,.pdf">
                     </div>
                     <button type="submit" class="btn btn-primary">Add Professional</button>
                 </form>
@@ -1152,8 +1175,11 @@ async function viewProfessional(professionalId) {
                     <h2>Professional Details</h2>
                     <div class="professional-details">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
-                            ${prof.staff_image ? `<div><strong>Staff Photo:</strong><br><img src="${prof.staff_image}" style="max-width: 200px; max-height: 200px; border-radius: 4px; object-fit: cover;"></div>` : ''}
-                            ${prof.id_proof_image ? `<div><strong>ID Proof:</strong><br><a href="${prof.id_proof_image}" target="_blank" style="color: #007bff; text-decoration: none;">📄 View Document</a></div>` : ''}
+                            ${prof.staff_image ? `<div><strong>Staff Photo:</strong><br><img src="../${prof.staff_image}" style="max-width: 100px; max-height: 100px; border-radius: 4px; object-fit: cover;"></div>` : ''}
+                            <div>
+                                ${prof.id_proof_front ? `<div style="margin-bottom: 10px;"><strong>ID Proof Front:</strong><br><a href="../${prof.id_proof_front}" target="_blank" style="color: #007bff; text-decoration: none;">📄 View Document</a></div>` : ''}
+                                ${prof.id_proof_back ? `<div><strong>ID Proof Back:</strong><br><a href="../${prof.id_proof_back}" target="_blank" style="color: #007bff; text-decoration: none;">📄 View Document</a></div>` : ''}
+                            </div>
                         </div>
                         <p><strong>Name:</strong> ${prof.name}</p>
                         <p><strong>Phone:</strong> ${prof.phone}</p>
@@ -1163,9 +1189,11 @@ async function viewProfessional(professionalId) {
                         <p><strong>Experience:</strong> ${prof.experience || 0} years</p>
                         <p><strong>Hours Per Day:</strong> ${prof.hours || 8} hours</p>
                         <p><strong>Rating:</strong> ⭐ ${prof.rating}</p>
+                        <p><strong>Skills:</strong> ${prof.skills || '-'}</p>
                         <p><strong>Status:</strong> <span class="badge">${prof.status}</span></p>
                         <p><strong>Verification:</strong> <span class="badge">${prof.verify_status}</span></p>
                         <p><strong>Location:</strong> ${prof.location || '-'}</p>
+                        ${prof.police_verification ? `<p><strong>Police Verification:</strong> <a href="../${prof.police_verification}" target="_blank" style="color: #007bff; text-decoration: none;">📄 View Document</a></p>` : ''}
                         ${prof.updated_by_name ? `<p><strong>Last Edited By:</strong> ${prof.updated_by_name}</p>` : ''}
                     </div>
                     <div style="margin-top: 20px; padding: 10px; background-color: #f0f9ff; border-radius: 4px;">
@@ -1241,6 +1269,10 @@ async function editProfessional(professionalId) {
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Skills (comma-separated)</label>
+                            <textarea name="skills" rows="3" placeholder="e.g., Cooking, Cleaning, Childcare">${prof.skills || ''}</textarea>
+                        </div>
+                        <div class="form-group">
                             <label>Verification Status</label>
                             <select name="verify_status">
                                 <option value="Verified" ${prof.verify_status === 'Verified' ? 'selected' : ''}>Verified</option>
@@ -1253,9 +1285,22 @@ async function editProfessional(professionalId) {
                             <input type="file" name="staff_image" accept=".jpg,.jpeg,.png,.gif">
                             <small>JPG, PNG, GIF - Max 5MB. Upload to replace current image.</small>
                         </div>
+                        <div style="background-color: #f0f9ff; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                            <h4 style="margin-top: 0; color: #0369a1;">ID Proof Document (Separate Front and Back)</h4>
+                            <div class="form-group">
+                                <label>ID Proof Front ${prof.id_proof_front ? '(Current: ✓)' : ''}</label>
+                                <input type="file" name="id_proof_front" accept=".jpg,.jpeg,.png">
+                                <small>JPG, PNG - Max 5MB. Upload to replace current image.</small>
+                            </div>
+                            <div class="form-group">
+                                <label>ID Proof Back ${prof.id_proof_back ? '(Current: ✓)' : ''}</label>
+                                <input type="file" name="id_proof_back" accept=".jpg,.jpeg,.png">
+                                <small>JPG, PNG - Max 5MB. Upload to replace current image.</small>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label>ID Proof Document ${prof.id_proof_image ? '(Current: ✓)' : ''}</label>
-                            <input type="file" name="id_proof_image" accept=".jpg,.jpeg,.png,.pdf">
+                            <label>Police Verification Document ${prof.police_verification ? '(Current: ✓)' : ''}</label>
+                            <input type="file" name="police_verification" accept=".jpg,.jpeg,.png,.pdf">
                             <small>JPG, PNG, PDF - Max 5MB. Upload to replace current document.</small>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
