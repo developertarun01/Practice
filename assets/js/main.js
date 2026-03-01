@@ -1012,9 +1012,26 @@ function setupViewButtons() {
 
 // Payment view/edit functions
 async function viewPayment(paymentId) {
+    // Remove any existing modals first
     removeAllModals();
+
+    // Prevent multiple clicks
+    if (window.isLoading) return;
+    window.isLoading = true;
+
     try {
-        const response = await fetch(`../api/get-payment.php?id=${paymentId}`);
+        const response = await fetch(`../api/get-payment.php?id=${paymentId}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        // Check if response is OK
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.message || `HTTP error ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (!data.success) {
@@ -1030,16 +1047,16 @@ async function viewPayment(paymentId) {
                     <span class="close" onclick="closeModal('viewPaymentModal')">&times;</span>
                     <h2>Payment Details</h2>
                     <div class="payment-details">
-                        <p><strong>Customer Name:</strong> ${payment.customer_name}</p>
-                        <p><strong>Phone:</strong> ${payment.customer_phone}</p>
-                        <p><strong>Email:</strong> ${payment.customer_email}</p>
-                        <p><strong>Service:</strong> ${payment.service}</p>
-                        <p><strong>Purpose:</strong> ${payment.purpose}</p>
+                        <p><strong>Customer Name:</strong> ${escapeHtml(payment.customer_name)}</p>
+                        <p><strong>Phone:</strong> ${escapeHtml(payment.customer_phone)}</p>
+                        <p><strong>Email:</strong> ${escapeHtml(payment.customer_email || '-')}</p>
+                        <p><strong>Service:</strong> ${escapeHtml(payment.service)}</p>
+                        <p><strong>Purpose:</strong> ${escapeHtml(payment.purpose)}</p>
                         <p><strong>Amount:</strong> ₹${parseFloat(payment.total_amount).toFixed(2)}</p>
-                        <p><strong>Status:</strong> <span class="badge">${payment.status}</span></p>
-                        <p><strong>Payment Method:</strong> ${payment.payment_method || '-'}</p>
+                        <p><strong>Status:</strong> <span class="badge">${escapeHtml(payment.status)}</span></p>
+                        <p><strong>Payment Method:</strong> ${escapeHtml(payment.payment_method || '-')}</p>
                         <p><strong>Created At:</strong> ${new Date(payment.created_at).toLocaleString()}</p>
-                        ${payment.updated_by_name ? `<p><strong>Last Edited By:</strong> ${payment.updated_by_name}</p>` : ''}
+                        ${payment.updated_by_name ? `<p><strong>Last Edited By:</strong> ${escapeHtml(payment.updated_by_name)}</p>` : ''}
                     </div>
                     <button class="btn btn-secondary" onclick="editPayment(${paymentId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewPaymentModal')">Close</button>
@@ -1048,14 +1065,31 @@ async function viewPayment(paymentId) {
         `;
         document.body.insertAdjacentHTML('beforeend', html);
     } catch (error) {
-        console.error(error);
-        alert('Error loading payment details');
+        console.error('View payment error:', error);
+        alert('Error loading payment details: ' + error.message);
+    } finally {
+        window.isLoading = false;
     }
 }
 
 async function editPayment(paymentId) {
+    // Prevent multiple clicks
+    if (window.isLoading) return;
+    window.isLoading = true;
+
     try {
-        const response = await fetch(`../api/get-payment.php?id=${paymentId}`);
+        const response = await fetch(`../api/get-payment.php?id=${paymentId}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        // Check if response is OK
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.message || `HTTP error ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (!data.success) {
@@ -1064,6 +1098,8 @@ async function editPayment(paymentId) {
         }
 
         const payment = data.data;
+
+        // Close view modal if open
         closeModal('viewPaymentModal');
 
         const html = `
@@ -1089,36 +1125,71 @@ async function editPayment(paymentId) {
         `;
         document.body.insertAdjacentHTML('beforeend', html);
     } catch (error) {
-        console.error(error);
-        alert('Error loading payment for editing');
+        console.error('Edit payment error:', error);
+        alert('Error loading payment for editing: ' + error.message);
+    } finally {
+        window.isLoading = false;
     }
 }
 
 async function handleEditPayment(e, paymentId) {
     e.preventDefault();
+
     const form = e.target;
     const formData = new FormData(form);
     formData.append('payment_id', paymentId);
 
+    // Prevent double submission
+    if (form.classList.contains('submitting')) return;
+    form.classList.add('submitting');
+
     try {
         const response = await fetch('../api/update-payment-status.php', {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
+
+        // Check if response is OK
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            throw new Error(errorData?.message || `HTTP error ${response.status}`);
+        }
 
         const data = await response.json();
 
         if (data.success) {
             alert('Payment updated successfully!');
             closeModal('editPaymentModal');
+            // Reload the page to show updated data
             setTimeout(() => location.reload(), 500);
         } else {
             alert('Error: ' + (data.message || 'Unknown error'));
         }
     } catch (error) {
-        console.error(error);
-        alert('Network error');
+        console.error('Update payment error:', error);
+        alert('Network error: ' + error.message);
+    } finally {
+        form.classList.remove('submitting');
     }
+}
+
+// Helper function to escape HTML
+function escapeHtml(unsafe) {
+    if (!unsafe) return unsafe;
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Make sure removeAllModals function exists
+function removeAllModals() {
+    document.querySelectorAll('.modal').forEach(modal => modal.remove());
 }
 
 // Professional view/edit functions
