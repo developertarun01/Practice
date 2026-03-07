@@ -432,11 +432,6 @@ $total_count = $total_count_result->fetch_assoc()['total'];
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoFilters();
 
-            // Set active menu if function exists
-            if (typeof setActiveMenu === 'function') {
-                setActiveMenu();
-            }
-
             // Auto-hide messages if function exists
             if (typeof autoHideMessages === 'function') {
                 autoHideMessages();

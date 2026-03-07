@@ -342,7 +342,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                 <th>Status</th>
                                 <th>Verification</th>
                                 <th>Created At</th>
-                                <th>Last Edited By</th>
+                                <th>Last Edited</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -371,6 +371,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
                                     echo "<td>" . ($prof['updated_by_name'] ? htmlspecialchars($prof['updated_by_name']) : '-') . "</td>";
                                     echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a>";
+                                    echo "<a href='#' class='action-btn' data-id='" . $prof['id'] . "' data-type='professional' style='background-color: #c28400; margin: 5px 0 5px 3px' onclick='editProfessional(" . $prof['id'] . "); return false;'>Edit</a>";
                                     if ($_SESSION['user_role'] == 'Admin') {
                                         echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $prof['id'] . ", \"professional\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }

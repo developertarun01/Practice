@@ -484,14 +484,15 @@ body {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 25px;
   margin-bottom: 40px;
 }
 
 .dashboard-card {
+  text-align: center;
   background: #ffffff;
-  padding: 25px;
+  padding: 5px;
   border-radius: 8px;
   box-shadow: var(--shadow-md);
 }

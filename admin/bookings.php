@@ -314,7 +314,11 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td>" . ($booking['created_at'] ? date('M d, Y', strtotime($booking['created_at'])) : '-') . "</td>";
                                     echo "<td>" . ($booking['updated_by_name'] ? htmlspecialchars($booking['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
-                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $booking['id'] . "' data-type='booking' onclick='viewBooking(" . $booking['id'] . "); return false;'>View</a>";
+
+                                    echo "<a href='#' class='action-btn  view-btn' data-id='" . $booking['id'] . "' data-type='booking' return false;'>View</a>";
+
+                                    echo "<a href='#' class='action-btn' data-id='" . $booking['id'] . "' data-type='booking' style='background-color: #c28400;' onclick='editBooking(" . $booking['id'] . "); return false;'>Edit</a>";
+
                                     if ($_SESSION['user_role'] == 'Admin') {
                                         echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $booking['id'] . ", \"booking\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }
@@ -496,9 +500,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoFilters();
-            setActiveMenu();
             autoHideMessages();
-            setupViewButtons();
         });
     </script>
 

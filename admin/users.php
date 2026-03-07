@@ -307,6 +307,7 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<td>" . ($user['created_at'] ? date('M d, Y', strtotime($user['created_at'])) : '-') . "</td>";
                                     echo "<td>" . ($user['updated_by_name'] ? htmlspecialchars($user['updated_by_name']) : '-') . "</td>";
                                     echo "<td><a href='#' class='action-btn view-btn' data-id='" . $user['id'] . "' data-type='user' onclick='viewUser(" . $user['id'] . "); return false;'>View</a>";
+                                    echo "<a href='#' class='action-btn' data-id='" . $user['id'] . "' data-type='user' style='background-color: #c28400;' onclick='editUser(" . $user['id'] . "); return false;'>Edit</a>";
                                     if ($_SESSION['user_role'] == 'Admin' && $user['id'] != $_SESSION['user_id']) {
                                         echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $user['id'] . ", \"user\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }
@@ -483,10 +484,6 @@ $total_count = $total_count_result->fetch_assoc()['total'];
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoFilters();
-            // You can add other initialization functions here
-            // setActiveMenu();
-            // autoHideMessages();
-            // setupViewButtons();
         });
     </script>
 

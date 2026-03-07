@@ -50,25 +50,25 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                 <!-- Dashboard Cards -->
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
-                        <h3>Fresh Leads</h3>
                         <div class="value"><?php echo $fresh_leads; ?></div>
+                        <h3>Fresh Leads</h3>
                     </div>
                     <div class="dashboard-card">
-                        <h3>In Progress Leads</h3>
                         <div class="value"><?php echo $in_progress_leads; ?></div>
+                        <h3>In Progress Leads</h3>
                     </div>
                     <div class="dashboard-card">
-                        <h3>Pending Bookings</h3>
                         <div class="value"><?php echo $pending_bookings; ?></div>
+                        <h3>Pending Bookings</h3>
                     </div>
                     <div class="dashboard-card">
-                        <h3>Pending Payments</h3>
                         <div class="value"><?php echo $pending_payments; ?></div>
+                        <h3>Pending Payments</h3>
                     </div>
-                    <div class="dashboard-card">
+                    <!-- <div class="dashboard-card">
                         <h3>Missed Calls (7d)</h3>
                         <div class="value"><?php echo $missed_calls; ?></div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Open Leads Section -->
@@ -121,6 +121,7 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                                     echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
                                     echo "<a href='leads.php?action=view&id=" . $lead['id'] . "' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
+                                    echo "<a href='#' class='action-btn edit-btn' style='background-color: #c28400;' onclick='editLead(" . $lead['id'] . ")' data-id='" . $lead['id'] . "' data-type='lead'>Edit</a>";
                                     if ($_SESSION['user_role'] == 'Admin') {
                                         echo "<a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }
@@ -166,6 +167,7 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
                                     echo "<td>" . date('M d, Y H:i', strtotime($payment['created_at'])) . "</td>";
                                     echo "<td>";
                                     echo "<a href='payments.php?action=view&id=" . $payment['id'] . "' class='action-btn view-btn'>View</a> ";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $payment['id'] . "' data-type='payment' style='background-color: #c28400;' onclick='editPayment(" . $payment['id'] . "); return false;'>Edit</a>";
                                     if ($_SESSION['user_role'] == 'Admin') {
                                         echo "<a href='#' class='action-btn' onclick='deleteRecord(" . $payment['id'] . ", \"payment\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }

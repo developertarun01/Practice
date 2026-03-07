@@ -374,8 +374,13 @@ if (!$leads) {
                                     echo "<td>" . ($lead['created_at'] ? date('M d, Y H:i', strtotime($lead['created_at'])) : '-') . "</td>";
                                     echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
+
                                     echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
+
+                                    echo "<a href='#' class='action-btn edit-btn' style='background-color: #c28400;' onclick='editLead(" . $lead['id'] . ")' data-id='" . $lead['id'] . "' data-type='lead'>Edit</a>";
+
                                     echo "<a href='#' class='action-btn' onclick='openCreateFollowUpModal(" . $lead['id'] . ", \"" . htmlspecialchars($lead['name']) . "\"); return false;' style='background-color: #10b981;'>Follow-up</a>";
+
                                     if ($_SESSION['user_role'] == 'Admin') {
                                         echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'>Delete</a>";
                                     }
@@ -627,11 +632,7 @@ if (!$leads) {
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoFilters();
-
-            // Keep existing functionality
-            if (typeof setActiveMenu === 'function') setActiveMenu();
             if (typeof autoHideMessages === 'function') autoHideMessages();
-            if (typeof setupViewButtons === 'function') setupViewButtons();
         });
     </script>
 

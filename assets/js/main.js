@@ -135,42 +135,47 @@ async function handleFormSubmit(e) {
 }
 
 // ============================
-// ADMIN MODAL FUNCTIONS
+// ADMIN MODAL FUNCTIONS - FIXED
 // ============================
 function openModal(modalId) {
-    document.getElementById(modalId)?.classList.add('active');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+    }
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('active');
-        // Don't remove the modal from DOM, just hide it
+        // Remove modal after animation completes
+        setTimeout(() => {
+            if (modal && modal.parentNode && !modal.classList.contains('active')) {
+                modal.remove();
+            }
+        }, 300);
     }
 }
 
 function removeAllModals() {
-    // Remove all modal elements from DOM
     document.querySelectorAll('.modal').forEach(modal => {
-        modal.classList.remove('active');
-        setTimeout(() => {
-            if (modal && modal.parentNode) {
-                modal.remove();
-            }
-        }, 100);
+        modal.remove();
     });
 }
 
-window.addEventListener('click', function (e) {
-    if (e.target.classList.contains('modal')) {
-        e.target.classList.remove('active');
-        setTimeout(() => {
-            if (e.target && e.target.parentNode) {
-                e.target.remove();
-            }
-        }, 300);
-    }
-});
+// Improved modal click outside handler
+// window.addEventListener('click', function (e) {
+//     if (e.target.classList.contains('modal')) {
+//         // Get the modal ID from the clicked element
+//         const modalId = e.target.id;
+//         if (modalId) {
+//             closeModal(modalId);
+//         } else {
+//             // Fallback for modals without ID
+//             e.target.classList.remove('active');
+//         }
+//     }
+// });
 
 // ============================
 // ADMIN UI HELPERS
@@ -185,6 +190,12 @@ function setActiveMenu() {
         }
     });
 }
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function () {
+    setupViewButtons();
+    if (typeof setActiveMenu === 'function') setActiveMenu();
+});
 
 function autoHideMessages() {
     document.querySelectorAll('[data-auto-hide]').forEach(msg => {
@@ -1757,10 +1768,6 @@ async function handleEditFollowUp(e, followUpId) {
         alert('Network error');
     }
 }
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', setupViewButtons);
-
 // ============================
 // UTILITY FUNCTIONS
 // ============================
