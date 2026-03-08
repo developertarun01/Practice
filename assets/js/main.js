@@ -481,7 +481,7 @@ function openCreateFollowUpModal(leadId, leadName) {
                     
                     <div class="form-group">
                         <label>Comments</label>
-                        <textarea style="width: 100%" rows="7" name="comments" placeholder="Enter follow-up notes..."></textarea>
+                        <textarea style="width: 100%; padding: 10px" rows="7" name="comments" placeholder="Enter follow-up notes..."></textarea>
                     </div>
                     
                     <div class="form-group">
@@ -1530,8 +1530,8 @@ async function viewProfessional(professionalId) {
         const prof = data.data;
         // console.log('Professional data:', prof);
 
-        const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
-        // const profileUrl = `${window.location.origin}/professional-profile.php?slug=${prof.professional_slug}`;
+        // const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
+        const profileUrl = `${window.location.origin}/professional-profile.php?slug=${prof.professional_slug}`;
 
         const html = `
             <div id="viewProfessionalModal" class="modal active">

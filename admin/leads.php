@@ -46,9 +46,10 @@ if (!empty($created_before)) {
     }
 }
 
-// For non-admin users, show only their assigned leads
+// For non-admin users, show their assigned leads plus fresh/unassigned leads
 if ($_SESSION['user_role'] != 'Admin') {
-    $where[] = "responder_id = " . intval($_SESSION['user_id']);
+    // Sales users can see: leads assigned to them OR fresh unassigned leads
+    $where[] = "(responder_id = " . intval($_SESSION['user_id']) . " OR status = 'Fresh')";
 }
 
 // Combine where conditions
