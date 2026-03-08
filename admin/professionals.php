@@ -96,6 +96,12 @@ $total_count = $total_count_result->fetch_assoc()['total'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professionals - Servon Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Font Awesome (For Icons)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         .reset-filter-btn {
             background-color: #6c757d;
@@ -332,17 +338,17 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                     <table>
                         <thead>
                             <tr>
-                                <th>Serial No</th>
+                                <th>No</th>
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Service</th>
                                 <th>Location</th>
-                                <th>Experience</th>
-                                <th>Hours/Day</th>
+                                <th>Experi</th>
+                                <th>Hours</th>
                                 <th>Status</th>
                                 <th>Verification</th>
-                                <th>Created At</th>
-                                <th>Last Edited</th>
+                                <th>Created</th>
+                                <th>Edited</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -370,10 +376,10 @@ $total_count = $total_count_result->fetch_assoc()['total'];
                                     echo "<span style='padding: 4px 8px; border-radius: 4px; background-color: $v_color;'>" . $prof['verify_status'] . "</span></td>";
                                     echo "<td>" . date('M d, Y', strtotime($prof['created_at'])) . "</td>";
                                     echo "<td>" . ($prof['updated_by_name'] ? htmlspecialchars($prof['updated_by_name']) : '-') . "</td>";
-                                    echo "<td><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'>View</a>";
-                                    echo "<a href='#' class='action-btn' data-id='" . $prof['id'] . "' data-type='professional' style='background-color: #c28400; margin: 5px 0 5px 3px' onclick='editProfessional(" . $prof['id'] . "); return false;'>Edit</a>";
+                                    echo "<td style='width:156px'><a href='#' class='action-btn view-btn' data-id='" . $prof['id'] . "' data-type='professional' onclick='viewProfessional(" . $prof['id'] . "); return false;'><i class='fa-regular fa-eye'></i></a>";
+                                    echo "<a href='#' class='action-btn' data-id='" . $prof['id'] . "' data-type='professional' style='background-color: #c28400; margin-right: 0' onclick='editProfessional(" . $prof['id'] . "); return false;'><i class='fa-regular fa-pen-to-square'></i></a>";
                                     if ($_SESSION['user_role'] == 'Admin') {
-                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $prof['id'] . ", \"professional\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $prof['id'] . ", \"professional\"); return false;' style='background-color: #dc3545;'><i class='fa-solid fa-trash-can'></i></a>";
                                     }
                                     echo "</td>";
                                     echo "</tr>";

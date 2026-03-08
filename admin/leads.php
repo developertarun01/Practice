@@ -75,6 +75,12 @@ if (!$leads) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leads - Servon Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Font Awesome (For Icons)-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         .filter-section form {
             display: grid;
@@ -375,15 +381,20 @@ if (!$leads) {
                                     echo "<td>" . ($lead['updated_by_name'] ? htmlspecialchars($lead['updated_by_name']) : '-') . "</td>";
                                     echo "<td>";
 
-                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'>View</a> ";
+                                    echo "<a href='#' class='action-btn view-btn' data-id='" . $lead['id'] . "' data-type='lead'><i class='fa-regular fa-eye'></i></a> ";
 
-                                    echo "<a href='#' class='action-btn edit-btn' style='background-color: #c28400;' onclick='editLead(" . $lead['id'] . ")' data-id='" . $lead['id'] . "' data-type='lead'>Edit</a>";
 
-                                    echo "<a href='#' class='action-btn' onclick='openCreateFollowUpModal(" . $lead['id'] . ", \"" . htmlspecialchars($lead['name']) . "\"); return false;' style='background-color: #10b981;'>Follow-up</a>";
+
+                                    echo "<a href='#' class='action-btn edit-btn' style='background-color: #c28400;' onclick='editLead(" . $lead['id'] . ")' data-id='" . $lead['id'] . "' data-type='lead'><i class='fa-regular fa-pen-to-square'></i></a>";
+
+                                    echo "<a href='#' class='action-btn' onclick='openCreateFollowUpModal(" . $lead['id'] . ", \"" . htmlspecialchars($lead['name']) . "\"); return false;' style='background-color: #10b981;'><i class='fa-solid fa-user-plus'></i></a>";
 
                                     if ($_SESSION['user_role'] == 'Admin') {
-                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'>Delete</a>";
+                                        echo " <a href='#' class='action-btn' onclick='deleteRecord(" . $lead['id'] . ", \"lead\"); return false;' style='background-color: #dc3545;'><i class='fa-solid fa-trash-can'></i></a>";
                                     }
+
+                                    echo "<a href='#' class='action-btn' style='background-color: #8b5cf6;' onclick='openCommentModal(" . $lead['id'] . "); return false;'><i class='fa-solid fa-clipboard-list'></i></a> ";
+
                                     echo "</td>";
                                     echo "</tr>";
                                     $counter++;

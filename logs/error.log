@@ -198,3 +198,21 @@ Stack trace:
 [07-Mar-2026 18:27:09 Europe/Berlin] get-user.php called with ID: 4
 [07-Mar-2026 18:27:10 Europe/Berlin] get-user.php called with ID: 4
 [07-Mar-2026 18:28:29 Europe/Berlin] get-user.php called with ID: 4
+[07-Mar-2026 18:55:05 Europe/Berlin] get-user.php called with ID: 4
+[07-Mar-2026 18:56:08 Europe/Berlin] PHP Warning:  Undefined variable $lead in C:\xampp\htdocs\freelance\public_html\admin\follow-ups.php on line 320
+[07-Mar-2026 18:56:08 Europe/Berlin] PHP Warning:  Trying to access array offset on value of type null in C:\xampp\htdocs\freelance\public_html\admin\follow-ups.php on line 320
+[07-Mar-2026 19:16:26 Europe/Berlin] get-user.php called with ID: 4
+[08-Mar-2026 16:16:34 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:17:23 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:18:55 Europe/Berlin] PHP Warning:  Undefined array key "skill" in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:18:55 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:19:04 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:19:55 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:20:16 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:20:25 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:20:58 Europe/Berlin] get-professional.php called with ID: 3
+[08-Mar-2026 16:21:15 Europe/Berlin] update-professional.php called
+[08-Mar-2026 16:21:18 Europe/Berlin] PHP Warning:  Undefined array key "skill" in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:21:18 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:21:20 Europe/Berlin] PHP Warning:  Undefined array key "skill" in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:21:20 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299

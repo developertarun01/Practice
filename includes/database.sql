@@ -195,6 +195,7 @@ CREATE TABLE IF NOT EXISTS lead_comments (
     user_id INT NOT NULL,
     comment TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (lead_id) REFERENCES leads(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     INDEX idx_lead_id (lead_id)

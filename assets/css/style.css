@@ -677,6 +677,127 @@ tbody tr:hover {
 }
 
 /* ============================
+   COMMENT MODAL STYLES
+   ============================ */
+
+.comment-modal {
+  max-width: 750px;
+  max-height: 85vh;
+}
+
+.comments-section {
+  margin: 20px 0;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--light-bg);
+}
+
+.comment-item {
+  background-color: #ffffff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border-left: 4px solid var(--primary-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.comment-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.comment-header strong {
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.comment-date {
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+.comment-edited {
+  color: var(--warning-color);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.comment-content {
+  margin: 10px 0;
+}
+
+.comment-text {
+  color: var(--text-dark);
+  line-height: 1.5;
+  margin: 0;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.comment-edit-textarea {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  resize: vertical;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.comment-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+.delete-comment-btn {
+  background-color: var(--danger-color);
+}
+
+.delete-comment-btn:hover {
+  background-color: #dc2626;
+}
+
+.cancel-comment-btn {
+  background-color: var(--text-light);
+}
+
+.cancel-comment-btn:hover {
+  background-color: #4b5563;
+}
+
+.no-comments {
+  text-align: center;
+  color: var(--text-light);
+  padding: 20px;
+  font-style: italic;
+}
+
+#addCommentForm textarea {
+  font-size: 14px;
+}
+
+#addCommentForm button {
+  margin-top: 10px;
+}
+
+/* ============================
    RESPONSIVE
    ============================ */
 

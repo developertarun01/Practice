@@ -693,22 +693,6 @@ async function viewLead(leadId) {
         }
 
         const lead = data.data.lead;
-        const comments = data.data.comments;
-
-        let commentsHtml = '<div class="comments-list">';
-        if (comments.length > 0) {
-            comments.forEach(comment => {
-                commentsHtml += `
-                    <div class="comment">
-                        <strong>${comment.user_name}</strong> - ${new Date(comment.created_at).toLocaleString()}
-                        <p>${comment.comment}</p>
-                    </div>
-                `;
-            });
-        } else {
-            commentsHtml += '<p>No comments yet</p>';
-        }
-        commentsHtml += '</div>';
 
         const html = `
             <div id="viewLeadModal" class="modal active">
@@ -723,12 +707,6 @@ async function viewLead(leadId) {
                         <p><strong>Created At:</strong> ${new Date(lead.created_at).toLocaleString()}</p>
                         ${lead.updated_by_name ? `<p><strong>Last Edited By:</strong> ${lead.updated_by_name}</p>` : ''}
                     </div>
-                    <h3>Comments</h3>
-                    ${commentsHtml}
-                    <form id="addCommentForm" onsubmit="handleAddComment(event, ${leadId})">
-                        <textarea style="width: 100%" rows="7" name="comment" placeholder="Add a comment..." required></textarea>
-                        <button type="submit" class="btn btn-primary">Add Comment</button>
-                    </form>
                     <button class="btn btn-secondary" onclick="editLead(${leadId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewLeadModal')">Close</button>
                 </div>
@@ -974,14 +952,319 @@ async function handleAddComment(e, leadId) {
         if (data.success) {
             alert('Comment added!');
             form.reset();
-            closeModal('viewLeadModal');
-            setTimeout(() => viewLead(leadId), 300);
+            // Reload comments in the comment modal
+            loadCommentsInModal(leadId);
         } else {
             alert('Error: ' + (data.message || 'Unknown error'));
         }
     } catch (error) {
         console.error(error);
         alert('Network error');
+    }
+}
+
+// ============================
+// COMMENT MODAL FUNCTIONS
+// ============================
+
+async function openCommentModal(leadId) {
+    removeAllModals();
+    try {
+        const response = await fetch(`../api/get-comments.php?lead_id=${leadId}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+            alert('Error: ' + data.message);
+            return;
+        }
+
+        const comments = data.data;
+        const currentUserId = data.currentUserId;
+        const currentUserRole = data.currentUserRole;
+
+        let commentsHtml = '<div class="comments-section">';
+
+        if (comments.length > 0) {
+            comments.forEach(comment => {
+                const isAuthor = parseInt(comment.user_id) === parseInt(currentUserId);
+                const isAdmin = currentUserRole === 'Admin';
+                const canEdit = isAuthor || isAdmin;
+
+                commentsHtml += `
+                    <div class="comment-item" data-comment-id="${comment.id}">
+                        <div class="comment-header">
+                            <strong>${escapeHtml(comment.user_name)}</strong>
+                            <span class="comment-date">${new Date(comment.created_at).toLocaleString()}</span>
+                            ${comment.updated_at !== comment.created_at ? `<span class="comment-edited">(edited)</span>` : ''}
+                        </div>
+                        <div class="comment-content">
+                            <p class="comment-text" id="comment-text-${comment.id}">${escapeHtml(comment.comment)}</p>
+                            <textarea class="comment-edit-textarea" id="comment-textarea-${comment.id}" style="display:none; width: 100%; min-height: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">${escapeHtml(comment.comment)}</textarea>
+                        </div>
+                        <div class="comment-actions">
+                            ${canEdit ? `
+                                <button class="comment-btn edit-comment-btn" data-comment-id="${comment.id}" onclick="toggleEditComment(${comment.id})">Edit</button>
+                                <button class="comment-btn save-comment-btn" data-comment-id="${comment.id}" onclick="saveCommentEdit(${comment.id})" style="display:none;">Save</button>
+                                <button class="comment-btn cancel-comment-btn" data-comment-id="${comment.id}" onclick="cancelEditComment(${comment.id})" style="display:none;">Cancel</button>
+                                <button class="comment-btn delete-comment-btn" data-comment-id="${comment.id}" onclick="deleteCommentFromModal(${comment.id})">Delete</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            commentsHtml += '<p class="no-comments">No comments yet. Add one below!</p>';
+        }
+        commentsHtml += '</div>';
+
+        const html = `
+            <div id="commentModal" class="modal active">
+                <div class="modal-content comment-modal">
+                    <span class="close" onclick="closeModal('commentModal')">&times;</span>
+                    <h2>Comments</h2>
+                    ${commentsHtml}
+                    <hr style="margin: 20px 0;">
+                    <h3>Add New Comment</h3>
+                    <form id="addCommentForm" onsubmit="addCommentViaModal(event, ${leadId})">
+                        <textarea name="comment" placeholder="Write your comment here..." required style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;"></textarea>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Add Comment</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', html);
+    } catch (error) {
+        console.error(error);
+        alert('Error loading comments: ' + error.message);
+    }
+}
+
+function toggleEditComment(commentId) {
+    const textElement = document.getElementById(`comment-text-${commentId}`);
+    const textareaElement = document.getElementById(`comment-textarea-${commentId}`);
+    const editBtn = document.querySelector(`.edit-comment-btn[data-comment-id="${commentId}"]`);
+    const saveBtn = document.querySelector(`.save-comment-btn[data-comment-id="${commentId}"]`);
+    const cancelBtn = document.querySelector(`.cancel-comment-btn[data-comment-id="${commentId}"]`);
+
+    if (textElement.style.display === 'none') {
+        // Already in edit mode, do nothing
+        return;
+    }
+
+    // Switch to edit mode
+    textElement.style.display = 'none';
+    textareaElement.style.display = 'block';
+    editBtn.style.display = 'none';
+    saveBtn.style.display = 'inline-block';
+    cancelBtn.style.display = 'inline-block';
+}
+
+function cancelEditComment(commentId) {
+    const textElement = document.getElementById(`comment-text-${commentId}`);
+    const textareaElement = document.getElementById(`comment-textarea-${commentId}`);
+    const editBtn = document.querySelector(`.edit-comment-btn[data-comment-id="${commentId}"]`);
+    const saveBtn = document.querySelector(`.save-comment-btn[data-comment-id="${commentId}"]`);
+    const cancelBtn = document.querySelector(`.cancel-comment-btn[data-comment-id="${commentId}"]`);
+
+    // Reset textarea to original value
+    textareaElement.value = textElement.textContent;
+
+    // Switch back to view mode
+    textElement.style.display = 'block';
+    textareaElement.style.display = 'none';
+    editBtn.style.display = 'inline-block';
+    saveBtn.style.display = 'none';
+    cancelBtn.style.display = 'none';
+}
+
+async function saveCommentEdit(commentId) {
+    const textareaElement = document.getElementById(`comment-textarea-${commentId}`);
+    const commentText = textareaElement.value.trim();
+
+    if (!commentText) {
+        alert('Comment cannot be empty');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('comment_id', commentId);
+    formData.append('comment', commentText);
+
+    try {
+        const response = await fetch('../api/update-comment.php', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Update the text element with new content
+            const textElement = document.getElementById(`comment-text-${commentId}`);
+            textElement.textContent = commentText;
+
+            // Switch back to view mode
+            const editBtn = document.querySelector(`.edit-comment-btn[data-comment-id="${commentId}"]`);
+            const saveBtn = document.querySelector(`.save-comment-btn[data-comment-id="${commentId}"]`);
+            const cancelBtn = document.querySelector(`.cancel-comment-btn[data-comment-id="${commentId}"]`);
+
+            textElement.style.display = 'block';
+            textareaElement.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+
+            // Add edited indication
+            const commentItem = document.querySelector(`[data-comment-id="${commentId}"]`);
+            const editedSpan = commentItem.querySelector('.comment-edited');
+            if (!editedSpan) {
+                const dateSpan = commentItem.querySelector('.comment-date');
+                const newSpan = document.createElement('span');
+                newSpan.className = 'comment-edited';
+                newSpan.textContent = ' (edited)';
+                dateSpan.parentNode.insertBefore(newSpan, dateSpan.nextSibling);
+            }
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error');
+    }
+}
+
+async function deleteCommentFromModal(commentId) {
+    const confirmDelete = confirm('Are you sure you want to delete this comment?');
+    if (!confirmDelete) return;
+
+    const formData = new FormData();
+    formData.append('comment_id', commentId);
+
+    try {
+        const response = await fetch('../api/delete-comment.php', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Remove the comment from DOM
+            const commentItem = document.querySelector(`[data-comment-id="${commentId}"]`);
+            commentItem.remove();
+
+            // Show message if no comments left
+            const commentsList = document.querySelector('.comments-section');
+            if (commentsList.querySelectorAll('.comment-item').length === 0) {
+                const noCommentsMsg = document.createElement('p');
+                noCommentsMsg.className = 'no-comments';
+                noCommentsMsg.textContent = 'No comments yet. Add one below!';
+                commentsList.innerHTML = '';
+                commentsList.appendChild(noCommentsMsg);
+            }
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error');
+    }
+}
+
+async function addCommentViaModal(e, leadId) {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append('lead_id', leadId);
+
+    try {
+        const response = await fetch('../api/add-comment.php', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            form.reset();
+            // Reload the entire comment modal
+            closeModal('commentModal');
+            setTimeout(() => openCommentModal(leadId), 300);
+        } else {
+            alert('Error: ' + (data.message || 'Unknown error'));
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error');
+    }
+}
+
+async function loadCommentsInModal(leadId) {
+    try {
+        const response = await fetch(`../api/get-comments.php?lead_id=${leadId}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const comments = data.data;
+            const currentUserId = data.currentUserId;
+            const currentUserRole = data.currentUserRole;
+            const commentsList = document.querySelector('.comments-section');
+
+            let commentsHtml = '';
+            if (comments.length > 0) {
+                comments.forEach(comment => {
+                    const isAuthor = parseInt(comment.user_id) === parseInt(currentUserId);
+                    const isAdmin = currentUserRole === 'Admin';
+                    const canEdit = isAuthor || isAdmin;
+
+                    commentsHtml += `
+                        <div class="comment-item" data-comment-id="${comment.id}">
+                            <div class="comment-header">
+                                <strong>${escapeHtml(comment.user_name)}</strong>
+                                <span class="comment-date">${new Date(comment.created_at).toLocaleString()}</span>
+                                ${comment.updated_at !== comment.created_at ? `<span class="comment-edited">(edited)</span>` : ''}
+                            </div>
+                            <div class="comment-content">
+                                <p class="comment-text" id="comment-text-${comment.id}">${escapeHtml(comment.comment)}</p>
+                                <textarea class="comment-edit-textarea" id="comment-textarea-${comment.id}" style="display:none; width: 100%; min-height: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">${escapeHtml(comment.comment)}</textarea>
+                            </div>
+                            <div class="comment-actions">
+                                ${canEdit ? `
+                                    <button class="comment-btn edit-comment-btn" data-comment-id="${comment.id}" onclick="toggleEditComment(${comment.id})">Edit</button>
+                                    <button class="comment-btn save-comment-btn" data-comment-id="${comment.id}" onclick="saveCommentEdit(${comment.id})" style="display:none;">Save</button>
+                                    <button class="comment-btn cancel-comment-btn" data-comment-id="${comment.id}" onclick="cancelEditComment(${comment.id})" style="display:none;">Cancel</button>
+                                    <button class="comment-btn delete-comment-btn" data-comment-id="${comment.id}" onclick="deleteCommentFromModal(${comment.id})">Delete</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                commentsHtml = '<p class="no-comments">No comments yet. Add one below!</p>';
+            }
+            commentsList.innerHTML = commentsHtml;
+        }
+    } catch (error) {
+        console.error(error);
     }
 }
 
@@ -1247,8 +1530,8 @@ async function viewProfessional(professionalId) {
         const prof = data.data;
         // console.log('Professional data:', prof);
 
-        // const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
-        const profileUrl = `${window.location.origin}/professional-profile.php?slug=${prof.professional_slug}`;
+        const profileUrl = `${window.location.origin}/freelance/public_html/professional-profile.php?slug=${prof.professional_slug}`;
+        // const profileUrl = `${window.location.origin}/professional-profile.php?slug=${prof.professional_slug}`;
 
         const html = `
             <div id="viewProfessionalModal" class="modal active">
@@ -1352,7 +1635,7 @@ async function editProfessional(professionalId) {
                         </div>
                         <div class="form-group">
                             <label>Skills (comma-separated)</label>
-                            <textarea name="skills" rows="3" placeholder="e.g., Cooking, Cleaning, Childcare">${prof.skills || ''}</textarea>
+                            <textarea name="skills" style="width:100%; padding:10px" rows="5" placeholder="e.g., Cooking, Cleaning, Childcare">${prof.skills || ''}</textarea>
                         </div>
                         <div class="form-group">
                             <label>Verification Status</label>

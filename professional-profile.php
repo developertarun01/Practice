@@ -50,23 +50,24 @@ $professional = $prof_result->fetch_assoc();
         .profile-header {
             text-align: center;
             margin-bottom: 40px;
-            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 30px;
             border-bottom: 2px solid #f0f0f0;
         }
 
         .profile-image {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 20px;
             border: 4px solid #007bff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .profile-header h1 {
             font-size: 32px;
-            margin: 15px 0 5px 0;
             color: #1a1a1a;
         }
 
@@ -75,9 +76,9 @@ $professional = $prof_result->fetch_assoc();
             background-color: #007bff;
             color: white;
             padding: 8px 16px;
+            margin-bottom: 10px;
             border-radius: 20px;
             font-size: 14px;
-            margin-bottom: 15px;
         }
 
         .profile-header .rating {
@@ -260,7 +261,6 @@ $professional = $prof_result->fetch_assoc();
 
 <body>
     <div class="profile-container">
-        <div class="logo">✓ Servon</div>
 
         <div class="profile-header">
             <?php if (!empty($professional['staff_image'])): ?>
@@ -269,26 +269,10 @@ $professional = $prof_result->fetch_assoc();
                 <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #e0e0e0; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 50px; border: 4px solid #007bff;">👤</div>
             <?php endif; ?>
 
-            <h1><?php echo htmlspecialchars($professional['name']); ?></h1>
-            <span class="service-badge"><?php echo htmlspecialchars($professional['service']); ?></span>
-
-            <div class="rating">
-                <?php
-                $rating = floatval($professional['rating']);
-                for ($i = 0; $i < 5; $i++) {
-                    if ($i < $rating) {
-                        echo '⭐';
-                    } else {
-                        echo '☆';
-                    }
-                }
-                ?>
-                <span style="color: #666; font-size: 14px; margin-left: 10px;"><?php echo $professional['rating']; ?>/5.0</span>
-            </div>
-
-            <div style="margin-top: 15px;">
-                <span class="status-badge verified">✓ Verified Professional</span>
-                <span class="status-badge active" style="margin-left: 10px;">🟢 Available</span>
+            <div style="display:flex; flex-direction: column; align-item: center;">
+                <h1><?php echo htmlspecialchars($professional['name']); ?></h1>
+                <span class="service-badge"><?php echo htmlspecialchars($professional['service']); ?></span>
+                <span class="status-badge active">🟢 Available</span>
             </div>
         </div>
 
@@ -309,6 +293,7 @@ $professional = $prof_result->fetch_assoc();
                 <strong>Location</strong>
                 <p><?php echo !empty($professional['location']) ? htmlspecialchars($professional['location']) : 'Available'; ?></p>
             </div>
+
             <?php if (!empty($professional['language'])): ?>
                 <div class="detail-item">
                     <strong>Languages</strong>
@@ -323,9 +308,13 @@ $professional = $prof_result->fetch_assoc();
             <?php endif; ?>
         </div>
 
+        <div class="detail-item">
+            <strong>Skills</strong>
+            <p><?php echo htmlspecialchars($professional['skills']); ?></p>
+        </div>
+
         <div class="footer-text">
-            <p>This is a verified professional profile on Servon. All professionals are thoroughly vetted and verified.</p>
-            <p style="margin-top: 15px; color: #999;">© <?php echo date('Y'); ?> Servon - Domestic Support Solution. All rights reserved.</p>
+            <p style="color: #999;">© <?php echo date('Y'); ?> Servon - Domestic Support Solution. All rights reserved.</p>
         </div>
     </div>
 </body>
