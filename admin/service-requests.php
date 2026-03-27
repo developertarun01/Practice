@@ -114,6 +114,8 @@ $service_requests = $conn->query("SELECT s.*, p.name as prof_name, p.phone as pr
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script src="../assets/js/main.js"></script>
 </body>
 

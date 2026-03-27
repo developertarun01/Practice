@@ -168,6 +168,8 @@ $payments = $conn->query("
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script src="../assets/js/main.js"></script>
 </body>
 

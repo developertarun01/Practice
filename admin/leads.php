@@ -463,6 +463,8 @@ if (!$leads) {
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
         // Function to open add lead modal
         function openAddLeadModal() {

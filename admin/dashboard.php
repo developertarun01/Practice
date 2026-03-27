@@ -187,6 +187,8 @@ $pending_payment_records = $conn->query("SELECT id, customer_name, customer_phon
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script src="../assets/js/main.js"></script>
 </body>
 

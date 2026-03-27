@@ -1,20 +1,20 @@
 <?php
 
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'servon_user');
-define('DB_PASS', 'localhost');
-define('DB_NAME', 'servon_db');
+// define('DB_HOST', 'localhost');
+// define('DB_USER', 'servon_user');
+// define('DB_PASS', 'localhost');
+// define('DB_NAME', 'servon_db');
 
-define('BASE_URL', 'http://localhost/freelance/public_html/');
+// define('BASE_URL', 'http://localhost/freelance/public_html/');
 
 // Database Configuration
-// define('DB_HOST', 'localhost');
-// define('DB_USER', 'u161425727_servon_user');
-// define('DB_PASS', 'Tarun.Servon@123');
-// define('DB_NAME', 'u161425727_servon_db');
+define('DB_HOST', 'localhost');
+define('DB_USER', 'u161425727_servon_user');
+define('DB_PASS', 'Tarun.Servon@123');
+define('DB_NAME', 'u161425727_servon_db');
 
-// define('BASE_URL', 'https://servon.in/');
+define('BASE_URL', 'https://servon.in/');
 
 // Common Part 
 define('ADMIN_URL', BASE_URL . 'admin/');

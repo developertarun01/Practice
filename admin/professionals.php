@@ -415,6 +415,8 @@ $total_count = $total_count_result->fetch_assoc()['total'];
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
         // Function to remove a specific filter
         function removeFilter(paramName) {

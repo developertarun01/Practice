@@ -113,6 +113,8 @@ $calls = $conn->query("SELECT c.*, u.name as agent_name FROM phone_calls c LEFT 
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script src="../assets/js/main.js"></script>
 </body>
 

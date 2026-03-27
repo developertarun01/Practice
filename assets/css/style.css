@@ -31,6 +31,19 @@ body {
   background-color: #ffffff;
 }
 
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 5px;
+  display: none;
+  z-index: 9999;
+  font-size: 14px;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;

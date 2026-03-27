@@ -531,7 +531,7 @@ async function handleCreateBooking(e) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Booking created successfully!');
+            showToast('Booking created successfully!');
             closeModal('newBookingModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -557,7 +557,7 @@ async function handleCreatePayment(e) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Payment link created successfully!');
+            showToast('Payment link created successfully!');
             closeModal('newPaymentModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -584,7 +584,7 @@ async function handleCreateProfessional(e) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Professional added successfully!');
+            showToast('Professional added successfully!');
             closeModal('newProfessionalModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -631,7 +631,7 @@ async function handleCreateUser(e) {
         const data = await response.json();
 
         if (data.success) {
-            alert('User created successfully!');
+            showToast('User created successfully!');
             closeModal('newUserModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -665,7 +665,7 @@ async function handleCreateFollowUp(e, leadId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Follow-up created successfully!');
+            showToast('Follow-up created successfully!');
             closeModal('followUpModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -885,7 +885,7 @@ async function handleEditLead(e, leadId) {
                 }
             }
 
-            alert('Lead updated successfully!');
+            showToast('Lead updated successfully!');
             closeModal('editLeadModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -895,6 +895,16 @@ async function handleEditLead(e, leadId) {
         console.error(error);
         alert('Network error');
     }
+}
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.style.display = 'block';
+
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 5000); // auto hide after 3 sec
 }
 
 async function viewBooking(bookingId) {
@@ -1107,7 +1117,7 @@ async function handleEditBooking(e, bookingId, leadId) {
                 }
             }
 
-            alert('Booking updated successfully!');
+            showToast('Booking updated successfully!');
             closeModal('editBookingModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -1744,7 +1754,7 @@ async function handleEditPayment(e, paymentId, leadId) {
                 }
             }
 
-            alert('Payment updated successfully!');
+            showToast('Payment updated successfully!');
             closeModal('editPaymentModal');
             // Reload the page to show updated data
             setTimeout(() => location.reload(), 500);
@@ -1986,7 +1996,7 @@ async function handleEditProfessional(e, professionalId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('Professional updated successfully!');
+            showToast('Professional updated successfully!');
             closeModal('editProfessionalModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -2194,7 +2204,7 @@ async function handleEditUser(e, userId) {
         const data = await response.json();
 
         if (data.success) {
-            alert('User updated successfully!');
+            showToast('User updated successfully!');
             closeModal('editUserModal');
             setTimeout(() => location.reload(), 500);
         } else {
@@ -2424,7 +2434,7 @@ async function handleEditFollowUp(e, followUpId, leadId) {
                 }
             }
 
-            alert('Follow-up updated successfully!');
+            showToast('Follow-up updated successfully!');
             closeModal('editFollowUpModal');
             setTimeout(() => location.reload(), 500);
         } else {
