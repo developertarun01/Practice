@@ -269,7 +269,7 @@ $professional = $prof_result->fetch_assoc();
                 <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 50px; border: 4px solid #007bff;">👤</div>
             <?php endif; ?>
 
-            <div style="display:flex; flex-direction: column; align-item: center;">
+            <div style="display:flex; flex-direction: column; align-items: center;">
                 <h1><?php echo htmlspecialchars($professional['name']); ?></h1>
                 <span class="service-badge"><?php echo htmlspecialchars($professional['service']); ?></span>
                 <span class="status-badge active">🟢 Available</span>

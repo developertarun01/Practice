@@ -694,6 +694,30 @@ async function viewLead(leadId) {
 
         const lead = data.data.lead;
 
+        // Fetch the most recent comment
+        let recentCommentHtml = '';
+        try {
+            const commentResponse = await fetch(`../api/get-recent-comment.php?lead_id=${leadId}`);
+            const commentData = await commentResponse.json();
+            if (commentData.success && commentData.data) {
+                const comment = commentData.data;
+                recentCommentHtml = `
+                    <hr style="margin: 15px 0;">
+                    <div class="recent-comment-section">
+                        <h3>Most Recent Comment</h3>
+                        <div class="recent-comment">
+                            <p><strong>By:</strong> ${escapeHtml(comment.user_name)}</p>
+                            <p><strong>Date:</strong> ${new Date(comment.created_at).toLocaleString()}</p>
+                            <p><strong>Comment:</strong></p>
+                            <p class="comment-text">${escapeHtml(comment.comment)}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            console.error('Error loading recent comment:', err);
+        }
+
         const html = `
             <div id="viewLeadModal" class="modal active">
                 <div class="modal-content">
@@ -707,6 +731,7 @@ async function viewLead(leadId) {
                         <p><strong>Created At:</strong> ${new Date(lead.created_at).toLocaleString()}</p>
                         ${lead.updated_by_name ? `<p><strong>Last Edited By:</strong> ${lead.updated_by_name}</p>` : ''}
                     </div>
+                    ${recentCommentHtml}
                     <button class="btn btn-secondary" onclick="editLead(${leadId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewLeadModal')">Close</button>
                 </div>
@@ -731,6 +756,44 @@ async function editLead(leadId) {
 
         const lead = data.data.lead;
         closeModal('viewLeadModal');
+
+        // Fetch the most recent comment by the current user
+        let userCommentHtml = '';
+        let userComment = null;
+        try {
+            const commentResponse = await fetch(`../api/get-recent-user-comment.php?lead_id=${leadId}`);
+            const commentData = await commentResponse.json();
+            if (commentData.success && commentData.data) {
+                userComment = commentData.data;
+                userCommentHtml = `
+                    <hr style="margin: 15px 0;">
+                    <div class="user-comment-section">
+                        <h3>Your Most Recent Comment</h3>
+                        <div class="form-group">
+                            <label>Edit Your Comment *</label>
+                            <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" required>${escapeHtml(userComment.comment)}</textarea>
+                            <input type="hidden" id="userCommentId" value="${userComment.id}">
+                            <small style="color: #6c757d;">Last updated: ${new Date(userComment.updated_at).toLocaleString()}</small>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // No comment by user yet, show option to add one
+                userCommentHtml = `
+                    <hr style="margin: 15px 0;">
+                    <div class="user-comment-section">
+                        <h3>Your Comment</h3>
+                        <div class="form-group">
+                            <label>Add Your Comment *</label>
+                            <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" placeholder="Add your comment..."></textarea>
+                            <input type="hidden" id="userCommentId" value="">
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            console.error('Error loading user comment:', err);
+        }
 
         const html = `
             <div id="editLeadModal" class="modal active">
@@ -768,6 +831,7 @@ async function editLead(leadId) {
                                 <option value="Dropped" ${lead.status === 'Dropped' ? 'selected' : ''}>Dropped</option>
                             </select>
                         </div>
+                        ${userCommentHtml}
                         <button type="submit" class="btn btn-primary">Update Lead</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editLeadModal')">Cancel</button>
                     </form>
@@ -796,6 +860,31 @@ async function handleEditLead(e, leadId) {
         const data = await response.json();
 
         if (data.success) {
+            // Handle user comment - add or update
+            const userCommentText = document.getElementById('userCommentText');
+            const userCommentId = document.getElementById('userCommentId');
+
+            if (userCommentText && userCommentText.value.trim()) {
+                const commentFormData = new FormData();
+                commentFormData.append('lead_id', leadId);
+                commentFormData.append('comment', userCommentText.value.trim());
+
+                if (userCommentId.value) {
+                    // Update existing comment
+                    commentFormData.append('comment_id', userCommentId.value);
+                    await fetch('../api/update-comment.php', {
+                        method: 'POST',
+                        body: commentFormData
+                    });
+                } else {
+                    // Add new comment
+                    await fetch('../api/add-comment.php', {
+                        method: 'POST',
+                        body: commentFormData
+                    });
+                }
+            }
+
             alert('Lead updated successfully!');
             closeModal('editLeadModal');
             setTimeout(() => location.reload(), 500);
@@ -821,6 +910,32 @@ async function viewBooking(bookingId) {
 
         const booking = data.data;
 
+        // Fetch the most recent comment for this booking's lead
+        let recentCommentHtml = '';
+        if (booking.lead_id) {
+            try {
+                const commentResponse = await fetch(`../api/get-recent-comment.php?lead_id=${booking.lead_id}`);
+                const commentData = await commentResponse.json();
+                if (commentData.success && commentData.data) {
+                    const comment = commentData.data;
+                    recentCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="recent-comment-section">
+                            <h3>Most Recent Comment</h3>
+                            <div class="recent-comment">
+                                <p><strong>By:</strong> ${escapeHtml(comment.user_name)}</p>
+                                <p><strong>Date:</strong> ${new Date(comment.created_at).toLocaleString()}</p>
+                                <p><strong>Comment:</strong></p>
+                                <p class="comment-text">${escapeHtml(comment.comment)}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error loading recent comment:', err);
+            }
+        }
+
         const html = `
             <div id="viewBookingModal" class="modal active">
                 <div class="modal-content">
@@ -838,6 +953,7 @@ async function viewBooking(bookingId) {
                         <p><strong>Salary Bracket:</strong> ${booking.salary_bracket || '-'}</p>
                         ${booking.updated_by_name ? `<p><strong>Last Edited By:</strong> ${booking.updated_by_name}</p>` : ''}
                     </div>
+                    ${recentCommentHtml}
                     <button class="btn btn-secondary" onclick="editBooking(${bookingId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewBookingModal')">Close</button>
                 </div>
@@ -863,12 +979,52 @@ async function editBooking(bookingId) {
         const booking = data.data;
         closeModal('viewBookingModal');
 
+        // Fetch the most recent comment by the current user (for this booking's lead)
+        let userCommentHtml = '';
+        let userComment = null;
+        if (booking.lead_id) {
+            try {
+                const commentResponse = await fetch(`../api/get-recent-user-comment.php?lead_id=${booking.lead_id}`);
+                const commentData = await commentResponse.json();
+                if (commentData.success && commentData.data) {
+                    userComment = commentData.data;
+                    userCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="user-comment-section">
+                            <h3>Your Most Recent Comment</h3>
+                            <div class="form-group">
+                                <label>Edit Your Comment *</label>
+                                <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" required>${escapeHtml(userComment.comment)}</textarea>
+                                <input type="hidden" id="userCommentId" value="${userComment.id}">
+                                <small style="color: #6c757d;">Last updated: ${new Date(userComment.updated_at).toLocaleString()}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // No comment by user yet, show option to add one
+                    userCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="user-comment-section">
+                            <h3>Your Comment</h3>
+                            <div class="form-group">
+                                <label>Add Your Comment *</label>
+                                <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" placeholder="Add your comment..."></textarea>
+                                <input type="hidden" id="userCommentId" value="">
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error loading user comment:', err);
+            }
+        }
+
         const html = `
             <div id="editBookingModal" class="modal active">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('editBookingModal')">&times;</span>
                     <h2>Edit Booking</h2>
-                    <form id="editBookingForm" onsubmit="handleEditBooking(event, ${bookingId})">
+                    <form id="editBookingForm" onsubmit="handleEditBooking(event, ${bookingId}, ${booking.lead_id || 'null'})">
                         <div class="form-group">
                             <label>Customer Name</label>
                             <input type="text" name="customer_name" value="${booking.customer_name}">
@@ -895,6 +1051,7 @@ async function editBooking(bookingId) {
                             <label>Job Hours</label>
                             <input type="number" name="job_hours" value="${booking.job_hours || ''}">
                         </div>
+                        ${userCommentHtml}
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editBookingModal')">Cancel</button>
                     </form>
@@ -908,7 +1065,7 @@ async function editBooking(bookingId) {
     }
 }
 
-async function handleEditBooking(e, bookingId) {
+async function handleEditBooking(e, bookingId, leadId) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -923,6 +1080,33 @@ async function handleEditBooking(e, bookingId) {
         const data = await response.json();
 
         if (data.success) {
+            // Handle user comment - add or update
+            if (leadId) {
+                const userCommentText = document.getElementById('userCommentText');
+                const userCommentId = document.getElementById('userCommentId');
+
+                if (userCommentText && userCommentText.value.trim()) {
+                    const commentFormData = new FormData();
+                    commentFormData.append('lead_id', leadId);
+                    commentFormData.append('comment', userCommentText.value.trim());
+
+                    if (userCommentId.value) {
+                        // Update existing comment
+                        commentFormData.append('comment_id', userCommentId.value);
+                        await fetch('../api/update-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    } else {
+                        // Add new comment
+                        await fetch('../api/add-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    }
+                }
+            }
+
             alert('Booking updated successfully!');
             closeModal('editBookingModal');
             setTimeout(() => location.reload(), 500);
@@ -1335,6 +1519,37 @@ async function viewPayment(paymentId) {
 
         const payment = data.data;
 
+        // Fetch the most recent comment for this payment's booking's lead
+        let recentCommentHtml = '';
+        if (payment.booking_id) {
+            try {
+                const bookingResponse = await fetch(`../api/get-booking.php?id=${payment.booking_id}`);
+                const bookingData = await bookingResponse.json();
+                if (bookingData.success && bookingData.data && bookingData.data.lead_id) {
+                    const leadId = bookingData.data.lead_id;
+                    const commentResponse = await fetch(`../api/get-recent-comment.php?lead_id=${leadId}`);
+                    const commentData = await commentResponse.json();
+                    if (commentData.success && commentData.data) {
+                        const comment = commentData.data;
+                        recentCommentHtml = `
+                            <hr style="margin: 15px 0;">
+                            <div class="recent-comment-section">
+                                <h3>Most Recent Comment</h3>
+                                <div class="recent-comment">
+                                    <p><strong>By:</strong> ${escapeHtml(comment.user_name)}</p>
+                                    <p><strong>Date:</strong> ${new Date(comment.created_at).toLocaleString()}</p>
+                                    <p><strong>Comment:</strong></p>
+                                    <p class="comment-text">${escapeHtml(comment.comment)}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading recent comment:', err);
+            }
+        }
+
         const html = `
             <div id="viewPaymentModal" class="modal active">
                 <div class="modal-content">
@@ -1352,6 +1567,7 @@ async function viewPayment(paymentId) {
                         <p><strong>Created At:</strong> ${new Date(payment.created_at).toLocaleString()}</p>
                         ${payment.updated_by_name ? `<p><strong>Last Edited By:</strong> ${escapeHtml(payment.updated_by_name)}</p>` : ''}
                     </div>
+                    ${recentCommentHtml}
                     <button class="btn btn-secondary" onclick="editPayment(${paymentId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewPaymentModal')">Close</button>
                 </div>
@@ -1396,12 +1612,57 @@ async function editPayment(paymentId) {
         // Close view modal if open
         closeModal('viewPaymentModal');
 
+        // Fetch the most recent comment by the current user (for this payment's booking's lead)
+        let userCommentHtml = '';
+        let leadId = null;
+        if (payment.booking_id) {
+            try {
+                const bookingResponse = await fetch(`../api/get-booking.php?id=${payment.booking_id}`);
+                const bookingData = await bookingResponse.json();
+                if (bookingData.success && bookingData.data && bookingData.data.lead_id) {
+                    leadId = bookingData.data.lead_id;
+                    const commentResponse = await fetch(`../api/get-recent-user-comment.php?lead_id=${leadId}`);
+                    const commentData = await commentResponse.json();
+                    if (commentData.success && commentData.data) {
+                        const userComment = commentData.data;
+                        userCommentHtml = `
+                            <hr style="margin: 15px 0;">
+                            <div class="user-comment-section">
+                                <h3>Your Most Recent Comment</h3>
+                                <div class="form-group">
+                                    <label>Edit Your Comment *</label>
+                                    <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" required>${escapeHtml(userComment.comment)}</textarea>
+                                    <input type="hidden" id="userCommentId" value="${userComment.id}">
+                                    <small style="color: #6c757d;">Last updated: ${new Date(userComment.updated_at).toLocaleString()}</small>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // No comment by user yet, show option to add one
+                        userCommentHtml = `
+                            <hr style="margin: 15px 0;">
+                            <div class="user-comment-section">
+                                <h3>Your Comment</h3>
+                                <div class="form-group">
+                                    <label>Add Your Comment *</label>
+                                    <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" placeholder="Add your comment..."></textarea>
+                                    <input type="hidden" id="userCommentId" value="">
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading user comment:', err);
+            }
+        }
+
         const html = `
             <div id="editPaymentModal" class="modal active">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('editPaymentModal')">&times;</span>
                     <h2>Edit Payment</h2>
-                    <form id="editPaymentForm" onsubmit="handleEditPayment(event, ${paymentId})">
+                    <form id="editPaymentForm" onsubmit="handleEditPayment(event, ${paymentId}, ${leadId})">
                         <div class="form-group">
                             <label>Status</label>
                             <select name="status">
@@ -1411,6 +1672,7 @@ async function editPayment(paymentId) {
                                 <option value="Refunded" ${payment.status === 'Refunded' ? 'selected' : ''}>Refunded</option>
                             </select>
                         </div>
+                        ${userCommentHtml}
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editPaymentModal')">Cancel</button>
                     </form>
@@ -1426,7 +1688,7 @@ async function editPayment(paymentId) {
     }
 }
 
-async function handleEditPayment(e, paymentId) {
+async function handleEditPayment(e, paymentId, leadId) {
     e.preventDefault();
 
     const form = e.target;
@@ -1455,6 +1717,33 @@ async function handleEditPayment(e, paymentId) {
         const data = await response.json();
 
         if (data.success) {
+            // Handle user comment - add or update
+            if (leadId) {
+                const userCommentText = document.getElementById('userCommentText');
+                const userCommentId = document.getElementById('userCommentId');
+
+                if (userCommentText && userCommentText.value.trim()) {
+                    const commentFormData = new FormData();
+                    commentFormData.append('lead_id', leadId);
+                    commentFormData.append('comment', userCommentText.value.trim());
+
+                    if (userCommentId.value) {
+                        // Update existing comment
+                        commentFormData.append('comment_id', userCommentId.value);
+                        await fetch('../api/update-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    } else {
+                        // Add new comment
+                        await fetch('../api/add-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    }
+                }
+            }
+
             alert('Payment updated successfully!');
             closeModal('editPaymentModal');
             // Reload the page to show updated data
@@ -1933,6 +2222,32 @@ async function viewFollowUp(followUpId) {
 
         const fu = data.data;
 
+        // Fetch the most recent comment for this follow-up's lead
+        let recentCommentHtml = '';
+        if (fu.lead_id) {
+            try {
+                const commentResponse = await fetch(`../api/get-recent-comment.php?lead_id=${fu.lead_id}`);
+                const commentData = await commentResponse.json();
+                if (commentData.success && commentData.data) {
+                    const comment = commentData.data;
+                    recentCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="recent-comment-section">
+                            <h3>Most Recent Comment</h3>
+                            <div class="recent-comment">
+                                <p><strong>By:</strong> ${escapeHtml(comment.user_name)}</p>
+                                <p><strong>Date:</strong> ${new Date(comment.created_at).toLocaleString()}</p>
+                                <p><strong>Comment:</strong></p>
+                                <p class="comment-text">${escapeHtml(comment.comment)}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error loading recent comment:', err);
+            }
+        }
+
         const html = `
             <div id="viewFollowUpModal" class="modal active">
                 <div class="modal-content">
@@ -1948,6 +2263,7 @@ async function viewFollowUp(followUpId) {
                         <p><strong>Created By:</strong> ${fu.user_name || 'N/A'}</p>
                         <p><strong>Created At:</strong> ${new Date(fu.created_at).toLocaleString()}</p>
                     </div>
+                    ${recentCommentHtml}
                     <button class="btn btn-secondary" onclick="editFollowUp(${followUpId})">Edit</button>
                     <button class="btn btn-secondary" onclick="closeModal('viewFollowUpModal')">Close</button>
                 </div>
@@ -1973,12 +2289,51 @@ async function editFollowUp(followUpId) {
 
         const fu = data.data;
 
+        // Fetch the most recent comment by the current user (for this follow-up's lead)
+        let userCommentHtml = '';
+        if (fu.lead_id) {
+            try {
+                const commentResponse = await fetch(`../api/get-recent-user-comment.php?lead_id=${fu.lead_id}`);
+                const commentData = await commentResponse.json();
+                if (commentData.success && commentData.data) {
+                    const userComment = commentData.data;
+                    userCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="user-comment-section">
+                            <h3>Your Most Recent Comment</h3>
+                            <div class="form-group">
+                                <label>Edit Your Comment *</label>
+                                <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" required>${escapeHtml(userComment.comment)}</textarea>
+                                <input type="hidden" id="userCommentId" value="${userComment.id}">
+                                <small style="color: #6c757d;">Last updated: ${new Date(userComment.updated_at).toLocaleString()}</small>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // No comment by user yet, show option to add one
+                    userCommentHtml = `
+                        <hr style="margin: 15px 0;">
+                        <div class="user-comment-section">
+                            <h3>Your Comment</h3>
+                            <div class="form-group">
+                                <label>Add Your Comment *</label>
+                                <textarea id="userCommentText" name="user_comment" style="width: 100%; min-height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: Arial, sans-serif;" placeholder="Add your comment..."></textarea>
+                                <input type="hidden" id="userCommentId" value="">
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error loading user comment:', err);
+            }
+        }
+
         const html = `
             <div id="editFollowUpModal" class="modal active">
                 <div class="modal-content">
                     <span class="close" onclick="closeModal('editFollowUpModal')">&times;</span>
                     <h2>Edit Follow-up</h2>
-                    <form id="editFollowUpForm" onsubmit="handleEditFollowUp(event, ${followUpId})">
+                    <form id="editFollowUpForm" onsubmit="handleEditFollowUp(event, ${followUpId}, ${fu.lead_id || 'null'})">
                         <div class="form-group">
                             <label>Lead Name</label>
                             <input type="text" value="${htmlEscape(fu.lead_name || '')}" disabled style="background-color: #f3f4f6; cursor: not-allowed;">
@@ -2012,6 +2367,8 @@ async function editFollowUp(followUpId) {
                             <input type="datetime-local" name="reminder_at" value="${fu.reminder_at ? fu.reminder_at.replace(' ', 'T').substring(0, 16) : ''}">
                         </div>
                         
+                        ${userCommentHtml}
+                        
                         <button type="submit" class="btn btn-primary">Update Follow-up</button>
                         <button type="button" class="btn btn-secondary" onclick="closeModal('editFollowUpModal')">Cancel</button>
                     </form>
@@ -2025,7 +2382,7 @@ async function editFollowUp(followUpId) {
     }
 }
 
-async function handleEditFollowUp(e, followUpId) {
+async function handleEditFollowUp(e, followUpId, leadId) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
@@ -2040,6 +2397,33 @@ async function handleEditFollowUp(e, followUpId) {
         const data = await response.json();
 
         if (data.success) {
+            // Handle user comment - add or update
+            if (leadId) {
+                const userCommentText = document.getElementById('userCommentText');
+                const userCommentId = document.getElementById('userCommentId');
+
+                if (userCommentText && userCommentText.value.trim()) {
+                    const commentFormData = new FormData();
+                    commentFormData.append('lead_id', leadId);
+                    commentFormData.append('comment', userCommentText.value.trim());
+
+                    if (userCommentId.value) {
+                        // Update existing comment
+                        commentFormData.append('comment_id', userCommentId.value);
+                        await fetch('../api/update-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    } else {
+                        // Add new comment
+                        await fetch('../api/add-comment.php', {
+                            method: 'POST',
+                            body: commentFormData
+                        });
+                    }
+                }
+            }
+
             alert('Follow-up updated successfully!');
             closeModal('editFollowUpModal');
             setTimeout(() => location.reload(), 500);
