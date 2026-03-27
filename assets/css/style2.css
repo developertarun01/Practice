@@ -540,6 +540,20 @@ form {
   display: none;
 }
 
+.whatsapp-button {
+  display: block;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--button);
+  border-radius: 50%;
+  padding: 20px 10px;
+}
+
+.whatsapp-button i {
+  color: white;
+}
+
 /* Mobile and Tablets (1023px) */
 @media (max-width: 900px) {
   i {
@@ -587,7 +601,6 @@ form {
 
   .logo-mobile {
     display: block;
-    width: 40px;
     height: 40px;
     margin-top: 10px;
   }
@@ -712,5 +725,11 @@ form {
 
   .call-button p {
     font-size: 18px;
+  }
+
+  .whatsapp-button {
+    bottom: 60px;
+    right: 10px;
+    padding: 18px 10px;
   }
 }

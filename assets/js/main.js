@@ -164,18 +164,18 @@ function removeAllModals() {
 }
 
 // Improved modal click outside handler
-// window.addEventListener('click', function (e) {
-//     if (e.target.classList.contains('modal')) {
-//         // Get the modal ID from the clicked element
-//         const modalId = e.target.id;
-//         if (modalId) {
-//             closeModal(modalId);
-//         } else {
-//             // Fallback for modals without ID
-//             e.target.classList.remove('active');
-//         }
-//     }
-// });
+window.addEventListener('click', function (e) {
+    if (e.target.classList.contains('modal')) {
+        // Get the modal ID from the clicked element
+        const modalId = e.target.id;
+        if (modalId) {
+            closeModal(modalId);
+        } else {
+            // Fallback for modals without ID
+            e.target.classList.remove('active');
+        }
+    }
+});
 
 // ============================
 // ADMIN UI HELPERS

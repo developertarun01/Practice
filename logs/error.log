@@ -216,3 +216,154 @@ Stack trace:
 [08-Mar-2026 16:21:18 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
 [08-Mar-2026 16:21:20 Europe/Berlin] PHP Warning:  Undefined array key "skill" in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
 [08-Mar-2026 16:21:20 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\freelance\public_html\professional-profile.php on line 299
+[08-Mar-2026 16:24:08 UTC] get-professional.php called with ID: 77
+[08-Mar-2026 16:41:48 UTC] get-user.php called with ID: 5
+[08-Mar-2026 16:41:54 UTC] get-professional.php called with ID: 82
+[08-Mar-2026 16:42:03 UTC] get-professional.php called with ID: 47
+[08-Mar-2026 16:42:06 UTC] get-professional.php called with ID: 47
+[08-Mar-2026 16:42:14 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[08-Mar-2026 16:42:20 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[08-Mar-2026 16:42:24 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[08-Mar-2026 16:44:28 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[09-Mar-2026 06:56:50 UTC] get-professional.php called with ID: 82
+[09-Mar-2026 06:56:58 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[09-Mar-2026 11:19:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:20:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:20:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:20:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:20:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:21:05 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`lead_comments`, CONSTRAINT `lead_comments_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:22:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:32:13 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:32:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:33:18 UTC] New lead created: ID=14, Name=Tarun ‎, Phone=8630739687, Service=Elderly Care
+[09-Mar-2026 11:33:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:33:52 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[09-Mar-2026 11:37:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot delete or update a parent row: a foreign key constraint fails (`u161425727_servon_db`.`bookings`, CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`)) in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php:24
+Stack trace:
+#0 /home/u161425727/domains/servon.in/public_html/api/delete-lead.php(24): mysqli->query()
+#1 {main}
+  thrown in /home/u161425727/domains/servon.in/public_html/api/delete-lead.php on line 24
+[10-Mar-2026 14:09:48 UTC] get-professional.php called with ID: 82
+[10-Mar-2026 14:09:58 UTC] get-professional.php called with ID: 8
+[10-Mar-2026 14:10:14 UTC] get-professional.php called with ID: 8
+[10-Mar-2026 14:10:37 UTC] update-professional.php called
+[10-Mar-2026 14:10:40 UTC] get-professional.php called with ID: 8
+[12-Mar-2026 10:39:43 UTC] New lead created: ID=15, Name=Unknown 1, Phone=8527377833, Service=All Rounder
+[12-Mar-2026 10:42:06 UTC] New lead created: ID=16, Name=Unknown 2, Phone=9205301721, Service=All Rounder
+[12-Mar-2026 10:42:29 UTC] New lead created: ID=17, Name=Unknown 3, Phone=7838376122, Service=All Rounder
+[13-Mar-2026 06:30:35 UTC] New lead created: ID=18, Name=Unknown as, Phone=7357199723, Service=All Rounder
+[13-Mar-2026 06:31:15 UTC] New lead created: ID=19, Name=asdfaf, Phone=9828527286, Service=All Rounder
+[13-Mar-2026 06:31:31 UTC] New lead created: ID=20, Name=sxa, Phone=9469596197, Service=All Rounder
+[13-Mar-2026 06:31:45 UTC] New lead created: ID=21, Name=ghf, Phone=9999427507, Service=All Rounder
+[13-Mar-2026 06:32:08 UTC] New lead created: ID=22, Name=jyj, Phone=9643953063, Service=All Rounder
+[13-Mar-2026 06:32:30 UTC] New lead created: ID=23, Name=reer, Phone=9953151355, Service=All Rounder
+[13-Mar-2026 06:32:45 UTC] New lead created: ID=24, Name=eerwwe, Phone=8980442541, Service=All Rounder
+[13-Mar-2026 06:32:58 UTC] New lead created: ID=25, Name=werwe, Phone=9953615615, Service=All Rounder
+[13-Mar-2026 06:33:10 UTC] New lead created: ID=26, Name=erter, Phone=8279747114, Service=All Rounder
+[13-Mar-2026 06:33:23 UTC] New lead created: ID=27, Name=wqeqw, Phone=9810703352, Service=All Rounder
+[13-Mar-2026 06:34:45 UTC] New lead created: ID=28, Name=qewq, Phone=9599711619, Service=All Rounder
+[13-Mar-2026 06:35:02 UTC] New lead created: ID=29, Name=yuiy, Phone=9910375355, Service=All Rounder
+[13-Mar-2026 06:35:22 UTC] New lead created: ID=30, Name=uiouio, Phone=9810862676, Service=All Rounder
+[13-Mar-2026 06:35:41 UTC] New lead created: ID=31, Name=uiouio, Phone=9013131390, Service=All Rounder
+[13-Mar-2026 06:35:54 UTC] New lead created: ID=32, Name=weqqew, Phone=9719965368, Service=All Rounder
+[13-Mar-2026 06:36:19 UTC] New lead created: ID=33, Name=wqeqw, Phone=9057035139, Service=Baby Caretaker
+[13-Mar-2026 06:36:47 UTC] New lead created: ID=34, Name=uiou, Phone=8004846723, Service=Baby Caretaker
+[13-Mar-2026 06:37:06 UTC] New lead created: ID=35, Name=ioioiu, Phone=9546877156, Service=Baby Caretaker
+[13-Mar-2026 06:37:39 UTC] New lead created: ID=36, Name=lkkl, Phone=8077744801, Service=Baby Caretaker
+[13-Mar-2026 06:38:06 UTC] New lead created: ID=37, Name=qweqweqw, Phone=9958232904, Service=All Rounder
+[13-Mar-2026 06:38:18 UTC] New lead created: ID=38, Name=xcvxcvvcx, Phone=8882003875, Service=Cooking Maid
+[13-Mar-2026 06:38:32 UTC] New lead created: ID=39, Name=zxccxxcz, Phone=7838655605, Service=Elderly Care
+[13-Mar-2026 06:38:49 UTC] New lead created: ID=40, Name=zxccxzcxz, Phone=8860601843, Service=House Maid
+[13-Mar-2026 06:39:16 UTC] New lead created: ID=41, Name=cxvxcv, Phone=9873168052, Service=House Maid
+[13-Mar-2026 06:39:33 UTC] New lead created: ID=42, Name=nbnb, Phone=9535894785, Service=House Maid
+[13-Mar-2026 06:39:49 UTC] New lead created: ID=43, Name=mnbb, Phone=8840565950, Service=House Maid
+[13-Mar-2026 06:40:01 UTC] New lead created: ID=44, Name=mmbnnb, Phone=9810039084, Service=House Maid
+[13-Mar-2026 06:41:02 UTC] New lead created: ID=45, Name=nbvbnvb, Phone=8221915188, Service=House Maid
+[13-Mar-2026 06:41:14 UTC] get-user.php called with ID: 3
+[13-Mar-2026 10:01:34 UTC] get-professional.php called with ID: 78
+[13-Mar-2026 10:02:45 UTC] get-professional.php called with ID: 8
+[17-Mar-2026 09:36:30 UTC] get-professional.php called with ID: 86
+[17-Mar-2026 09:36:32 UTC] get-professional.php called with ID: 86
+[17-Mar-2026 09:36:39 UTC] update-professional.php called
+[17-Mar-2026 18:27:39 UTC] New lead created: ID=46, Name=Gunjan, Phone=8107784703, Service=Baby Caretaker
+[19-Mar-2026 11:58:33 UTC] get-professional.php called with ID: 72
+[19-Mar-2026 11:58:40 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[19-Mar-2026 11:58:54 UTC] get-professional.php called with ID: 71
+[19-Mar-2026 11:59:00 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /home/u161425727/domains/servon.in/public_html/professional-profile.php on line 313
+[19-Mar-2026 12:17:40 UTC] get-professional.php called with ID: 86
+[19-Mar-2026 12:18:35 UTC] get-professional.php called with ID: 8
+[19-Mar-2026 12:19:54 UTC] get-professional.php called with ID: 86
+[19-Mar-2026 15:17:51 UTC] New lead created: ID=47, Name=Àyachit Vashistha , Phone=9958279824, Service=All Rounder
+[20-Mar-2026 07:45:07 UTC] get-professional.php called with ID: 87
+[20-Mar-2026 07:45:09 UTC] get-professional.php called with ID: 87
+[20-Mar-2026 07:45:16 UTC] update-professional.php called
+[20-Mar-2026 07:45:21 UTC] get-professional.php called with ID: 87
+[20-Mar-2026 07:52:20 UTC] get-professional.php called with ID: 88
+[20-Mar-2026 07:52:25 UTC] get-professional.php called with ID: 88
+[20-Mar-2026 07:52:33 UTC] update-professional.php called
+[20-Mar-2026 07:52:38 UTC] get-professional.php called with ID: 88
+[20-Mar-2026 07:54:39 UTC] get-professional.php called with ID: 88
+[20-Mar-2026 07:54:43 UTC] get-professional.php called with ID: 88
+[20-Mar-2026 09:32:48 UTC] New lead created: ID=48, Name=baljeet kaur , Phone=9625429938, Service=All Rounder
+[25-Mar-2026 08:26:34 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:30:04 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:30:17 UTC] update-professional.php called
+[25-Mar-2026 08:30:21 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:31:57 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:32:03 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:32:44 UTC] update-professional.php called
+[25-Mar-2026 08:32:48 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:33:23 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:33:40 UTC] update-professional.php called
+[25-Mar-2026 08:33:44 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:34:23 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:34:35 UTC] update-professional.php called
+[25-Mar-2026 08:34:38 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:35:08 UTC] get-professional.php called with ID: 88
+[25-Mar-2026 08:36:12 UTC] get-professional.php called with ID: 86
+[26-Mar-2026 13:40:43 UTC] New lead created: ID=49, Name=Payal, Phone=8800420656, Service=Baby Caretaker

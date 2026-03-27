@@ -266,7 +266,7 @@ $professional = $prof_result->fetch_assoc();
             <?php if (!empty($professional['staff_image'])): ?>
                 <img src="<?php echo htmlspecialchars($professional['staff_image']); ?>" alt="<?php echo htmlspecialchars($professional['name']); ?>" class="profile-image">
             <?php else: ?>
-                <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #e0e0e0; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 50px; border: 4px solid #007bff;">👤</div>
+                <div style="width: 200px; height: 200px; border-radius: 50%; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 50px; border: 4px solid #007bff;">👤</div>
             <?php endif; ?>
 
             <div style="display:flex; flex-direction: column; align-item: center;">
